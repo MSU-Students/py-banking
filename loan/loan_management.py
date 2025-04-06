@@ -3,6 +3,7 @@ from utils import clear_console
 from account import BankAccount
 
 class Loan:
+    user_id: int
     id: int
     status: str # pending, approve, paid, paying
     balance: float
@@ -13,7 +14,6 @@ class LoanPayment:
     date: str
 
 class LoanService:
-    
     current_loan: Loan | None = None
     loans : List[Loan] = []
     payments: List[LoanPayment] = []
@@ -27,7 +27,7 @@ class LoanService:
     def collect_payment(self):
         print("TODO: Collect Payment")
     
-    # Other methods here
+    # Other methods here like (history, ....)
 
 
 

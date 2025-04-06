@@ -18,9 +18,7 @@ class UserService:
         input('TODO:collect user credentials and save')
         self.current_user = User() #replace this code
     
-    def change_pin(self):
-        input("TODO: Change PIN")
-    # Other methods here
+    #TODO: Other methods such as (change_pin, update_profile)
 
 user_service = UserService()
 
