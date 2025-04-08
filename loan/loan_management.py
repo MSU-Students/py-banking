@@ -27,6 +27,8 @@ class LoanService:
     def collect_payment(self):
         print("TODO: Collect Payment")
     
+    def display_load_history(self):
+        print("TODO: Loan History")
     # Other methods here like (history, ....)
 
 
