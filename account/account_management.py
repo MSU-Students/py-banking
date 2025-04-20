@@ -3,24 +3,86 @@ from .bank_account import BankAccount
 from loan import handle_loan_option
 from utils import clear_console
 from transaction import TransactionService
+from datetime import datetime
 
 class AccountService:
     current_account: BankAccount | None = None
-    accounts:List[BankAccount] = list()   
+    accounts: List[BankAccount] = list()   
 
     def create_account(self):
-        input("TODO:create account:")
-        #replace the following temporary code
-        self.current_account = BankAccount();
-        self.accounts.append(self.current_account)
+        print("\nWelcome to PY Banking!")
+        print("Let's create your new bank account.")
+        while True:
+            last_name = input("Enter account holder's last name: ").strip()
+            first_name = input("Enter account holder's first name: ").strip()
+            middle_name = input("Enter account holder's middle name: ").strip()
+            
+            if not last_name.isalpha():
+                print("Last name must contain only alphabetic characters. Please try again.")
+                continue
+            if not first_name.isalpha():
+                print("First name must contain only alphabetic characters. Please try again.")
+                continue
+            if not middle_name.isalpha():
+                print("Middle name must contain only alphabetic characters. Please try again.")
+                continue
+            
+            account_name = f"{last_name}, {first_name} {middle_name}"
+            break
+        
+        # Generate account ID in the format YYYYMMDDXXXX (e.g., 202310150001)
+        date_part = datetime.now().strftime("%Y%m%d")
+        unique_part = f"{len(self.accounts) + 1:04d}"  # Ensure 4-digit unique part
+        account_id = f"{date_part}{unique_part}"
+        
+        while True:
+            try:
+                initial_balance = float(input("Enter initial deposit amount: "))
+                if initial_balance < 0:
+                    print("Initial deposit amount cannot be negative. Please try again.")
+                    continue
+                break
+            except ValueError:
+                print("Initial deposit amount must be a valid number. Please try again.")
+        # Create a new BankAccount instance
+        new_account = BankAccount(account_id, account_name, initial_balance)
+        
+        # Set the new account as the current account
+        self.current_account = new_account
+        
+        # Add the new account to the accounts list
+        self.accounts.append(new_account)
+        
+        print(f"Account created successfully for {account_name} with ID {account_id}.")
     
     def select_account(self):
-        input("TODO:list account and select") 
+        if not self.accounts:
+            print("No accounts available to select.")
+            return
         
-    def find_account(self, id: int) -> BankAccount|None:
-        print("TODO:find account:", id) 
+        print("\nAvailable Accounts:")
+        for account in self.accounts:
+            print(f"ID: {account.account_id}, Name: {account.account_name}")
+        
+        while True:
+            try:
+                account_id = int(input("Enter the ID of the account to select: "))
+                selected_account = self.find_account(account_id)
+                if selected_account:
+                    self.current_account = selected_account
+                    print(f"Account with ID {account_id} selected successfully.")
+                    break
+                else:
+                    print("Account not found. Please try again.")
+            except ValueError:
+                print("Invalid input. Please enter a valid account ID.")
+    
+    def find_account(self, id: int) -> BankAccount | None:
+        for account in self.accounts:
+            if account.account_id == id:
+                return account
         return None
-    # TODO: Other methods such as (balance_inquery)
+    # TODO: Other methods such as (balance_inquiry)
 
 account_service = AccountService()
 
@@ -60,8 +122,9 @@ def handle_services_option():
         elif option == LOAN:
             clear_console()
             handle_loan_option(account_service.current_account)
-        # handle other options here
-        clear_console()
+            # handle other options here
+            clear_console()
+        print("Exiting account options...")
 
 
 def handle_account_option():
@@ -80,7 +143,10 @@ def handle_account_option():
         elif option == SELECT:
             account_service.select_account()
         elif option == WITHDRAW:
-            transaction_service.withdrawal()
-        # handle other options here
+            transaction_service.withdraw()
+        elif option == DEPOSIT:
+            transaction_service.deposit()   
+        elif option == BALANCE:
+            transaction_service.balance_inquiry()
         clear_console()
 
