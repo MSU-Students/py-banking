@@ -4,21 +4,21 @@ from loan import handle_loan_option
 from utils import clear_console
 from transaction import TransactionService
 
-class AccountService:
+class AccountService: #kurt
     current_account: BankAccount | None = None
     accounts:List[BankAccount] = list()   
 
     def create_account(self):
-        input("TODO:create account:")
+        input("TODO:create account okay?:") #dito mag stop
         #replace the following temporary code
-        self.current_account = BankAccount();
+        self.current_account = BankAccount()
         self.accounts.append(self.current_account)
     
     def select_account(self):
-        input("TODO:list account and select") 
+        input("TODO:list account and select")
         
     def find_account(self, id: int) -> BankAccount|None:
-        print("TODO:find account:", id) 
+        print("TODO:find account:", id)
         return None
     # TODO: Other methods such as (balance_inquery)
 
@@ -40,7 +40,7 @@ def print_account_menu():
 
 CREATE_ACCOUNT, LOAN = (1, 2)
 '''
-Main Account Sub Menu: Services 
+Main Account Sub Menu: Services
 '''
 def print_services_options():
     print('Services Options:')
@@ -64,7 +64,7 @@ def handle_services_option():
         clear_console()
 
 
-def handle_account_option():
+def handle_account_option(): #group 1
     option = SERVICES
     transaction_service: TransactionService
     if len(account_service.accounts) == 0:
