@@ -1,0 +1,51 @@
+[
+    {
+        "username": "rena123",
+        "pin": "1111",
+        "balance": 0.0,
+        "account_number": null,
+        "account_type": null,
+        "account_status": null,
+        "account_creation_date": null,
+        "account_last_transaction_date": null
+    },
+    {
+        "username": "wer",
+        "pin": "12234",
+        "balance": 0.0,
+        "account_number": null,
+        "account_type": null,
+        "account_status": null,
+        "account_creation_date": null,
+        "account_last_transaction_date": null
+    },
+    {
+        "username": "user",
+        "pin": "1234",
+        "balance": 0.0,
+        "account_number": "39945864061",
+        "account_type": "Individual",
+        "account_status": "Active",
+        "account_creation_date": null,
+        "account_last_transaction_date": null
+    },
+    {
+        "username": "rena",
+        "pin": "1111",
+        "balance": 0.0,
+        "account_number": "82308155789",
+        "account_type": "Individual",
+        "account_status": "Active",
+        "account_creation_date": null,
+        "account_last_transaction_date": null,
+        "full_name": "renalyn",
+        "date_of_birth": "4567",
+        "contact_number": "111111111",
+        "email": "eeeeeeeeeeeeee",
+        "address": "qqqqqqqqqqqqq",
+        "id_type": "qqqqqqqqqqq",
+        "id_number": "1111111111111",
+        "tin": "qqqqqqqqq",
+        "account_preference": "savings"
+    }
+]

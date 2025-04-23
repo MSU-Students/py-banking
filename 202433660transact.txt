@@ -1,0 +1,3 @@
+Transaction history for account number: 202433660
+Date		Transaction Type	Amount
+-------------------------------------------------
