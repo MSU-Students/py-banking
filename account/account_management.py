@@ -5,7 +5,7 @@ from utils import clear_console
 from transaction import TransactionService
 from datetime import datetime
 
-class AccountService:
+class AccountService: #kurt
     current_account: BankAccount | None = None
     accounts: List[BankAccount] = list()   
 
@@ -132,7 +132,7 @@ def print_account_menu():
 
 CREATE_ACCOUNT, LOAN = (1, 2)
 '''
-Main Account Sub Menu: Services 
+Main Account Sub Menu: Services
 '''
 def print_services_options():
     print('Services Options:')
@@ -157,7 +157,7 @@ def handle_services_option():
         print("Exiting account options...")
 
 
-def handle_account_option():
+def handle_account_option(): #group 1
     option = SERVICES
     transaction_service: TransactionService
     if len(account_service.accounts) == 0:
