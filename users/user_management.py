@@ -8,6 +8,7 @@ class User:
         self.username = username
         self.pin = pin
         self.balance = 0.0
+        
         self.account_number = None  # Placeholder for account number
         self.account_type = None  # Placeholder for account type
         self.account_status = None  # Placeholder for account status
