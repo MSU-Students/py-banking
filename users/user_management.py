@@ -2,7 +2,7 @@ import random
 from account import handle_account_option
 from utils import clear_console
 enter = False
-
+import json
 class User:
     def __init__(self, User_Id='', pin='',address = '', bday='', fullname='', mob_num='', authentication= 0, email = '', nationality='', approval=0):
         self.User_Id = User_Id
@@ -29,57 +29,62 @@ class UserService:
         self.full_name = input("Full Name:\t\t")
         self.mobile_num = input("Mobile Number:\t\t")
         self.address = input("Address:\t\t")
-        self.bday = input ("Birthdate:\t\t")
+        self.bday = input("Birthdate:\t\t")
         self.email = input("Email Address:\t\t")
         self.nationality = input("Nationality:\t\t")
         self.user_id = input("User ID:\t\t")
         self.pin = input("Password:\t\t")
-        self.approval = 0 #false
+        self.approval = 0  # false
         self.authentication = str(random.randint(10000, 99999))
 
-        with open(self.user_id + ".txt", 'a') as account:
-            account.write(self.full_name + '\n')
-            account.write(self.mobile_num + '\n')
-            account.write(self.address + '\n')
-            account.write(self.bday + '\n') 
-            account.write(self.email + '\n')
-            account.write(self.nationality + '\n')
-            account.write(self.user_id + '\n')
-            account.write(self.pin + '\n')
-            account.write(str(self.approval) + '\n')
-            account.write(self.authentication +'\n')
-        self.registered_user = User(self.user_id, self.pin, self.address, self.bday ,self.full_name, self.mobile_num, self.authentication, self.email, self.nationality, self.approval)
-        print ('You have succesfully registered an account')
+        user_data = {
+            "full_name": self.full_name,
+            "mobile_num": self.mobile_num,
+            "address": self.address,
+            "bday": self.bday,
+            "email": self.email,
+            "nationality": self.nationality,
+            "user_id": self.user_id,
+            "pin": self.pin,
+            "approval": self.approval,
+            "authentication": self.authentication
+        }
+
+        with open(self.user_id + ".json", 'w') as account:
+            json.dump(user_data, account, indent=4)
+
+        self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name, self.mobile_num, self.authentication, self.email, self.nationality, self.approval)
+        print('You have successfully registered an account!')
+
 
     def forgot_password(self):
-        print ("Enter the right following information for user authentication")
-        self.proof_accnum = input('Enter User Account Number:\t\t')
+        print("Enter the correct information for user authentication")
+        self.proof_accnum = input('Enter User User ID:\t\t')
         self.proof = input('Enter User Authentication:\t\t')
 
         try:
-            with open (self.proof_accnum + ".txt", 'r') as account:
-                lines = account.readlines()
-                if len(lines) >= 7:
-                    self.security_number = lines[6].strip()
-        except FileNotFoundError as e:
+            with open(self.proof_accnum + ".json", 'r') as account:
+                user_data = json.load(account)
+                self.security_number = user_data['authentication']
+        except FileNotFoundError:
             print("Error: Account Doesn't Exist")
             input('Press any key to continue')
-        except NotADirectoryError as e:
-            print("Error: Account Doesn't Exist")
-            input('Press any key to continue')
-        else: 
+        else:
             if self.proof == self.security_number:
-                print("you can now change your password")
+                print("You can now change your password")
                 self.pin = input("New Password:\t")
-                self.confirm_pin = input("confirm Password:\t")
-                
+                self.confirm_pin = input("Confirm Password:\t")
+
                 if self.pin == self.confirm_pin:
-                    if len(lines) >= 7:
-                        lines[5] = self.pin + '\n'
-                    with open(self.proof_accnum + ".txt", 'w') as account:
-                        account.writelines(lines)    
-                    print("You have succesfully changed your password!")
+                    user_data['pin'] = self.pin
+                    with open(self.proof_accnum + ".json", 'w') as account:
+                        json.dump(user_data, account, indent=4)
+                    print("You have successfully changed your password!")
                     return True
+                else:
+                    print("Passwords do not match.")
+                    input("Press any key to continue")
+
 
     #Todo Other methods such as (change_pin, update_profile)
 
@@ -113,30 +118,27 @@ def handle_user_option():
             print("Login")  
             User_service.login()
             try:
-                with open (User_service.login_user.User_Id + ".txt", 'r') as account:
-                    lines = account.readlines()
-                    if len(lines) >= 9:
-                        user_id = lines[6].strip()
-                        password = lines[7].strip()
-            except NotADirectoryError as e:
+                with open(User_service.login_user.User_Id + ".json", 'r') as account:
+                    user_data = json.load(account)
+                    user_id = user_data['user_id']
+                    password = user_data['pin']
+                    approval_status = user_data['approval']
+            except FileNotFoundError:
                 print("Error: Account Doesn't Exist")
-                input('Press any key to continue')
-            except  FileNotFoundError as e:
-                print("Error: Account Doesn't Exist")
-                input('Press any key to continue')
+                input("Press any key to continue")
             else:
-                if User_service.login_user.User_Id != user_id and User_service.login_user.pin != password:
+                if User_service.login_user.User_Id != user_id or User_service.login_user.pin != password:
                     print("Invalid username or pin")
-                    input('wrong')
+                    input("Wrong credentials. Press any key to continue")
                     clear_console()
-                    continue
+                    return
 
-                with open(User_service.login_user.User_Id + '.txt', 'r') as account:
-                    lines = account.readlines()
-                    if len(lines) >= 9:
-                        key = int(lines[8])
-                        if key == 0: print("Account hasn't been confirmed by the Admin")
-                        input("press enter to continue")
+                if approval_status == 0:
+                    print("Account hasn't been confirmed by the Admin")
+                    input("Press enter to continue")
+                else:
+                    key = 1
+
 
         elif option == FORGOT_PASS:
             if User_service.forgot_password():
