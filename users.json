@@ -1,51 +1,26 @@
-[
+[ 
     {
-        "username": "rena123",
-        "pin": "1111",
-        "balance": 0.0,
-        "account_number": null,
-        "account_type": null,
-        "account_status": null,
-        "account_creation_date": null,
-        "account_last_transaction_date": null
+        "full_name": "Abdullah Abuat Lacsaman",
+        "mobile_num": "09092907819",
+        "address": "Boracay, Malay, Aklan",
+        "bday": "June 16, 2006",
+        "email": "lacsaman.aa60@s.msu.edu.ph",
+        "nationality": "Filipino",
+        "user_id": "202433660",
+        "pin": "20060616",
+        "approval": 1, 
+        "authentication": "71725"
     },
     {
-        "username": "wer",
-        "pin": "12234",
-        "balance": 0.0,
-        "account_number": null,
-        "account_type": null,
-        "account_status": null,
-        "account_creation_date": null,
-        "account_last_transaction_date": null
-    },
-    {
-        "username": "user",
-        "pin": "1234",
-        "balance": 0.0,
-        "account_number": "39945864061",
-        "account_type": "Individual",
-        "account_status": "Active",
-        "account_creation_date": null,
-        "account_last_transaction_date": null
-    },
-    {
-        "username": "rena",
-        "pin": "1111",
-        "balance": 0.0,
-        "account_number": "82308155789",
-        "account_type": "Individual",
-        "account_status": "Active",
-        "account_creation_date": null,
-        "account_last_transaction_date": null,
-        "full_name": "renalyn",
-        "date_of_birth": "4567",
-        "contact_number": "111111111",
-        "email": "eeeeeeeeeeeeee",
-        "address": "qqqqqqqqqqqqq",
-        "id_type": "qqqqqqqqqqq",
-        "id_number": "1111111111111",
-        "tin": "qqqqqqqqq",
-        "account_preference": "savings"
+        "full_name": "Alfred Jun Cadiz Esoy",
+        "mobile_num": "09092485312",
+        "address": "Baroi, Lanao del Norte",
+        "bday": "June 19, 2005",
+        "email": "esoy.12421@s.msu.edu.ph",
+        "nationality": "Alien",
+        "user_id": "202412345",
+        "pin": "0909",
+        "approval": 0,
+        "authentication": "41966"
     }
 ]
