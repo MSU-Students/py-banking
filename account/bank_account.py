@@ -3,10 +3,16 @@ class BankAccount:
     type: str  # saving
     balance: float
 
-    def __init__(self, user_id: int, account_name: str, initial_balance: float = 0.0, account_type: str = "saving"):
+#account_number
+
+    def __init__(self, user_id: str, account_number:int, initial_balance: float = 0.0, account_type: str = "saving"):
         self.user_id = user_id
-        self.account_name = account_name
-        self.type = account_type
+        self.account_number = account_number
+        #self.new name sa variable
         self.balance = initial_balance
+        self.account_type = account_type
+        
+    
+
 
    
