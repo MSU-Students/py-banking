@@ -32,8 +32,29 @@ class UserService:
     def login(self):
         self.user_id = input("User ID:\t\t")
         self.pin = input("Password:\t\t")
-        self.login_user = User(self.user_id, self.pin)
-    
+        
+        for user in self.users_data:
+            if user['user_id'] == self.user_id and user['pin'] == self.pin:
+                
+                self.login_user = User(
+                    User_Id = user['user_id'],
+                    pin = user['pin'],
+                    address = user['address'],
+                    bday = user['bday'],
+                    fullname = user['full_name'],
+                    mob_num = user['mobile_num'],
+                    authentication = user['authentication'],
+                    email = user['email'],
+                    nationality = user['nationality'],
+                    approval = user['approval']
+                )
+                return True
+
+        print("Invalid username or pin")
+        input("Wrong credentials. Press any key to continue")
+        return False
+
+
     def register(self):
         self.full_name = input("Full Name:\t\t")
         self.mobile_num = input("Mobile Number:\t\t")
@@ -107,56 +128,35 @@ def print_main_menu():
     print(f"\t{FORGOT_PASS} : Forgot Password")
     print(f"\t{EXIT} : Exit")
 
-def handle_admin_login():
-    admin_username = "admin"
-    admin_password = "admin123"
-    try:
-        username = input("Enter admin username: ")
-        password = input("Enter admin password: ")
-        if username == admin_username and password == admin_password:
-            print("Admin login successful!")
-            # Add admin-specific functionality here
-        else:
-            print("Invalid admin credentials.")
-    except Exception as e:
-        print(f"An error occurred during admin login: {e}")
-
 def handle_user_option():
-    key = False
-    global enter
     option = LOGIN
     while option != EXIT:
         print_main_menu()
-        option = int(input("\n\tCommand: "))
+        try:
+            option = int(input("\n\tCommand: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
 
         if option == REGISTER:
+            clear_console()
             print("Registration")
             User_service.register()
 
         elif option == LOGIN:
+            clear_console()
             print("Login")
-            User_service.login()
-
-            user_found = False
-            for user_data in User_service.users_data:
-                if user_data['user_id'] == User_service.login_user.User_Id and user_data['pin'] == User_service.login_user.pin:
-                    user_found = True
-                    approval_status = user_data['approval']
-                    break
-
-            if not user_found:
-                print("Invalid username or pin")
-                input("Wrong credentials. Press any key to continue")
-                clear_console()
-                return
-
-            if approval_status == 0:
-                print("Account hasn't been confirmed by the Admin")
-                input("Press enter to continue")
-            else:
-                key = 1
+            if User_service.login():
+                if User_service.login_user.approval == 0:
+                    print("Account hasn't been confirmed by the Admin")
+                    input("Press enter to continue")
+                else:
+                    clear_console()
+                    print(f"Welcome {User_service.login_user.name}")
+                    handle_account_option()
 
         elif option == FORGOT_PASS:
+            clear_console()
             if User_service.forgot_password():
                 User_service.login()
 
@@ -164,9 +164,7 @@ def handle_user_option():
             clear_console()
             return
 
-        if key:
-            clear_console()
-            print(f"Welcome {User_service.registered_user.name}")
-            handle_account_option()
-        
+        else:
+            print("Invalid option. Please select from the menu.")
+
         clear_console()
