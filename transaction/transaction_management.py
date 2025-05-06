@@ -72,6 +72,7 @@ class TransactionService:
         except ValueError as e:
             print(e)
         except Exception as e:
+            
             print(f"An error occurred: {e}")
 
     def display_transactions(self):
