@@ -5,43 +5,62 @@ from utils import clear_console
 from transaction import TransactionService
 import random
 import json
+import os
+
+
 
 SAVINGS, CHECKING = (1,2)
 class AccountService: #kurt
-    current_account: BankAccount | None = None
+    user_id: str
+    account_type: str
+    account_number: str
+    current_account= BankAccount(202433660, "savings", "12345678", account_balance=0)
     accounts:List[BankAccount] = list()   
-
+    accounts_file = "accounts.json"
+    def __init__(self):
+        if os.path.exists(self.accounts_file):
+            with open(self.accounts_file, 'r') as file:
+                self.accounts_data = json.load(file)
+        else:
+            self.accounts_data = []
+            
     def create_account(self):
-
         print("Create an Account: ") 
         print("What type of account will you open? Choose Below")
         print("1. Savings\n2. Checking")
-        account_type=(input("Decision: "))
-        if account_type == SAVINGS:
+        option=(input("Decision: "))
+        if option == SAVINGS:
+            self.current_account.account_type = 'savings'
             self.current_account.account_number(str(random.randint(10000, 99999)))
-            self.current_account.balance(input("Deposit min of Php 500 for maintaining balance: "))
+            print("Deposit min of Php 500 for maintaining balance: ")
+            self.current_account.balance = TransactionService.deposit()
+            
                             
-        elif account_type == CHECKING:
+        elif option == CHECKING:
+            self.current_account.account_type = 'checking'
             self.current_account.account_number(str(random.randint(10000, 99999)))
             self.current_account.balance(input("Deposit min of Php 500 for maintaining balance: "))
                    
         account_data = {
-            "user_id": self.current_account.user_id(),
-            "account_type":self.current_account.account_type(),
-            "account_number": self.current_account.account_number(),
-            "balance":self.current_account.balance()
+            "user_id": self.current_account.user_id,
+            "account_type":self.current_account.account_type,
+            "account_number": self.current_account.account_number,
+            "balance":self.current_account.account_balance
         }
        
-        self.current_account = BankAccount()
-        self.accounts.append(account_data)
+        self.accounts_data.append(account_data)
         with open("accounts.json", 'w') as account:
-            json.dump(self.accounts, account, indent=4)
+            json.dump(self.accounts_data, account, indent=4)
+            
         self.current_account = BankAccount(self.current_account.user_id,self.current_account.account_type,self.current_account.account_number,self.current_account.account_balance)
         print(f'Congratulations! You have successfully registered a {self.current_account.account_type} account!')
         print(f'Information:\nUser_id: {self.current_account.user_id}')
         print(f'Account Type: {self.current_account.account_type}')
         print(f'Account Number: {self.current_account.account_number}')
         print(f'Account Balance: {self.current_account.account_balance}')
+        
+
+    def new_method(self):
         return
     
     def select_account(self):

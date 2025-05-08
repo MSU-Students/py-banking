@@ -1,0 +1,20 @@
+[
+    {
+        "user_id": 202433660,
+        "account_type": "savings",
+        "account_number": "12345678",
+        "balance": 0.0
+    },
+    {
+        "user_id": 202433660,
+        "account_type": "savings",
+        "account_number": "12345678",
+        "balance": 0.0
+    },
+    {
+        "user_id": 202433660,
+        "account_type": "savings",
+        "account_number": "12345678",
+        "balance": 0
+    }
+]

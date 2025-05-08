@@ -1,3 +1,4 @@
+
 class BankAccount:
     user_id: int
     account_type: str
@@ -9,7 +10,9 @@ class BankAccount:
         self.user_id = user_id
         self.account_type = account_type
         self.account_number = account_number
-        self.balance = account_balance
+        self.account_balance = account_balance
+\
+        
    
 
    

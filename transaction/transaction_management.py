@@ -20,7 +20,7 @@ class Transaction:
 class TransactionService:
     transactions: List[Transaction] = []
 
-    def __init__(self, account: BankAccount, storage_file: str = "transactions.json"):
+    def __init__(self, account: BankAccount, storage_file: str = "transactions.json" and "accounts.json"):
         self._account = account
         self.storage_file = storage_file
         self._load_transactions()

@@ -5,7 +5,7 @@ import json
 import os
 
 class User:
-    def __init__(self, User_Id='', pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
+    def __init__(self, User_Id=int, pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
         self.User_Id = User_Id
         self.pin = pin
         self.name = fullname
