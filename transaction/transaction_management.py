@@ -72,12 +72,10 @@ class TransactionService:
         self.transactions.append(transaction)
         transaction_data = {
             "user_id": self.account.user_id,
-            "account_type": self.account.account_type,
-            "account_number": self.account.account_number,
-            "transaction_type": transaction.transaction_type,
-            "date": transaction.date,
-            "transaction_number": transaction.transaction_number,
-            "amount": transaction.amount,
+            "account_type": self.account.account_type,"account_number": self.account.account_number,
+            "transaction_type": transaction.transaction_type,  "transaction_number": transaction.transaction_number,
+            "amount": transaction.amount, "date": transaction.date
+            
         }
 
         with open("transactions.json", 'a') as file:
