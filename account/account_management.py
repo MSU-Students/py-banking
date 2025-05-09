@@ -83,8 +83,12 @@ class AccountService: #kurt
         return
     
     def select_account(self):
-
-        input("TODO:list account and select")
+        for item, account in enumerate(account_service.accounts_data):
+            print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}, Balance: {account['balance']}")
+        
+        selected_index = int(input("Enter the number of the account: ")) - 1
+        return selected_index
+            
         
     def find_account(self, id: int) -> BankAccount|None:
         print("TODO:find account:", id)
@@ -147,12 +151,25 @@ def handle_account_option(): #group 1
             handle_services_option()
         elif option == SELECT:
             account_service.select_account()
+            
+            
         elif option == WITHDRAW:
-            selected_account = account_service.select_account()
-            if selected_account:
-                transaction_service = TransactionService(account=selected_account)
-                amount = float(input("Enter amount to withdraw: "))
-                transaction_service.withdraw(amount)
+            print("\t\WITHDRAW\nSelect an account to withdraw into:")
+            for item, account in enumerate(account_service.accounts_data):
+                print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}, Balance: {account['balance']}")
+            
+            selected_index = int(input("Enter the number of the account: ")) - 1
+            if selected_index < 0 or selected_index >= len(account_service.accounts_data):
+                print("Invalid selection. Please try again.")
+                continue
+            
+            selected_account = account_service.accounts_data[selected_index]
+            transaction_service = TransactionService(account=selected_account)
+            amount = float(input("\nEnter ammount to withdraw: "))
+            transaction_service.withdrawal(amount)
+            
+                
+                
         elif option == DEPOSIT:
             print("\t\tDEPOSIT\nSelect an account to deposit into:")
             for item, account in enumerate(account_service.accounts_data):

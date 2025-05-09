@@ -16,3 +16,21 @@
     "transaction_number": "9110874",
     "amount": 500.0
 }
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "deposit",
+    "date": "2025-05-08 22:23:00",
+    "transaction_number": "3409945",
+    "amount": 500.0
+}
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "withdrawal",
+    "transaction_number": "6786279",
+    "amount": 500.0,
+    "date": "2025-05-08 22:32:24"
+}

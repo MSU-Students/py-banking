@@ -79,7 +79,7 @@ class TransactionService:
         }
 
         with open("transactions.json", 'a') as file:
-            file.write(json.dumps(transaction_data) + "\n",indent=4)
+            file.write(json.dumps(transaction_data, indent=4) + "\n")
         print(f"Withdrew {amount}. New balance: {self.account.account_balance}")
 
     def display_transactions(self):
