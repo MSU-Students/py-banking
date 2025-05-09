@@ -34,17 +34,6 @@
         "pin": "1234",
         "approval": 0,
         "authentication": "37978"
-    },
-    {
-        "full_name": "wdfgh",
-        "mobile_num": "wedf324567",
-        "address": "dfghj",
-        "bday": "1234567",
-        "email": "sdfghj",
-        "nationality": "qwerty",
-        "user_id": "1234",
-        "pin": "1111",
-        "approval": 1,
-        "authentication": "61846"
     }
+    
 ]

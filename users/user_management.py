@@ -82,7 +82,7 @@ class UserService:
 
         self.users_data.append(user_data)
 
-        with open(self.users_file, 'w') as account:
+        with open(self.users_file, 'w+') as account:
             json.dump(self.users_data, account, indent=4)
 
         self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name, self.mobile_num, self.authentication, self.email, self.nationality, self.approval)
@@ -153,6 +153,7 @@ def handle_user_option():
                 else:
                     clear_console()
                     print(f"Welcome {User_service.login_user.name}")
+                    
                     handle_account_option()
 
         elif option == FORGOT_PASS:

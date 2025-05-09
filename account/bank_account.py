@@ -11,7 +11,10 @@ class BankAccount:
         self.account_type = account_type
         self.account_number = account_number
         self.account_balance = account_balance
-\
+    # def display_All_Accs_of_the_user(self):
+    #     users_Account = {
+            
+    #     }
         
    
 

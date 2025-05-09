@@ -14,9 +14,11 @@ class AccountService: #kurt
     user_id: str
     account_type: str
     account_number: str
-    current_account= BankAccount(202433660, "savings", "12345678", account_balance=0)
-    accounts:List[BankAccount] = list()   
+    account_balance: float
+    accounts:List[BankAccount] = list()
     accounts_file = "accounts.json"
+    current_account:List
+
     def __init__(self):
         if os.path.exists(self.accounts_file):
             with open(self.accounts_file, 'r') as file:
@@ -47,11 +49,11 @@ class AccountService: #kurt
             "account_number": self.current_account.account_number,
             "balance":self.current_account.account_balance
         }
-       
+        self.accounts.append(account_data)
         self.accounts_data.append(account_data)
         with open("accounts.json", 'w') as account:
             json.dump(self.accounts_data, account, indent=4)
-            
+      
         self.current_account = BankAccount(self.current_account.user_id,self.current_account.account_type,self.current_account.account_number,self.current_account.account_balance)
         print(f'Congratulations! You have successfully registered a {self.current_account.account_type} account!')
         print(f'Information:\nUser_id: {self.current_account.user_id}')
@@ -116,11 +118,11 @@ def handle_services_option():
 def handle_account_option(): #group 1
     option = SERVICES
     transaction_service: TransactionService
-    if len(account_service.accounts) == 0:
+    if len(account_service.accounts_data) == 0:
         account_service.create_account()
         
-    while option != EXIT and account_service.current_account != None:
-        transaction_service = TransactionService(account_service.current_account)
+    while option != EXIT:
+        transaction_service = TransactionService(account_service.accounts)
         print_account_menu()
         option = int(input("\n\tCommand: "))
         if option == SERVICES:
@@ -129,6 +131,13 @@ def handle_account_option(): #group 1
         elif option == SELECT:
             account_service.select_account()
         elif option == WITHDRAW:
-            transaction_service.withdrawal()
-        # handle other options here
-        clear_console()
+            amount = input("Amount: ")
+            transaction_service.withdrawal(amount)
+        elif option == DEPOSIT:
+            amount = float(input("Amount: "))
+            transaction_service.deposit(amount)
+        elif option == BALANCE:
+            transaction_service.balance_inquiry()
+    
+     
+     

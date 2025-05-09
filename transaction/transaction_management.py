@@ -3,107 +3,95 @@ from typing import List, Optional
 from datetime import datetime
 from loan import Loan, LoanPayment
 from account import BankAccount
+import random
 
 class Transaction:
-    def __init__(self, type: str, date: str, amount: float):
-        self.type = type  # deposit | withdraw | transfer
+    def __init__(self, type: str, date: str, amount: float, transaction_number:str):
+        self.transaction_type = type  # deposit | withdraw | transfer
         self.date = date
         self.amount = amount
+        self.transaction_number = transaction_number
+      
+        
 
-    def to_dict(self):
-        return {"type": self.type, "date": self.date, "amount": self.amount}
-
-    @staticmethod
-    def from_dict(data):
-        return Transaction(type=data["type"], date=data["date"], amount=data["amount"])
-
+user_Details:BankAccount
 class TransactionService:
     transactions: List[Transaction] = []
 
-    def __init__(self, account: BankAccount, storage_file: str = "transactions.json" and "accounts.json"):
-        self._account = account
-        self.storage_file = storage_file
-        self._load_transactions()
+    def __init__(self, account: BankAccount):
+        self.account = account
 
-    def _load_transactions(self):
-        try:
-            with open(self.storage_file, "r") as file:
-                data = json.load(file)
-                self.transactions = [Transaction.from_dict(tx) for tx in data]
-        except FileNotFoundError:
-            self.transactions = []
-        except Exception as e:
-            print(f"An error occurred while loading transactions: {e}")
 
-    def _save_transactions(self):
-        try:
-            with open(self.storage_file, "w") as file:
-                json.dump([tx.to_dict() for tx in self.transactions], file, indent=4)
-        except Exception as e:
-            print(f"An error occurred while saving transactions: {e}")
 
-    def deposit(self, amount: float):
-        try:
-            if amount <= 0:
-                raise ValueError("Deposit amount must be greater than zero.")
-            date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
-            self._account.balance += amount
-            transaction = Transaction(type="deposit", date=date, amount=amount)
-            self.transactions.append(transaction)
-            self._save_transactions()
-            print(f"Deposited {amount}. New balance: {self._account.balance}")
-        except ValueError as e:
-            print(e)
-        except Exception as e:
-            print(f"An error occurred: {e}")
+    def deposit(self, amount:float):
+
+        if amount <= 0.0:
+            raise ValueError("Deposit amount must be greater than zero.")
+        
+        self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
+        self.account.account_balance += amount
+        self.amount = amount
+        self.transaction_number = str(random.randint(1000000, 9999999))
+        self.transaction_type = "deposit"
+        self.user_id = user_Details.user_id
+        self.account_type = user_Details.account_type
+        self.account_number = user_Details.account_balance
+    
+        transaction_data={
+            "user_id: ": self.user_id,
+            "account_type: ": self.account_type, "account_number: ": self.account_number,
+            "transaction_type: ":self.transaction_type, "date: ":self.date,
+            "transaction_number": self.transaction_number, "amount_deposited: ":self.amount
+        }
+        
+        self.transactions.append(transaction_data)
+        #append
+        with open ("transactions.json", 'a') as file:
+            file.write(transaction_data)
+        print(f"Deposited {amount}. New balance: {self.account.account_balance}")
+    
 
     def withdrawal(self, amount: float):
-        try:
-            if amount <= 0:
-                raise ValueError("Withdrawal amount must be greater than zero.")
-            if amount > self._account.balance:
-                raise ValueError("Insufficient balance.")
-            date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
-            self._account.balance -= amount
-            transaction = Transaction(type="withdrawal", date=date, amount=amount)
-            self.transactions.append(transaction)
-            self._save_transactions()
-            print(f"Withdrew {amount}. New balance: {self._account.balance}")
-        except ValueError as e:
-            print(e)
-        except Exception as e:
-            
-            print(f"An error occurred: {e}")
+     
+        if amount <= 0:
+            raise ValueError("Withdrawal amount must be greater than zero.")
+        if amount > self.account.balance:
+            raise ValueError("Insufficient balance.")
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
+        self.account.balance -= amount
+        transaction = Transaction(type="withdrawal", date=date, amount=amount)
+        
+        self.transactions.append(transaction)
+        self._save_transactions()
+        print(f"Withdrew {amount}. New balance: {self.account.balance}")
+
 
     def display_transactions(self):
-        try:
-            if not self.transactions:
-                print("No transactions available.")
-                return
-            print("Transaction History:")
-            for transaction in self.transactions:
-                print(f"{transaction.date} - {transaction.type} - {transaction.amount}")
-        except Exception as e:
-            print(f"An error occurred while displaying transactions: {e}")
+    
+        if not self.transactions:
+            print("No transactions available.")
+            return
+        print("Transaction History:")
+        for transaction in self.transactions:
+            print(f"{transaction.date} - {transaction.type} - {transaction.amount}")
+
 
     def filter_transactions(self, date: Optional[str] = None, type: Optional[str] = None):
-        try:
-            filtered = self.transactions
-            if date:
-                filtered = [tx for tx in filtered if tx.date.startswith(date)]
-            if type:
-                filtered = [tx for tx in filtered if tx.type == type]
-            if not filtered:
-                print("No transactions match the filter criteria.")
-                return
-            print("Filtered Transactions:")
-            for transaction in filtered:
-                print(f"{transaction.date} - {transaction.type} - {transaction.amount}")
-        except Exception as e:
-            print(f"An error occurred while filtering transactions: {e}")
+       
+        filtered = self.transactions
+        if date:
+            filtered = [tx for tx in filtered if tx.date.startswith(date)]
+        if type:
+            filtered = [tx for tx in filtered if tx.type == type]
+        if not filtered:
+            print("No transactions match the filter criteria.")
+            return
+        print("Filtered Transactions:")
+        for transaction in filtered:
+            print(f"{transaction.date} - {transaction.type} - {transaction.amount}")
 
     def balance_inquiry(self):
         try:
-            print(f"Current balance: {self._account.balance}")
+            print(f"Current balance: {self.account.balance}")
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
