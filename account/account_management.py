@@ -9,6 +9,7 @@ import os
 
 
 
+
 SAVINGS, CHECKING = (1,2)
 class AccountService: #kurt
     user_id: str
@@ -16,6 +17,7 @@ class AccountService: #kurt
     account_number: str
     account_balance: float
     accounts:List[BankAccount] = list()
+    
     accounts_file = "accounts.json"
     current_account:List
 
@@ -30,42 +32,58 @@ class AccountService: #kurt
         print("Create an Account: ") 
         print("What type of account will you open? Choose Below")
         print("1. Savings\n2. Checking")
-        option=(input("Decision: "))
-        if option == SAVINGS:
-            self.current_account.account_type = 'savings'
-            self.current_account.account_number(str(random.randint(10000, 99999)))
-            print("Deposit min of Php 500 for maintaining balance: ")
-            self.current_account.balance = TransactionService.deposit()
+        option = input("Decision: ")
+        
+        user_id = input("Enter your User ID: ")
+        if option == str(SAVINGS):
+            account_type = "savings"
+        elif option == str(CHECKING):
+            account_type = "checking"
+        else:
+            print("Invalid option. Please select 1 for Savings or 2 for Checking.")
+            return
             
-                            
-        elif option == CHECKING:
-            self.current_account.account_type = 'checking'
-            self.current_account.account_number(str(random.randint(10000, 99999)))
-            self.current_account.balance(input("Deposit min of Php 500 for maintaining balance: "))
-                   
-        account_data = {
-            "user_id": self.current_account.user_id,
-            "account_type":self.current_account.account_type,
-            "account_number": self.current_account.account_number,
-            "balance":self.current_account.account_balance
-        }
-        self.accounts.append(account_data)
-        self.accounts_data.append(account_data)
-        with open("accounts.json", 'w') as account:
-            json.dump(self.accounts_data, account, indent=4)
-      
-        self.current_account = BankAccount(self.current_account.user_id,self.current_account.account_type,self.current_account.account_number,self.current_account.account_balance)
-        print(f'Congratulations! You have successfully registered a {self.current_account.account_type} account!')
-        print(f'Information:\nUser_id: {self.current_account.user_id}')
-        print(f'Account Type: {self.current_account.account_type}')
-        print(f'Account Number: {self.current_account.account_number}')
-        print(f'Account Balance: {self.current_account.account_balance}')
+        account_number = str(random.randint(10000, 99999))
+        attempts = 0
+        while attempts < 3:
+            initial_balance = float(input("Enter initial deposit amount: "))
+            if initial_balance >= 500:
+                self.current_account = BankAccount(user_id="", account_number="", account_type="", account_balance=0.0)
+                self.current_account.user_id = user_id
+            
+                account_data = {
+                    "user_id": self.current_account.user_id,
+                    "account_type": self.current_account.account_type,
+                    "account_number": self.current_account.account_number,
+                    "balance": self.current_account.account_balance,
+                }
+                self.accounts_data.append(account_data)
+                
+                with open("accounts.json", 'w') as account:
+                    json.dump(self.accounts_data, account, indent=4)
+                
+                print(f'Information:\nUser_id: {self.current_account.user_id}')
+                print(f'Account Type: {self.current_account.account_type}')
+                print(f'Account Number: {self.current_account.account_number}')
+                print(f'Account Balance: {self.current_account.account_balance}')
+                break
+            else:
+                print("Error: Minimum deposit is Php 500.")
+                attempts += 1
+                if attempts < 3:
+                    print("Please try again.")
+                else:
+                    print("Maximum attempts reached. Exiting.")
+                    clear_console()
+                    return 
+            
         
 
     def new_method(self):
         return
     
     def select_account(self):
+
         input("TODO:list account and select")
         
     def find_account(self, id: int) -> BankAccount|None:
@@ -117,12 +135,11 @@ def handle_services_option():
 
 def handle_account_option(): #group 1
     option = SERVICES
-    transaction_service: TransactionService
     if len(account_service.accounts_data) == 0:
+        print("No account found. Please create an account.")
         account_service.create_account()
-        
+    
     while option != EXIT:
-        transaction_service = TransactionService(account_service.accounts)
         print_account_menu()
         option = int(input("\n\tCommand: "))
         if option == SERVICES:
@@ -131,13 +148,30 @@ def handle_account_option(): #group 1
         elif option == SELECT:
             account_service.select_account()
         elif option == WITHDRAW:
-            amount = input("Amount: ")
-            transaction_service.withdrawal(amount)
+            selected_account = account_service.select_account()
+            if selected_account:
+                transaction_service = TransactionService(account=selected_account)
+                amount = float(input("Enter amount to withdraw: "))
+                transaction_service.withdraw(amount)
         elif option == DEPOSIT:
-            amount = float(input("Amount: "))
+            print("\t\tDEPOSIT\nSelect an account to deposit into:")
+            for item, account in enumerate(account_service.accounts_data):
+                print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}, Balance: {account['balance']}")
+            
+            selected_index = int(input("Enter the number of the account: ")) - 1
+            if selected_index < 0 or selected_index >= len(account_service.accounts_data):
+                print("Invalid selection. Please try again.")
+                continue
+            
+            selected_account = account_service.accounts_data[selected_index]
+            transaction_service = TransactionService(account=selected_account)
+            amount = float(input("\nEnter deposit amount: "))
             transaction_service.deposit(amount)
         elif option == BALANCE:
-            transaction_service.balance_inquiry()
+            selected_account = account_service.select_account()
+            if selected_account:
+                transaction_service = TransactionService(account=selected_account)
+                transaction_service.balance_inquiry()
     
      
      

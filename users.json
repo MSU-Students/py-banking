@@ -34,6 +34,29 @@
         "pin": "1234",
         "approval": 0,
         "authentication": "37978"
+    },
+    {
+        "full_name": "erg",
+        "mobile_num": "1234",
+        "address": "wef",
+        "bday": "12345",
+        "email": "wefr",
+        "nationality": "wef",
+        "user_id": "1111",
+        "pin": "1111",
+        "approval": 1,
+        "authentication": "19540"
+    },
+    {
+        "full_name": "renalyna",
+        "mobile_num": "098764",
+        "address": "efvbgfd",
+        "bday": "1233",
+        "email": "edvv",
+        "nationality": "ddvffd",
+        "user_id": "1234",
+        "pin": "1212",
+        "approval": 1,
+        "authentication": "59467"
     }
-    
 ]

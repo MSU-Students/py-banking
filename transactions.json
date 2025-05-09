@@ -1,0 +1,9 @@
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "deposit",
+    "date": "2025-05-08 21:36:14",
+    "transaction_number": "2345422",
+    "amount": 100.0
+}
