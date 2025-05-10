@@ -23,7 +23,7 @@ class LoanService:
 
     def loan_apply(self):
         print("TODO:loan application")
-        
+
         input("press any key")
     
     def collect_payment(self):
@@ -31,7 +31,7 @@ class LoanService:
     
     def display_load_history(self):
         print("TODO: Loan History")
-    # Other methods here like (history, ....)
+        # Other methods here like (history, ....)
 
 
 
