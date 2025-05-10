@@ -58,5 +58,17 @@
         "pin": "1212",
         "approval": 1,
         "authentication": "59467"
+    },
+    {
+        "full_name": "Renalyn Joyce Bas",
+        "mobile_num": "12345",
+        "address": "sw",
+        "bday": "ww",
+        "email": "ww",
+        "nationality": "ww",
+        "user_id": "0000",
+        "pin": "0000",
+        "approval": 1,
+        "authentication": "21729"
     }
 ]
