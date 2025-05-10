@@ -23,6 +23,7 @@ class LoanService:
 
     def loan_apply(self):
         print("TODO:loan application")
+        input("press any key")
     
     def collect_payment(self):
         print("TODO: Collect Payment")

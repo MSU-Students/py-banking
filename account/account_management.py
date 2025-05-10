@@ -12,7 +12,7 @@ class AccountService: #kurt
     def create_account(self):
         input("TODO:create account okay?:") #dito mag stop
         #replace the following temporary code
-        self.current_account = BankAccount()
+        self.current_account = BankAccount(1, 'dummy')
         self.accounts.append(self.current_account)
     
     def select_account(self):
