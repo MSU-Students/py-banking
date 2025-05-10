@@ -17,22 +17,16 @@ class AccountService: #kurt
     account_number: str
     account_balance: float
     accounts:List[BankAccount] = list()
-    # account_user = Transaction()
     
     accounts_file = "accounts.json"
     current_account:List
 
-    def __init__(self, user_id:str, account_type:str, account_number:str,account_balance:float=0.0):
+    def __init__(self):
         if os.path.exists(self.accounts_file):
             with open(self.accounts_file, 'r') as file:
                 self.accounts_data = json.load(file)
         else:
             self.accounts_data = []
-            
-        self.user_id = user_id
-        self.account_type = account_type
-        self.account_number =account_number
-        self.account_balance = account_balance
             
     def create_account(self):
         print("Create an Account: ") 
@@ -89,7 +83,6 @@ class AccountService: #kurt
         return
     
     def select_account(self):
-        
         for item, account in enumerate(account_service.accounts_data):
             print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}, Balance: {account['balance']}")
         
@@ -203,6 +196,7 @@ def handle_account_option(): #group 1
                 continue
             selected_account = account_service.accounts_data[selected_index]
             transaction_service = TransactionService(account=selected_account)
+            print(f"Account Balance: {account['balance']}")
             transaction_service.balance_inquiry()
         elif option == EXIT:
             clear_console()

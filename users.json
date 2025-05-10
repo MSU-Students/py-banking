@@ -70,5 +70,17 @@
         "pin": "0000",
         "approval": 1,
         "authentication": "21729"
+    },
+    {
+        "full_name": "sdd",
+        "mobile_num": "11",
+        "address": "de",
+        "bday": "ee",
+        "email": "ee",
+        "nationality": "dd",
+        "user_id": "1212",
+        "pin": "1221",
+        "approval": 1,
+        "authentication": "36077"
     }
 ]
