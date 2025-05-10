@@ -14,7 +14,7 @@ class BankAccount:
     def display_all_accounts_of_user(self, accounts: list):
         for account in accounts:
             if isinstance(account, BankAccount):
-                print(f"Account Number: {account.account_number}, Balance: {account.account_balance}")
+                print(f"Account Number: {account.account_number}, Account Balance: {account.account_balance}")
             else:
                 print("Invalid account object in the list.")
         

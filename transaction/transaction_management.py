@@ -25,13 +25,14 @@ class TransactionService:
         if isinstance(account, dict):
             # Convert dictionary to BankAccount
             account = BankAccount(
-                user_id=account["user_id"],
-                account_number=account["account_number"],
-                account_type=account["account_type"],
-                account_balance=account["balance"]
+                user_id=account.get("user_id"),
+                account_number=account.get("account_number"),
+                account_type=account.get("account_type"),
+                account_balance=account.get("account_balance")
             )
         elif not isinstance(account, BankAccount):
-            raise TypeError(f"Expected BankAccount, got {type(account).__name__}")
+            # Handle unexpected types more gracefully
+            raise TypeError(f"Expected BankAccount or dict, got {type(account).__name__}")
         self.account = account
         self.transactions: List[Transaction] = []
         self.account_balance = account.account_balance
@@ -60,8 +61,8 @@ class TransactionService:
             file.write(json.dumps(transaction_data, indent=4) + "\n")
         print(f"Deposited {amount}. New balance: {self.account.account_balance}")
     def withdrawal(self, amount: float):
-        if amount <= 0:
-            raise ValueError("Withdrawal amount must be greater than zero.")
+        if amount < 500:
+            raise ValueError("Withdrawal amount must be greater than Php 500.0 Maintaining Balance.")
         if amount > self.account.account_balance:
             raise ValueError("Insufficient balance.")
 
