@@ -34,3 +34,48 @@
     "amount": 500.0,
     "date": "2025-05-08 22:32:24"
 }
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "deposit",
+    "date": "2025-05-08 22:38:34",
+    "transaction_number": "8965193",
+    "amount": 500.0
+}
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "deposit",
+    "date": "2025-05-08 22:42:03",
+    "transaction_number": "6717143",
+    "amount": 100.0
+}
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "withdrawal",
+    "transaction_number": "3066903",
+    "amount": 300.0,
+    "date": "2025-05-08 22:42:22"
+}
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "deposit",
+    "date": "2025-05-09 18:26:09",
+    "transaction_number": "8145176",
+    "amount": 1000.0
+}
+{
+    "user_id": "1234",
+    "account_type": "savings",
+    "account_number": "49143",
+    "transaction_type": "withdrawal",
+    "transaction_number": "4926776",
+    "amount": 100.0,
+    "date": "2025-05-09 18:26:21"
+}

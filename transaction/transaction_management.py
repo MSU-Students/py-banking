@@ -6,6 +6,7 @@ from account import BankAccount
 import random
 
 
+
 class Transaction:
     def __init__(self, type: str, date: str, amount: float, transaction_number: str, account_number: str = None, account_type: str = None, account_balance: float = None):      
         self.account_number = account_number

@@ -156,7 +156,7 @@ def handle_account_option(): #group 1
         elif option == WITHDRAW:
             print("\t\WITHDRAW\nSelect an account to withdraw into:")
             for item, account in enumerate(account_service.accounts_data):
-                print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}, Balance: {account['balance']}")
+                print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}")
             
             selected_index = int(input("Enter the number of the account: ")) - 1
             if selected_index < 0 or selected_index >= len(account_service.accounts_data):
@@ -173,7 +173,7 @@ def handle_account_option(): #group 1
         elif option == DEPOSIT:
             print("\t\tDEPOSIT\nSelect an account to deposit into:")
             for item, account in enumerate(account_service.accounts_data):
-                print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}, Balance: {account['balance']}")
+                print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}")
             
             selected_index = int(input("Enter the number of the account: ")) - 1
             if selected_index < 0 or selected_index >= len(account_service.accounts_data):
@@ -184,11 +184,23 @@ def handle_account_option(): #group 1
             transaction_service = TransactionService(account=selected_account)
             amount = float(input("\nEnter deposit amount: "))
             transaction_service.deposit(amount)
+            
         elif option == BALANCE:
-            selected_account = account_service.select_account()
-            if selected_account:
-                transaction_service = TransactionService(account=selected_account)
-                transaction_service.balance_inquiry()
+            print("\t\Balance\nSelect an account to check balance:")
+            for item, account in enumerate(account_service.accounts_data):
+                print(f"{item + 1}. Account Number: {account['account_number']}, Type: {account['account_type']}")
+            
+            selected_index = int(input("Enter the number of the account: ")) - 1
+            if selected_index < 0 or selected_index >= len(account_service.accounts_data):
+                print("Invalid selection. Please try again.")
+                continue
+            selected_account = account_service.accounts_data[selected_index]
+            transaction_service = TransactionService(account=selected_account)
+            transaction_service.balance_inquiry()
+        elif option == EXIT:
+            clear_console()
+            return
+            
     
      
      
