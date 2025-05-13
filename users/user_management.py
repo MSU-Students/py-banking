@@ -48,6 +48,7 @@ class UserService:
                     nationality = user['nationality'],
                     approval = user['approval']
                 )
+                
                 return True
 
         print("Invalid username or pin")
@@ -153,7 +154,7 @@ def handle_user_option():
                 else:
                     clear_console()
                     print(f"Welcome {User_service.login_user.name}")
-                    handle_account_option()
+                    handle_account_option(User_service.login_user)
 
         elif option == FORGOT_PASS:
             clear_console()

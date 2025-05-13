@@ -5,9 +5,10 @@ from loan import Loan, LoanPayment
 from account import BankAccount
 
 class Transaction:
-    def __init__(self, type: str, date: str, amount: float):
-        self.type = type  # deposit | withdraw | transfer
+    def __init__(self, type: str, date: str, amount: float, account_num = ""):
+        self.type = type  # deposit | withdraw | debit | credit 
         self.date = date
+        self.account_number = account_num
         self.amount = amount
 
     def to_dict(self):
@@ -107,3 +108,28 @@ class TransactionService:
             print(f"Current balance: {self._account.balance}")
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
+
+    def transfer_fund(self, target_account: BankAccount, amount: float):
+            if amount <= 0:
+                print("Transfer amount must be greater than zero.")
+                return
+
+            if self._account.balance < amount:
+                print("Insufficient funds for transfer.")
+                return
+
+            self._account.balance -= amount
+            print(f"Transferred {amount} from {self._account.account_number}.")
+            transaction = Transaction(type="credit", date="", amount=amount, account_num=self._account.account_number)
+            self.transactions.append(transaction)
+            self._save_transactions()
+
+
+            target_account.balance += amount
+            print(f"Received {amount} in {target_account.account_number}.")
+            transaction = Transaction(type="debit", date="", amount=amount, account_num=target_account.account_number)
+            self.transactions.append(transaction)
+            self._save_transactions()
+            input("Press enter to continue")
+
+            
