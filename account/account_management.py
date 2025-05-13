@@ -74,7 +74,8 @@ def handle_account_option(): #group 1
     while option != EXIT and account_service.current_account != None:
         transaction_service = TransactionService(account_service.current_account)
         print_account_menu()
-        option = int(input("\n\tCommand: "))
+        option = 
+        
         if option == SERVICES:
             clear_console()
             handle_services_option()

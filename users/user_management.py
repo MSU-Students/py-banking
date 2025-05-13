@@ -102,7 +102,7 @@ class UserService:
             if user_data["user_id"] == self.proof_accnum and user_data["authentication"] == self.proof:
                 user_found = True
                 self.user_data = user_data
-                break
+                break 
 
         if user_found:
             print("You can now change your password")

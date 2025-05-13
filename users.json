@@ -37,5 +37,19 @@
         "authentication": "99999",
         "is_admin": true,
         "balance": 0.0
+    },
+    {
+        "full_name": "andrewcute",
+        "mobile_num": "00000000",
+        "address": "0000",
+        "bday": "0",
+        "email": "0",
+        "nationality": "0",
+        "user_id": "0",
+        "pin": "0",
+        "authentication": "87506",
+        "is_admin": false,
+        "balance": 0.0,
+        "approved": true
     }
 ]
