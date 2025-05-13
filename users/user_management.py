@@ -6,7 +6,7 @@ import os
 
 class User:
     def __init__(self, User_Id='', pin='', address='', bday='', fullname='', mob_num='',
-                 authentication=0, email='', nationality='', is_admin=False, balance=0.0):
+                 authentication=0, email='', nationality='', is_admin=False, balance=0.0, approved=False):
         self.User_Id = User_Id
         self.pin = pin
         self.name = fullname
@@ -18,6 +18,7 @@ class User:
         self.nationality = nationality
         self.is_admin = is_admin
         self.balance = balance
+        self.approved = approved
 
 class UserService:
     registered_user = User()
@@ -48,7 +49,8 @@ class UserService:
                     email=user['email'],
                     nationality=user['nationality'],
                     is_admin=user.get('is_admin', False),
-                    balance=user.get('balance', 0.0)
+                    balance=user.get('balance', 0.0),
+                    approved=user.get('approved', False)
                 )
                 return True
 
@@ -78,7 +80,8 @@ class UserService:
             "pin": self.pin,
             "authentication": self.authentication,
             "is_admin": False,
-            "balance": 0.0
+            "balance": 0.0,
+            "approved": False
         }
 
         self.users_data.append(user_data)
@@ -87,7 +90,7 @@ class UserService:
             json.dump(self.users_data, account, indent=4)
 
         self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name, self.mobile_num, self.authentication, self.email, self.nationality)
-        print('You have successfully registered an account!')
+        print('You have successfully registered an account! Awaiting admin approval.')
 
     def forgot_password(self):
         print("Enter the correct information for user authentication")
@@ -131,6 +134,30 @@ class UserService:
                 print(f"  Phone     : {user['mobile_num']}")
                 print(f"  Balance   : ₱{user.get('balance', 0.0):,.2f}")
                 print(f"  Admin     : {user.get('is_admin', False)}")
+                print(f"  Approved  : {user.get('approved', False)}")
+
+    def approve_users(self):
+        print("\n--- Approve Users ---")
+        pending_users = [u for u in self.users_data if not u.get('approved', False) and not u.get('is_admin', False)]
+
+        if not pending_users:
+            print("No users pending approval.")
+            return
+
+        for i, user in enumerate(pending_users):
+            print(f"{i+1}. {user['full_name']} (User ID: {user['user_id']})")
+
+        try:
+            choice = int(input("Enter the number of the user to approve (0 to cancel): "))
+            if choice == 0:
+                return
+            selected_user = pending_users[choice - 1]
+            selected_user['approved'] = True
+            with open(self.users_file, 'w') as account:
+                json.dump(self.users_data, account, indent=4)
+            print(f"User '{selected_user['full_name']}' approved successfully!")
+        except (ValueError, IndexError):
+            print("Invalid choice.")
 
 User_service = UserService()
 
@@ -147,6 +174,7 @@ def admin_menu():
     while True:
         print("\n--- Admin Panel ---")
         print("1. View All Users")
+        print("2. Approve Registered Users")
         print("0. Logout")
         try:
             choice = int(input("Enter your choice: "))
@@ -157,6 +185,11 @@ def admin_menu():
         if choice == 1:
             clear_console()
             User_service.view_all_users()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 2:
+            clear_console()
+            User_service.approve_users()
             input("\nPress Enter to continue...")
             clear_console()
         elif choice == 0:
@@ -187,9 +220,12 @@ def handle_user_option():
                 if User_service.login_user.is_admin:
                     print(f"Welcome Admin {User_service.login_user.name}")
                     admin_menu()
-                else:
+                elif User_service.login_user.approved:
                     print(f"Welcome {User_service.login_user.name}")
                     handle_account_option()
+                else:
+                    print("Your account is pending admin approval.")
+                    input("Press Enter to continue...")
 
         elif option == FORGOT_PASS:
             clear_console()
@@ -205,22 +241,3 @@ def handle_user_option():
 
         clear_console()
 
-# One-time admin account creation (run once, then comment out)
-if not any(u.get('is_admin') for u in User_service.users_data):
-    admin_account = {
-        "full_name": "Admin User",
-        "mobile_num": "0000000000",
-        "address": "Admin Address",
-        "bday": "2000-01-01",
-        "email": "admin@example.com",
-        "nationality": "Admin",
-        "user_id": "admin",
-        "pin": "admin123",
-        "authentication": "99999",
-        "is_admin": True,
-        "balance": 0.0
-    }
-    User_service.users_data.append(admin_account)
-    with open(User_service.users_file, 'w') as account:
-        json.dump(User_service.users_data, account, indent=4)
-    print("Admin account created (User ID: admin / Password: admin123)")
