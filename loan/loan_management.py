@@ -54,5 +54,10 @@ def handle_loan_option(account: BankAccount):
             return
         elif option == LOAN_APPLY:
             loan_service.loan_apply()
-        # handle other options here
+        elif option == LOAN_PAYMENT:
+            loan_service.collect_payment()
+        elif option == LOAN_HISTORY:
+            loan_service.loan_history()
+        else:
+            print("Invalid option. Please try again.")
         clear_console()
