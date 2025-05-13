@@ -251,4 +251,3 @@ def handle_user_option():
             print("Invalid option. Please select from the menu.")
 
         clear_console()
-```
