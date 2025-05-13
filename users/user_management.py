@@ -1,3 +1,26 @@
+To add **admin account functionality** to your code, we need to:
+
+1. Add an **is\_admin** field to distinguish between admin and regular users.
+2. Modify the **User** and **UserService** classes to support this.
+3. Include admin logic in the **login** and **registration** process.
+4. Add admin features: **view all users** and **approve user accounts**.
+
+Here’s the **updated code** with admin support added:
+
+---
+
+### ✅ Changes Made:
+
+* `User` class: added `is_admin` field.
+* `UserService`: updated `register`, `login`, file handling, and added `view_all_users()` and `approve_users()`.
+* `handle_user_option`: detects admin login and routes accordingly.
+* `handle_admin_menu`: allows admin to view and approve users.
+
+---
+
+### ✅ Code with Admin Support:
+
+```python
 import random
 from account import handle_account_option
 from utils import clear_console
@@ -6,7 +29,7 @@ import os
 
 class User:
     def __init__(self, User_Id='', pin='', address='', bday='', fullname='', mob_num='', authentication=0,
-                 email='', nationality='', is_admin=False):
+                 email='', nationality='', approval=0, is_admin=False):
         self.User_Id = User_Id
         self.pin = pin
         self.name = fullname
@@ -16,6 +39,7 @@ class User:
         self.authentication = authentication
         self.email = email
         self.nationality = nationality
+        self.approval = approval
         self.is_admin = is_admin
 
 class UserService:
@@ -29,7 +53,6 @@ class UserService:
                 self.users_data = json.load(file)
         else:
             self.users_data = []
-            # Add a default admin account if no users exist
             admin_account = {
                 "full_name": "Admin",
                 "mobile_num": "0000000000",
@@ -39,6 +62,7 @@ class UserService:
                 "nationality": "None",
                 "user_id": "admin",
                 "pin": "admin123",
+                "approval": 1,
                 "authentication": "00000",
                 "is_admin": True
             }
@@ -62,6 +86,7 @@ class UserService:
                     authentication=user['authentication'],
                     email=user['email'],
                     nationality=user['nationality'],
+                    approval=user['approval'],
                     is_admin=user.get('is_admin', False)
                 )
                 return True
@@ -80,6 +105,7 @@ class UserService:
         self.nationality = input("Nationality:\t\t")
         self.user_id = input("User ID:\t\t")
         self.pin = input("Password:\t\t")
+        self.approval = 0
         self.authentication = str(random.randint(10000, 99999))
 
         user_data = {
@@ -91,6 +117,7 @@ class UserService:
             "nationality": self.nationality,
             "user_id": self.user_id,
             "pin": self.pin,
+            "approval": self.approval,
             "authentication": self.authentication,
             "is_admin": False
         }
@@ -101,7 +128,8 @@ class UserService:
             json.dump(self.users_data, account, indent=4)
 
         self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name,
-                                    self.mobile_num, self.authentication, self.email, self.nationality, False)
+                                    self.mobile_num, self.authentication, self.email, self.nationality,
+                                    self.approval, False)
         print('You have successfully registered an account!')
 
     def forgot_password(self):
@@ -109,29 +137,60 @@ class UserService:
         self.proof_accnum = input('Enter User ID:\t\t')
         self.proof = input('Enter Authentication Code:\t\t')
 
-        user_found = False
         for user_data in self.users_data:
             if user_data["user_id"] == self.proof_accnum and user_data["authentication"] == self.proof:
-                user_found = True
-                self.user_data = user_data
-                break
+                print("You can now change your password")
+                self.pin = input("New Password:\t")
+                self.confirm_pin = input("Confirm Password:\t")
+                if self.pin == self.confirm_pin:
+                    user_data['pin'] = self.pin
+                    with open(self.users_file, 'w') as account:
+                        json.dump(self.users_data, account, indent=4)
+                    print("You have successfully changed your password!")
+                    return True
+                else:
+                    print("Passwords do not match.")
+                return
+        print("Account or authentication code not found.")
+        input("Press any key to continue")
 
-        if user_found:
-            print("You can now change your password")
-            self.pin = input("New Password:\t")
-            self.confirm_pin = input("Confirm Password:\t")
-
-            if self.pin == self.confirm_pin:
-                self.user_data['pin'] = self.pin
-                with open(self.users_file, 'w') as account:
-                    json.dump(self.users_data, account, indent=4)
-                print("You have successfully changed your password!")
-                return True
-            else:
-                print("Passwords do not match.")
+    def view_all_users(self):
+        print("\nRegistered Users:")
+        if not self.users_data:
+            print("No users found.")
         else:
-            print("Account or authentication code not found.")
-            input("Press any key to continue")
+            for index, user in enumerate(self.users_data, 1):
+                print(f"\nUser {index}:")
+                print(f"  Full Name     : {user['full_name']}")
+                print(f"  User ID       : {user['user_id']}")
+                print(f"  Email         : {user['email']}")
+                print(f"  Mobile Number : {user['mobile_num']}")
+                print(f"  Is Admin      : {user.get('is_admin', False)}")
+                print(f"  Approved      : {'Yes' if user['approval'] == 1 else 'No'}")
+
+    def approve_users(self):
+        print("\n--- Pending Approvals ---")
+        pending = [u for u in self.users_data if not u.get("is_admin", False) and u['approval'] == 0]
+        if not pending:
+            print("No users pending approval.")
+            return
+
+        for i, user in enumerate(pending, 1):
+            print(f"{i}. {user['full_name']} ({user['user_id']})")
+        try:
+            choice = int(input("Enter number of user to approve (0 to cancel): "))
+            if choice > 0 and choice <= len(pending):
+                user = pending[choice - 1]
+                user['approval'] = 1
+                with open(self.users_file, 'w') as f:
+                    json.dump(self.users_data, f, indent=4)
+                print(f"User {user['user_id']} approved successfully.")
+            elif choice == 0:
+                return
+            else:
+                print("Invalid selection.")
+        except ValueError:
+            print("Invalid input.")
 
 User_service = UserService()
 
@@ -145,9 +204,31 @@ def print_main_menu():
     print(f"\t{EXIT} : Exit")
 
 def handle_admin_menu():
-    print("\n--- Admin Panel ---")
-    print("1. View All Users (Coming Soon)")
-    input("Press Enter to return...")
+    while True:
+        print("\n--- Admin Panel ---")
+        print("1. View All Users")
+        print("2. Approve Pending Users")
+        print("0. Back to Main Menu")
+        try:
+            choice = int(input("Enter your choice: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
+
+        if choice == 1:
+            clear_console()
+            User_service.view_all_users()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 2:
+            clear_console()
+            User_service.approve_users()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 0:
+            break
+        else:
+            print("Invalid choice. Please try again.")
 
 def handle_user_option():
     option = LOGIN
@@ -172,6 +253,9 @@ def handle_user_option():
                     clear_console()
                     print(f"Welcome Admin {User_service.login_user.name}")
                     handle_admin_menu()
+                elif User_service.login_user.approval == 0:
+                    print("Account hasn't been confirmed by the Admin")
+                    input("Press enter to continue")
                 else:
                     clear_console()
                     print(f"Welcome {User_service.login_user.name}")
@@ -190,3 +274,4 @@ def handle_user_option():
             print("Invalid option. Please select from the menu.")
 
         clear_console()
+```
