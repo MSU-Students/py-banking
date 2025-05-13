@@ -115,7 +115,7 @@ class UserService:
                     json.dump(self.users_data, account, indent=4)
                 print("You have successfully changed your password!")
                 return True
-            else:
+            else: 
                 print("Passwords do not match.")
         else:
             print("Account or authentication code not found.")
