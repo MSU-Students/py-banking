@@ -4,109 +4,142 @@ from datetime import datetime
 # Removed unused imports Loan and LoanPayment
 from account import BankAccount
 import random
-
+import os
+from utils import clear_console 
 
 
 class Transaction:
-    def __init__(self, type: str, date: str, amount: float, transaction_number: str, account_number: str = None, account_type: str = None, account_balance: float = None):      
-        self.account_number = account_number
+    def __init__(self, user_id: str, account_type: str,account_number: str, type: str, date: str, amount: float, transaction_number: str, original_balance:float):      
+        self.user_id = user_id
         self.account_type = account_type
-        self.account_balance = account_balance
+        self.account_number = account_number
         self.transaction_type = type  # deposit | withdraw | transfer
         self.date = date
         self.amount = amount
         self.transaction_number = transaction_number
+        self.original_balance = original_balance
 
 
 
 
 class TransactionService:
+    transaction_file = "transactions.json"
+    transactions_data = list()
+    accounts_file = "accounts.json"
+    account:Transaction
     def __init__(self, account):
-        if isinstance(account, dict):
-            # Convert dictionary to BankAccount
-            account = BankAccount(
-                user_id=account.get("user_id"),
-                account_number=account.get("account_number"),
-                account_type=account.get("account_type"),
-                account_balance=account.get("account_balance")
-            )
-        elif not isinstance(account, BankAccount):
-            # Handle unexpected types more gracefully
-            raise TypeError(f"Expected BankAccount or dict, got {type(account).__name__}")
         self.account = account
-        self.transactions: List[Transaction] = []
-        self.account_balance = account.account_balance
-
-    def deposit(self, amount: float):
+        if os.path.exists(self.transaction_file):
+            
+            print(f'__'*20)
+            print("\n\tTRANSACTION SERVICE")
+            print(f'__'*20)
+        else:
+            self.transactions_data = []
+#NORHAILAH - DEPOSIT
+    def deposit(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
         if amount <= 0.0:
             raise ValueError("Deposit amount must be greater than zero.")
 
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
-        self.account.account_balance += amount  # Update the account's balance
+        
+        account_balance += amount  # Update the account's balance
         transaction_number = str(random.randint(1000000, 9999999))
-        transaction = Transaction(type="deposit", date=date, amount=amount, transaction_number=transaction_number)
-
-        self.transactions.append(transaction)
+        self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="deposit", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
+        #para to sa original balance bago pa nag deposit si user
+        self.account.original_balance -= amount
+        self.transactions_data.append(self.account)
         transaction_data = {
-            "user_id": self.account.user_id,
-            "account_type": self.account.account_type,
-            "account_number": self.account.account_number,
-            "transaction_type": transaction.transaction_type,
-            "date": transaction.date,
-            "transaction_number": transaction.transaction_number,
-            "amount": transaction.amount,
+            "account_number: ": self.account.account_number,
+            "user_id: ": self.account.user_id,
+            "account_type: ": self.account.account_type,
+            "transaction_type: ": self.account.transaction_type,
+            "date: ": self.account.date,
+            "transaction_number: ": self.account.transaction_number,
+            "original_balance: ": self.account.original_balance,
+            "amount: ": self.account.amount
         }
-
+        # append ur transaction into transactions.json
         with open("transactions.json", 'a') as file:
             file.write(json.dumps(transaction_data, indent=4) + "\n")
-        print(f"Deposited {amount}. New balance: {self.account.account_balance}")
-    def withdrawal(self, amount: float):
-        if amount < 500:
-            raise ValueError("Withdrawal amount must be greater than Php 500.0 Maintaining Balance.")
-        if amount > self.account.account_balance:
-            raise ValueError("Insufficient balance.")
+        print(f"Deposited: {amount}. New balance: {account_balance}")
+        
+        #im not sure if gagana na hindi ma overwrite and accounts.json para lang ma update yung account_balance ng isang account sa accounts.json
+        with open("accounts.json", 'r') as file:
+            accounts = json.load(file)
+            for i, account in enumerate(accounts):
+                if account["account_number: "] == account_number:
+                    accounts[i]["account_balance: "] = account_balance
+                    with open("accounts.json", 'w') as file:  
+                       pass
+                    break
+        with open("accounts.json", 'a') as file:  
+            json.dump(accounts, file, indent=4)
 
-        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
-        self.account.account_balance -= amount
-        transaction_number = str(random.randint(1000000, 9999999))
-        transaction = Transaction(type="withdrawal", date=date, amount=amount, transaction_number=transaction_number)
+        print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}')
 
-        self.transactions.append(transaction)
-        transaction_data = {
-            "user_id": self.account.user_id,
-            "account_type": self.account.account_type,"account_number": self.account.account_number,
-            "transaction_type": transaction.transaction_type,  "transaction_number": transaction.transaction_number,
-            "amount": transaction.amount, "date": transaction.date
+    #ALI - WITHDRAWAL
+    # CHRISTIAN - INSUFFIECIENT CHUCHU, iKAW BAHALA GUMAWA NG WHILE LOOPS AND EXCEPTION HANDLING
+    def withdrawal(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
+        if account_balance - amount >= 500:
+    
+            date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
             
-        }
+            account_balance -= amount  # Update the account's balance
+            transaction_number = str(random.randint(1000000, 9999999))
+            self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="deposit", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
+            #para to sa original balance bago pa nag withdraw si user
+            self.account.original_balance += amount
+            self.transactions_data.append(self.account)
+            transaction_data = {
+                "account_number: ": self.account.account_number,
+                "user_id: ": self.account.user_id,
+                "account_type: ": self.account.account_type,
+                "transaction_type: ": self.account.transaction_type,
+                "date: ": self.account.date,
+                "transaction_number: ": self.account.transaction_number,
+                "original_balance: ": self.account.original_balance,
+                "amount: ": self.account.amount
+            }
+            # append ur transaction into transactions.json
+            with open("transactions.json", 'a') as file:
+                file.write(json.dumps(transaction_data, indent=4) + "\n")
+            print(f"Deposited: {amount}. New balance: {account_balance}")
+            
+           #update the account balance of the selected user's account in accounts.json
+            with open("accounts.json", 'r') as file:
+                accounts = json.load(file)
+                for i, account in enumerate(accounts):
+                    if account["account_number: "] == account_number:
+                        accounts[i]["account_balance: "] = account_balance
+                        with open("accounts.json", 'w') as file:  
+                            pass
+                        break
+            with open("accounts.json", 'a') as file:  
+                json.dump(accounts, file, indent=4)
 
-        with open("transactions.json", 'a') as file:
-            file.write(json.dumps(transaction_data, indent=4) + "\n")
-        print(f"Withdrew {amount}. New balance: {self.account.account_balance}")
+            print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}')
+        else:
+            print("Withdrawal amount must be greater than PhP 500 Maintaining Balance.")
+            # group 2 -christian (handling insuffiecient errors ) - ikaw na bahala mag gawa ng while loop dito
 
-    def display_transactions(self):
-        if not self.transactions:
-            print("No transactions available.")
+      
+    def display_transactions(self, user_id:str, account_type:str, account_number:str, account_balance:float):
+        print(f"User Id: {user_id}") 
+        print(f"Account Type: {account_type}") 
+        print(f"Account Number:{account_number}")
+        print(f"\n\t\tList of Transactions\n")   
+        with open ("transactions.json", 'r') as file:
+            transactions = json.load(file)
+            for transaction in transactions: 
+                if transaction["user_id: "] == user_id and transaction["account_number: "] == account_number:
+                    print(f"Date and Time: {transaction["date: "]} *** Transaction Type: {transaction["transaction_type: "]} *** Amount: {transaction["amount: "]}")
+            else:     
+                print("**No transactions available**")
             return
-        print("Transaction History:")
-        for transaction in self.transactions:
-            print(f"{transaction.date} - {transaction.transaction_type} - {transaction.amount}")
-
-    def filter_transactions(self, date: Optional[str] = None, type: Optional[str] = None):
-        filtered = self.transactions
-        if date:
-            filtered = [tx for tx in filtered if tx.date.startswith(date)]
-        if type:
-            filtered = [tx for tx in filtered if tx.transaction_type == type]
-        if not filtered:
-            print("No transactions match the filter criteria.")
-            return
-        print("Filtered Transactions:")
-        for transaction in filtered:
-            print(f"{transaction.date} - {transaction.transaction_type} - {transaction.amount}")
-
-    def balance_inquiry(self):
+       
+    def balance_inquiry(self, user_id:str, account_type:str, account_number:str, account_balance:float):
         try:
-            print(f"Current balance: {self.account.account_balance}")
+            print(f"User Id: {user_id}\nAccount_type: {account_type},\nAccount Number: {account_number}\nCurrent balance: {account_balance}")
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")

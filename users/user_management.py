@@ -5,8 +5,8 @@ import json
 import os
 
 class User:
-    def __init__(self, User_Id=str, pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
-        self.User_Id = User_Id
+    def __init__(self, user_id=str, pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
+        self.user_id = user_id
         self.pin = pin
         self.name = fullname
         self.mobile_number = mob_num
@@ -34,19 +34,19 @@ class UserService:
         self.pin = input("Password:\t\t")
         
         for user in self.users_data:
-            if user['user_id'] == self.user_id and user['pin'] == self.pin:
+            if user['user_id: '] == self.user_id and user['pin: '] == self.pin:
                 
                 self.login_user = User(
-                    User_Id = user['user_id'],
-                    pin = user['pin'],
-                    address = user['address'],
-                    bday = user['bday'],
-                    fullname = user['full_name'],
-                    mob_num = user['mobile_num'],
-                    authentication = user['authentication'],
-                    email = user['email'],
-                    nationality = user['nationality'],
-                    approval = user['approval']
+                    user_id = user["user_id: "],
+                    pin = user["pin: "],
+                    address = user["address: "],
+                    bday = user["bday: "],
+                    fullname = user["full_name: "],
+                    mob_num = user["mobile_num: "],
+                    authentication = user["authentication: "],
+                    email = user["email: "],
+                    nationality = user["nationality: "],
+                    approval = user["approval: "]
                 )
                 return True
 
@@ -68,16 +68,16 @@ class UserService:
         self.authentication = str(random.randint(10000, 99999))
 
         user_data = {
-            "full_name": self.full_name,
-            "mobile_num": self.mobile_num,
-            "address": self.address,
-            "bday": self.bday,
-            "email": self.email,
-            "nationality": self.nationality,
-            "user_id": self.user_id,
-            "pin": self.pin,
-            "approval": self.approval,
-            "authentication": self.authentication
+            "full_name: ": self.full_name,
+            "mobile_num: ": self.mobile_num,
+            "address: ": self.address,
+            "bday: ": self.bday,
+            "email: ": self.email,
+            "nationality: ": self.nationality,
+            "user_id: ": self.user_id,
+            "pin: ": self.pin,
+            "approval: ": self.approval,
+            "authentication: ": self.authentication
         }
 
         self.users_data.append(user_data)
@@ -95,7 +95,7 @@ class UserService:
 
         user_found = False
         for user_data in self.users_data:
-            if user_data["user_id"] == self.proof_accnum and user_data["authentication"] == self.proof:
+            if user_data["user_id: "] == self.proof_accnum and user_data["authentication: "] == self.proof:
                 user_found = True
                 self.user_data = user_data
                 break
@@ -106,7 +106,7 @@ class UserService:
             self.confirm_pin = input("Confirm Password:\t")
 
             if self.pin == self.confirm_pin:
-                self.user_data['pin'] = self.pin
+                self.user_data['pin: '] = self.pin
                 with open(self.users_file, 'w') as account:
                     json.dump(self.users_data, account, indent=4)
                 print("You have successfully changed your password!")
@@ -154,7 +154,7 @@ def handle_user_option():
                     clear_console()
                     print(f"Welcome {User_service.login_user.name}")
                     
-                    handle_account_option(User_service.login_user.User_Id)
+                    handle_account_option(User_service.login_user.user_id)
 
         elif option == FORGOT_PASS:
             clear_console()

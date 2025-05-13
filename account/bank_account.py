@@ -11,6 +11,7 @@ class BankAccount:
         self.account_type = account_type
         self.account_number = account_number
         self.account_balance = account_balance
+
     def display_all_accounts_of_user(self, accounts: list):
         for account in accounts:
             if isinstance(account, BankAccount):
