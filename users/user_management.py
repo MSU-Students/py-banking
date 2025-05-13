@@ -1,26 +1,3 @@
-To add **admin account functionality** to your code, we need to:
-
-1. Add an **is\_admin** field to distinguish between admin and regular users.
-2. Modify the **User** and **UserService** classes to support this.
-3. Include admin logic in the **login** and **registration** process.
-4. Add admin features: **view all users** and **approve user accounts**.
-
-Here’s the **updated code** with admin support added:
-
----
-
-### ✅ Changes Made:
-
-* `User` class: added `is_admin` field.
-* `UserService`: updated `register`, `login`, file handling, and added `view_all_users()` and `approve_users()`.
-* `handle_user_option`: detects admin login and routes accordingly.
-* `handle_admin_menu`: allows admin to view and approve users.
-
----
-
-### ✅ Code with Admin Support:
-
-```python
 import random
 from account import handle_account_option
 from utils import clear_console
