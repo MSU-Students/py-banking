@@ -5,7 +5,8 @@ import json
 import os
 
 class User:
-    def __init__(self, User_Id='', pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
+    def __init__(self, User_Id='', pin='', address='', bday='', fullname='', mob_num='', authentication=0,
+                 email='', nationality='', is_admin=False):
         self.User_Id = User_Id
         self.pin = pin
         self.name = fullname
@@ -15,38 +16,53 @@ class User:
         self.authentication = authentication
         self.email = email
         self.nationality = nationality
-        self.approval = approval
+        self.is_admin = is_admin
 
 class UserService:
     registered_user = User()
     login_user = User()
     users_file = "users.json"
-    
+
     def __init__(self):
         if os.path.exists(self.users_file):
             with open(self.users_file, 'r') as file:
                 self.users_data = json.load(file)
         else:
             self.users_data = []
+            # Add a default admin account if no users exist
+            admin_account = {
+                "full_name": "Admin",
+                "mobile_num": "0000000000",
+                "address": "Head Office",
+                "bday": "1970-01-01",
+                "email": "admin@example.com",
+                "nationality": "None",
+                "user_id": "admin",
+                "pin": "admin123",
+                "authentication": "00000",
+                "is_admin": True
+            }
+            self.users_data.append(admin_account)
+            with open(self.users_file, 'w') as f:
+                json.dump(self.users_data, f, indent=4)
 
     def login(self):
         self.user_id = input("User ID:\t\t")
         self.pin = input("Password:\t\t")
-        
+
         for user in self.users_data:
             if user['user_id'] == self.user_id and user['pin'] == self.pin:
-                
                 self.login_user = User(
-                    User_Id = user['user_id'],
-                    pin = user['pin'],
-                    address = user['address'],
-                    bday = user['bday'],
-                    fullname = user['full_name'],
-                    mob_num = user['mobile_num'],
-                    authentication = user['authentication'],
-                    email = user['email'],
-                    nationality = user['nationality'],
-                    approval = user['approval']
+                    User_Id=user['user_id'],
+                    pin=user['pin'],
+                    address=user['address'],
+                    bday=user['bday'],
+                    fullname=user['full_name'],
+                    mob_num=user['mobile_num'],
+                    authentication=user['authentication'],
+                    email=user['email'],
+                    nationality=user['nationality'],
+                    is_admin=user.get('is_admin', False)
                 )
                 return True
 
@@ -54,8 +70,8 @@ class UserService:
         input("Wrong credentials. Press any key to continue")
         return False
 
-
     def register(self):
+        print("Register New User (Admin accounts can only be added manually)")
         self.full_name = input("Full Name:\t\t")
         self.mobile_num = input("Mobile Number:\t\t")
         self.address = input("Address:\t\t")
@@ -64,7 +80,6 @@ class UserService:
         self.nationality = input("Nationality:\t\t")
         self.user_id = input("User ID:\t\t")
         self.pin = input("Password:\t\t")
-        self.approval = 0
         self.authentication = str(random.randint(10000, 99999))
 
         user_data = {
@@ -76,8 +91,8 @@ class UserService:
             "nationality": self.nationality,
             "user_id": self.user_id,
             "pin": self.pin,
-            "approval": self.approval,
-            "authentication": self.authentication
+            "authentication": self.authentication,
+            "is_admin": False
         }
 
         self.users_data.append(user_data)
@@ -85,13 +100,14 @@ class UserService:
         with open(self.users_file, 'w') as account:
             json.dump(self.users_data, account, indent=4)
 
-        self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name, self.mobile_num, self.authentication, self.email, self.nationality, self.approval)
+        self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name,
+                                    self.mobile_num, self.authentication, self.email, self.nationality, False)
         print('You have successfully registered an account!')
 
     def forgot_password(self):
         print("Enter the correct information for user authentication")
-        self.proof_accnum = input('Enter User User ID:\t\t')
-        self.proof = input('Enter User Authentication:\t\t')
+        self.proof_accnum = input('Enter User ID:\t\t')
+        self.proof = input('Enter Authentication Code:\t\t')
 
         user_found = False
         for user_data in self.users_data:
@@ -128,6 +144,11 @@ def print_main_menu():
     print(f"\t{FORGOT_PASS} : Forgot Password")
     print(f"\t{EXIT} : Exit")
 
+def handle_admin_menu():
+    print("\n--- Admin Panel ---")
+    print("1. View All Users (Coming Soon)")
+    input("Press Enter to return...")
+
 def handle_user_option():
     option = LOGIN
     while option != EXIT:
@@ -147,9 +168,10 @@ def handle_user_option():
             clear_console()
             print("Login")
             if User_service.login():
-                if User_service.login_user.approval == 0:
-                    print("Account hasn't been confirmed by the Admin")
-                    input("Press enter to continue")
+                if User_service.login_user.is_admin:
+                    clear_console()
+                    print(f"Welcome Admin {User_service.login_user.name}")
+                    handle_admin_menu()
                 else:
                     clear_console()
                     print(f"Welcome {User_service.login_user.name}")
