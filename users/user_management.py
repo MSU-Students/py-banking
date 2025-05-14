@@ -158,7 +158,51 @@ class UserService:
             new_bday = input("Enter new Birthdate: ")
             self.login_user.bday = new_bday
         else:
-            print("Invalid option selected.")
+            for index, user in enumerate(self.users_data, 1):
+                print(f"\nUser {index}:")
+                print(f"  Full Name : {user['full_name']}")
+                print(f"  User ID   : {user['user_id']}")
+                print(f"  Email     : {user['email']}")
+                print(f"  Phone     : {user['mobile_num']}")
+                print(f"  Balance   : ₱{user.get('balance', 0.0):,.2f}")
+                print(f"  Admin     : {user.get('is_admin', False)}")
+                print(f"  Approved  : {user.get('approved', False)}")
+                
+    def change_pass(self):
+        print("\tCHANGE PIN")
+        self.old_pin = input("Enter your previous pin:\t\t")
+        if self.old_pin != User_service.login_user.pin:
+            print("incorrect pin")
+            return
+        
+        print("you can now change your pin")
+        self.new_pin = input("Enter your new pin(4 digits only):\t\t")
+        if not self.new_pin.isdigit() or len(self.new_pin) != 4:
+            print("please try again")
+            input("press enter to continue...")
+            return
+        self.confirm_pin = input("Re-enter your new pin:\t\t")
+        if self.new_pin != self.confirm_pin:
+            print("confirmation is incorrect...")
+            return
+        
+        self.login_user.pin = self.new_pin
+        for user_data in self.users_data:
+            if user_data["user_id"] == self.login_user.User_Id:
+                user_data["pin"] = self.login_user.pin
+                break
+
+        with open(self.users_file, 'w') as account:
+            json.dump(self.users_data, account, indent=4)
+        print("Profile information updated successfully!")
+        input("Press any key to continue")
+
+    def approve_users(self):
+        print("\n--- Approve Users ---")
+        pending_users = [u for u in self.users_data if not u.get('approved', False) and not u.get('is_admin', False)]
+
+        if not pending_users:
+            print("No users pending approval.")
             return
 
         for user_data in self.users_data:
@@ -221,6 +265,8 @@ class UserService:
                     print(f"  Repayment Date  : {loan.get('repayment_date', 'N/A')}")
         else:
             print("You must be an admin to view loan records.")
+
+    
 
 User_service = UserService()
 
@@ -309,7 +355,9 @@ def handle_user_option():
             clear_console()
             return
 
-        else:
-            print("Invalid option. Please select from the menu.")
-
+        if key:
+            clear_console()
+            print(f"Welcome {User_service.registered_user.name}")
+            handle_account_option()
+        
         clear_console()
