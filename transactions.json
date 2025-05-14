@@ -17,8 +17,8 @@
     "transaction_number: ": "4366612",
     "original_balance: ": 800.0,
     "amount: ": 100.0
-}
-]{
+},
+{
     "account_number: ": "23497",
     "user_id: ": "1234",
     "account_type: ": "savings",
@@ -27,7 +27,7 @@
     "transaction_number: ": "7582978",
     "original_balance: ": 900.0,
     "amount: ": 100.0
-}
+},
 {
     "account_number: ": "23497",
     "user_id: ": "1234",
@@ -37,4 +37,25 @@
     "transaction_number: ": "6783148",
     "original_balance: ": 1000.0,
     "amount: ": 100.0
+},
+{
+    "account_number: ": "66917",
+    "user_id: ": "1111",
+    "account_type: ": "savings",
+    "transaction_type: ": "deposit",
+    "date: ": "2025-05-13 22:02:40",
+    "transaction_number: ": "9897400",
+    "original_balance: ": 500.0,
+    "amount: ": 100.0
+},
+{
+    "account_number: ": "66917",
+    "user_id: ": "1111",
+    "account_type: ": "savings",
+    "transaction_type: ": "deposit",
+    "date: ": "2025-05-13 22:02:48",
+    "transaction_number: ": "3972937",
+    "original_balance: ": 600.0,
+    "amount: ": 10000.0
 }
+]

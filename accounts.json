@@ -10,5 +10,11 @@
         "account_type: ": "savings",
         "account_number: ": "23497",
         "account_balance: ": 900.0
+    },
+    {
+        "user_id: ": "1111",
+        "account_type: ": "savings",
+        "account_number: ": "66917",
+        "account_balance: ": 10600.0
     }
 ]
