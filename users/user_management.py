@@ -21,13 +21,22 @@ class UserService:
     registered_user = User()
     login_user = User()
     users_file = "users.json"
-    
+    loans_file = "loan.json" 
+
     def __init__(self):
+        
         if os.path.exists(self.users_file):
             with open(self.users_file, 'r') as file:
                 self.users_data = json.load(file)
         else:
             self.users_data = []
+
+       
+        if os.path.exists(self.loans_file):
+            with open(self.loans_file, 'r') as file:
+                self.loans_data = json.load(file)
+        else:
+            self.loans_data = []
 
     def login(self):
         self.user_id = input("User ID:\t\t")
@@ -196,6 +205,23 @@ class UserService:
         input("Press any key to continue")
 
 
+    def view_loans(self):
+        
+        if self.login_user.is_admin:
+            print("\n--- View All Loans ---")
+            if not self.loans_data:
+                print("No loan records found.")
+            else:
+                for index, loan in enumerate(self.loans_data, 1):
+                    print(f"\nLoan {index}:")
+                    print(f"  Loan ID         : {loan.get('loan_id')}")
+                    print(f"  User ID         : {loan.get('user_id')}")
+                    print(f"  Amount          : ₱{loan.get('amount', 0.0):,.2f}")
+                    print(f"  Status          : {loan.get('status', 'Pending')}")
+                    print(f"  Repayment Date  : {loan.get('repayment_date', 'N/A')}")
+        else:
+            print("You must be an admin to view loan records.")
+
 User_service = UserService()
 
 EXIT, LOGIN, REGISTER, FORGOT_PASS = (0, 1, 2, 3)
@@ -206,6 +232,39 @@ def print_main_menu():
     print(f"\t{REGISTER} : Register")
     print(f"\t{FORGOT_PASS} : Forgot Password")
     print(f"\t{EXIT} : Exit")
+
+def admin_menu():
+    while True:
+        print("\n--- Admin Panel ---")
+        print("1. View All Users")
+        print("2. Approve Registered Users")
+        print("3. View All Loans") 
+        print("0. Logout")
+        try:
+            choice = int(input("Enter your choice: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
+
+        if choice == 1:
+            clear_console()
+            User_service.view_all_users()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 2:
+            clear_console()
+            User_service.approve_users()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 3:  
+            clear_console()
+            User_service.view_loans()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 0:
+            break
+        else:
+            print("Invalid choice. Try again.")
 
 def handle_user_option():
     key = False
@@ -250,9 +309,7 @@ def handle_user_option():
             clear_console()
             return
 
-        if key:
-            clear_console()
-            print(f"Welcome {User_service.registered_user.name}")
-            handle_account_option()
-        
+        else:
+            print("Invalid option. Please select from the menu.")
+
         clear_console()
