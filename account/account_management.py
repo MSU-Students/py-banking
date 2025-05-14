@@ -39,7 +39,7 @@ def print_account_menu():
     #other options here
     print(f"\t{EXIT} : Exit")
 
-CREATE_ACCOUNT, LOAN = (1, 2)
+CREATE_ACCOUNT, LOAN, CHANGE_PASS = (1, 2, 3)
 '''
 Main Account Sub Menu: Services
 '''
@@ -47,6 +47,7 @@ def print_services_options():
     print('Services Options:')
     print(f"\t{CREATE_ACCOUNT} : CREATE NEW ACCOUNT")
     print(f"\t{LOAN} : LOAN SERVICES")
+    print(f"\t{CHANGE_PASS} : CHANGE PASSWORD")
     #other options here
     print(f"\t{EXIT} : Exit")
 
@@ -61,10 +62,28 @@ def handle_services_option():
         elif option == LOAN:
             clear_console()
             handle_loan_option(account_service.current_account)
+        elif option == CHANGE_PASS:
+            clear_console()
+            User_service.change_pass()
         # handle other options here
         clear_console()
 
+LOGIN, CREATE = (1, 2)
+def login_account_menu():
+    #Allow the user to log in or create a new account
+    print("Choose an option")
+    print(f"\t{LOGIN} : LOGIN ACCOUNT")
+    print(f"\t{CREATE} : CREATE ACCOUNT")
+    print(f"\t{EXIT} : EXIT")
+    choice = int(input("CHOICE: "))
 
+    if choice == LOGIN:
+        account_service.select_account()
+    elif choice == CREATE:
+        account_service.create_account()
+    else:
+        return
+        
 def handle_account_option(): #group 1
     option = SERVICES
     transaction_service: TransactionService
