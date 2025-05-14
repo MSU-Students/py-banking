@@ -98,6 +98,7 @@ class LoanService:
                 for payment in loan_payments:
                     print(f"  Payment: {payment.amount} on {payment.date}")
 
+
 EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3
 
 def print_loan_option():
