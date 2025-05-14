@@ -10,5 +10,29 @@
         "pin: ": "1234",
         "approval: ": 1,
         "authentication: ": "71725"
+    },
+    {
+        "full_name: ": "Renalyn",
+        "mobile_num: ": "09827236354",
+        "address: ": "secret daw",
+        "bday: ": "secret",
+        "email: ": "secreo",
+        "nationality: ": "filo",
+        "user_id: ": "1212",
+        "pin: ": "1212",
+        "approval: ": 1,
+        "authentication: ": "57532"
+    },
+    {
+        "full_name: ": "Renalyn Joyce D. Bacones",
+        "mobile_num: ": "09649420305",
+        "address: ": "Hell University",
+        "bday: ": "1892",
+        "email: ": "renyuhin216@gmail.com",
+        "nationality: ": "Filipino",
+        "user_id: ": "1111",
+        "pin: ": "1111",
+        "approval: ": 1,
+        "authentication: ": "69668"
     }
 ]

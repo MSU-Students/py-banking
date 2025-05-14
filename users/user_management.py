@@ -87,7 +87,8 @@ class UserService:
 
         self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name, self.mobile_num, self.authentication, self.email, self.nationality, self.approval)
         print('You have successfully registered an account!')
-
+        os.system("pause")
+        return
     def forgot_password(self):
         print("Enter the correct information for user authentication")
         self.proof_accnum = input('Enter User User ID:\t\t')

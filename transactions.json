@@ -1,10 +1,40 @@
 [{
-    "account_number: ": "53947",
+    "account_number: ": "23497",
     "user_id: ": "1234",
-    "account_type: ": "checking",
+    "account_type: ": "savings",
     "transaction_type: ": "deposit",
-    "date: ": "2025-05-13 05:22:18",
-    "transaction_number: ": "1197042",
+    "date: ": "2025-05-13 20:57:36",
+    "transaction_number: ": "1606400",
     "original_balance: ": 700.0,
-    "amount: ": 200.0
-}]
+    "amount: ": 100.0
+},
+{
+    "account_number: ": "23497",
+    "user_id: ": "1234",
+    "account_type: ": "savings",
+    "transaction_type: ": "deposit",
+    "date: ": "2025-05-13 21:13:23",
+    "transaction_number: ": "4366612",
+    "original_balance: ": 800.0,
+    "amount: ": 100.0
+}
+]{
+    "account_number: ": "23497",
+    "user_id: ": "1234",
+    "account_type: ": "savings",
+    "transaction_type: ": "deposit",
+    "date: ": "2025-05-13 21:51:29",
+    "transaction_number: ": "7582978",
+    "original_balance: ": 900.0,
+    "amount: ": 100.0
+}
+{
+    "account_number: ": "23497",
+    "user_id: ": "1234",
+    "account_type: ": "savings",
+    "transaction_type: ": "withdrawal",
+    "date: ": "2025-05-13 21:51:39",
+    "transaction_number: ": "6783148",
+    "original_balance: ": 1000.0,
+    "amount: ": 100.0
+}

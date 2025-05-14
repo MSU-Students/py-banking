@@ -2,13 +2,13 @@
     {
         "user_id: ": "1234",
         "account_type: ": "savings",
-        "account_number: ": "86985",
-        "account_balance: ": 900.0
+        "account_number: ": "94797",
+        "account_balance: ": 1000.0
     },
     {
         "user_id: ": "1234",
-        "account_type: ": "checking",
-        "account_number: ": "53947",
-        "account_balance: ": 500.0
+        "account_type: ": "savings",
+        "account_number: ": "23497",
+        "account_balance: ": 900.0
     }
 ]

@@ -2,10 +2,10 @@ import json
 from typing import List, Optional
 from datetime import datetime
 # Removed unused imports Loan and LoanPayment
-from account import BankAccount
+# from account import BankAccount
 import random
 import os
-from utils import clear_console 
+# from utils import clear_console 
 
 
 class Transaction:
@@ -60,6 +60,7 @@ class TransactionService:
             "amount: ": self.account.amount
         }
         # append ur transaction into transactions.json
+        #w+ or a?
         with open("transactions.json", 'a') as file:
             file.write(json.dumps(transaction_data, indent=4) + "\n")
         print(f"Deposited: {amount}. New balance: {account_balance}")
@@ -87,7 +88,7 @@ class TransactionService:
             
             account_balance -= amount  # Update the account's balance
             transaction_number = str(random.randint(1000000, 9999999))
-            self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="deposit", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
+            self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="withdrawal", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
             #para to sa original balance bago pa nag withdraw si user
             self.account.original_balance += amount
             self.transactions_data.append(self.account)
@@ -119,27 +120,33 @@ class TransactionService:
                 json.dump(accounts, file, indent=4)
 
             print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}')
-        else:
-            print("Withdrawal amount must be greater than PhP 500 Maintaining Balance.")
-            # group 2 -christian (handling insuffiecient errors ) - ikaw na bahala mag gawa ng while loop dito
 
-      
-    def display_transactions(self, user_id:str, account_type:str, account_number:str, account_balance:float):
+        else:
+            print("Withdrawal amount must be greater than PhP 500 Maintaining Balance and must not be less than 0.")
+    # group 2 -christian (handling insuffiecient errors ) - ikaw na bahala mag gawa ng while loop dito
+    # IKAW na bahala sano history transaction kapag ang account number walang laman na transaction history, gawan mo ng exception handling, and yung mga error messages
+    def display_transactions(self, user_id:str, account_type:str, account_number:str):
         print(f"User Id: {user_id}") 
         print(f"Account Type: {account_type}") 
         print(f"Account Number:{account_number}")
         print(f"\n\t\tList of Transactions\n")   
         with open ("transactions.json", 'r') as file:
             transactions = json.load(file)
+            i = 0
             for transaction in transactions: 
+            
                 if transaction["user_id: "] == user_id and transaction["account_number: "] == account_number:
-                    print(f"Date and Time: {transaction["date: "]} *** Transaction Type: {transaction["transaction_type: "]} *** Amount: {transaction["amount: "]}")
-            else:     
-                print("**No transactions available**")
+                    print(f"{i+1.}\n*** Date and Time: {transaction["date: "]} \n*** Transaction Type: {transaction["transaction_type: "]} \n*** Amount: {transaction["amount: "]}\n")
+                    i+=1
             return
-       
-    def balance_inquiry(self, user_id:str, account_type:str, account_number:str, account_balance:float):
+    
+    def balance_inquiry(self, user_id:str,account_number:str):
         try:
-            print(f"User Id: {user_id}\nAccount_type: {account_type},\nAccount Number: {account_number}\nCurrent balance: {account_balance}")
+             with open("accounts.json", 'r') as file:
+                accounts = json.load(file)
+                for i, account in enumerate(accounts):
+                    if account["account_number: "] == account_number:
+                        print(f"User Id: {user_id}\nAccount_type: {account["account_type: "]},\nAccount Number: {account_number}\nCurrent balance: Php{account["account_balance: "]}")
+                        break
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
