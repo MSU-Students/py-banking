@@ -21,13 +21,22 @@ class UserService:
     registered_user = User()
     login_user = User()
     users_file = "users.json"
-    
+    loans_file = "loan.json" 
+
     def __init__(self):
+        
         if os.path.exists(self.users_file):
             with open(self.users_file, 'r') as file:
                 self.users_data = json.load(file)
         else:
             self.users_data = []
+
+       
+        if os.path.exists(self.loans_file):
+            with open(self.loans_file, 'r') as file:
+                self.loans_data = json.load(file)
+        else:
+            self.loans_data = []
 
     def login(self):
         self.user_id = input("User ID:\t\t")
@@ -47,16 +56,13 @@ class UserService:
                     nationality=user_data["nationality"],
                     approval=user_data["approval"]
                 )
-                return
+                return  # Exit after setting up login_user
 
         print("Invalid username or pin")
         input("Wrong credentials. Press any key to continue")
         clear_console()
 
-        print("Invalid username or pin")
-        input("Wrong credentials. Press any key to continue")
-        return False
-
+    
     def register(self):
         self.full_name = input("Full Name:\t\t")
         self.mobile_num = input("Mobile Number:\t\t")
@@ -125,10 +131,32 @@ class UserService:
             print("Account or authentication code not found.")
             input("Press any key to continue")
 
-    def view_all_users(self):
-        print("\nRegistered Users:")
-        if not self.users_data:
-            print("No users found.")
+    def change_info(self):
+        print("Change Information")
+        print("1. Change Address")
+        print("2. Change Mobile Number")
+        print("3. Change Email Address")
+        print("4. Change Nationality")
+        print("5. Change Birthdate")
+
+        option = int(input("Select an option: "))
+        clear_console()
+        print("Change Information")
+        if option == 1:
+            new_address = input("Enter new address: ")
+            self.login_user.address = new_address
+        elif option == 2:
+            new_mobile_number = input("Enter new mobile number: ")
+            self.login_user.mobile_number = new_mobile_number
+        elif option == 3:
+            new_email = input("Enter new email address: ")
+            self.login_user.email = new_email
+        elif option == 4:
+            new_nationality = input("Enter new Nationality: ")
+            self.login_user.nationality = new_nationality
+        elif option == 5:
+            new_bday = input("Enter new Birthdate: ")
+            self.login_user.bday = new_bday
         else:
             for index, user in enumerate(self.users_data, 1):
                 print(f"\nUser {index}:")
@@ -177,20 +205,66 @@ class UserService:
             print("No users pending approval.")
             return
 
-        for i, user in enumerate(pending_users):
-            print(f"{i+1}. {user['full_name']} (User ID: {user['user_id']})")
+        for user_data in self.users_data:
+            if user_data["user_id"] == self.login_user.User_Id:
+                user_data["address"] = self.login_user.address
+                user_data["mobile_num"] = self.login_user.mobile_number
+                user_data["email"] = self.login_user.email
+                user_data["nationality"] = self.login_user.nationality
+                user_data["bday"] = self.login_user.bday
+                break
+        
+        with open(self.users_file, 'w') as account:
+            json.dump(self.users_data, account, indent=4)
+        print("Profile information updated successfully!")
+        input("Press any key to continue")
 
-        try:
-            choice = int(input("Enter the number of the user to approve (0 to cancel): "))
-            if choice == 0:
-                return
-            selected_user = pending_users[choice - 1]
-            selected_user['approved'] = True
-            with open(self.users_file, 'w') as account:
-                json.dump(self.users_data, account, indent=4)
-            print(f"User '{selected_user['full_name']}' approved successfully!")
-        except (ValueError, IndexError):
-            print("Invalid choice.")
+    def change_pass(self):
+        print("\tCHANGE PIN")
+        self.old_pin = input("Enter your previous pin:\t\t")
+        if self.old_pin != User_service.login_user.pin:
+            print("incorrect pin")
+            return
+        
+        print("you can now change your pin")
+        self.new_pin = input("Enter your new pin(4 digits only):\t\t")
+        if not self.new_pin.isdigit() or len(self.new_pin) != 4:
+            print("please try again")
+            input("press enter to continue...")
+            return
+        self.confirm_pin = input("Re-enter your new pin:\t\t")
+        if self.new_pin != self.confirm_pin:
+            print("confirmation is incorrect...")
+            return
+        
+        self.login_user.pin = self.new_pin
+        for user_data in self.users_data:
+            if user_data["user_id"] == self.login_user.User_Id:
+                user_data["pin"] = self.login_user.pin
+                break
+
+        with open(self.users_file, 'w') as account:
+            json.dump(self.users_data, account, indent=4)
+        print("Profile information updated successfully!")
+        input("Press any key to continue")
+
+
+    def view_loans(self):
+        
+        if self.login_user.is_admin:
+            print("\n--- View All Loans ---")
+            if not self.loans_data:
+                print("No loan records found.")
+            else:
+                for index, loan in enumerate(self.loans_data, 1):
+                    print(f"\nLoan {index}:")
+                    print(f"  Loan ID         : {loan.get('loan_id')}")
+                    print(f"  User ID         : {loan.get('user_id')}")
+                    print(f"  Amount          : ₱{loan.get('amount', 0.0):,.2f}")
+                    print(f"  Status          : {loan.get('status', 'Pending')}")
+                    print(f"  Repayment Date  : {loan.get('repayment_date', 'N/A')}")
+        else:
+            print("You must be an admin to view loan records.")
 
     
 
@@ -210,6 +284,7 @@ def admin_menu():
         print("\n--- Admin Panel ---")
         print("1. View All Users")
         print("2. Approve Registered Users")
+        print("3. View All Loans") 
         print("0. Logout")
         try:
             choice = int(input("Enter your choice: "))
@@ -225,6 +300,11 @@ def admin_menu():
         elif choice == 2:
             clear_console()
             User_service.approve_users()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 3:  
+            clear_console()
+            User_service.view_loans()
             input("\nPress Enter to continue...")
             clear_console()
         elif choice == 0:
