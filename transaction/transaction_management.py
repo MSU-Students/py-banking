@@ -83,6 +83,7 @@ class TransactionService:
     # CHRISTIAN - INSUFFIECIENT CHUCHU, iKAW BAHALA GUMAWA NG WHILE LOOPS AND EXCEPTION HANDLING
     def withdrawal(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
         if account_balance - amount >= 500:
+            111
     
             date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
             
