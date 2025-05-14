@@ -82,8 +82,16 @@ class TransactionService:
     #ALI - WITHDRAWAL
     # CHRISTIAN - INSUFFIECIENT CHUCHU, iKAW BAHALA GUMAWA NG WHILE LOOPS AND EXCEPTION HANDLING
     def withdrawal(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
-        if account_balance - amount >= 500:
-            111
+        while True:
+            if amount <= 0:
+                raise ValueError("Withdraw amount must be greater than zero.")
+            if amount > account_balance:
+                raise ValueError("Insufficient funds for withdrawal.")
+            if account_balance - amount < 500:
+                raise ValueError("Wirhdrawal amount must not exceed the amount balance minus the maintaining balance of Php 500.")
+            if amount > 0 and account_balance - amount >= 500:
+                break
+            
     
             date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
             
@@ -131,15 +139,22 @@ class TransactionService:
         print(f"Account Type: {account_type}") 
         print(f"Account Number:{account_number}")
         print(f"\n\t\tList of Transactions\n")   
-        with open ("transactions.json", 'r') as file:
-            transactions = json.load(file)
-            i = 0
-            for transaction in transactions: 
+
+    try:
+          with open("transactions.json", 'r') as file:
+             transactions = json.load(file)
+             i = 0
+             for transaction in transactions: 
             
                 if transaction["user_id: "] == user_id and transaction["account_number: "] == account_number:
                     print(f"{i+1.}\n*** Date and Time: {transaction["date: "]} \n*** Transaction Type: {transaction["transaction_type: "]} \n*** Amount: {transaction["amount: "]}\n")
                     i+=1
-            return
+             if i == 0:
+                raise ValueError("No transactions found for this account.")
+    except FileNotFoundError as e:
+        print(e)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
     
     def balance_inquiry(self, user_id:str,account_number:str):
         try:
@@ -147,15 +162,13 @@ class TransactionService:
                 accounts = json.load(file)
                 for i, account in enumerate(accounts):
                     if account["account_number: "] == account_number:
-                        print(f"User Id: {user_id}\nAccount_type: {account["account_type: "]},\nAccount Number: {account_number}\nCurrent balance: Php{account["account_balance: "]}")
-                        print(f"christian ni gana ang pull?")
-                        print("ali nakita mo????")
-                        print("nakita niyo na??? means na pull ninyo ni ahh")
-                        print("ali nakita mo  keneme")
-                        print("ali nakita mo  keneme")
-                        print("ali nakita mo  keneme")
-                        print("ali nakita mo  keneme")
-                        
-                        break
+                        print(f"User Id: {user_id}")
+                        print(f"Account_type:  {account["account_type: "]}")
+                        print(f"Account Number: {account_number}")
+                        print(f"Current balance: Php{account["account_balance: "]}")
+                        return
+                    
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
+        except FileNotFoundError as e:
+            print("The account.json file does not exist. Please ensure the file as available.")
