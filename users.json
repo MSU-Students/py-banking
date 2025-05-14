@@ -1,4 +1,4 @@
-[ 
+[
     {
         "full_name": "Abdullah Abuat Lacsaman",
         "mobile_num": "09092907819",
@@ -8,8 +8,9 @@
         "nationality": "Filipino",
         "user_id": "202433660",
         "pin": "20060616",
-        "approval": 1, 
-        "authentication": "71725"
+        "approval": 1,
+        "authentication": "71725",
+        "approved": true
     },
     {
         "full_name": "Alfred Jun Cadiz Esoy",
@@ -21,6 +22,34 @@
         "user_id": "202412345",
         "pin": "0909",
         "approval": 0,
-        "authentication": "41966"
+        "authentication": "41966",
+        "approved": true
+    },
+    {
+        "full_name": "Admin User",
+        "mobile_num": "0000000000",
+        "address": "Admin Address",
+        "bday": "2000-01-01",
+        "email": "admin@admin.com",
+        "nationality": "Admin",
+        "user_id": "admin",
+        "pin": "andrewcute",
+        "authentication": "99999",
+        "is_admin": true,
+        "balance": 0.0
+    },
+    {
+        "full_name": "andrewcute",
+        "mobile_num": "00000000",
+        "address": "0000",
+        "bday": "0",
+        "email": "0",
+        "nationality": "0",
+        "user_id": "0",
+        "pin": "0",
+        "authentication": "87506",
+        "is_admin": false,
+        "balance": 0.0,
+        "approved": true
     }
 ]
