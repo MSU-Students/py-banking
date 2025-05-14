@@ -24,13 +24,22 @@ class UserService:
     registered_user = User()
     login_user = User()
     users_file = "users.json"
+    loans_file = "loan.json" 
 
     def __init__(self):
+        
         if os.path.exists(self.users_file):
             with open(self.users_file, 'r') as file:
                 self.users_data = json.load(file)
         else:
             self.users_data = []
+
+       
+        if os.path.exists(self.loans_file):
+            with open(self.loans_file, 'r') as file:
+                self.loans_data = json.load(file)
+        else:
+            self.loans_data = []
 
     def login(self):
         self.user_id = input("User ID:\t\t")
@@ -159,6 +168,23 @@ class UserService:
         except (ValueError, IndexError):
             print("Invalid choice.")
 
+    def view_loans(self):
+        
+        if self.login_user.is_admin:
+            print("\n--- View All Loans ---")
+            if not self.loans_data:
+                print("No loan records found.")
+            else:
+                for index, loan in enumerate(self.loans_data, 1):
+                    print(f"\nLoan {index}:")
+                    print(f"  Loan ID         : {loan.get('loan_id')}")
+                    print(f"  User ID         : {loan.get('user_id')}")
+                    print(f"  Amount          : ₱{loan.get('amount', 0.0):,.2f}")
+                    print(f"  Status          : {loan.get('status', 'Pending')}")
+                    print(f"  Repayment Date  : {loan.get('repayment_date', 'N/A')}")
+        else:
+            print("You must be an admin to view loan records.")
+
 User_service = UserService()
 
 EXIT, LOGIN, REGISTER, FORGOT_PASS = (0, 1, 2, 3)
@@ -175,6 +201,7 @@ def admin_menu():
         print("\n--- Admin Panel ---")
         print("1. View All Users")
         print("2. Approve Registered Users")
+        print("3. View All Loans") 
         print("0. Logout")
         try:
             choice = int(input("Enter your choice: "))
@@ -190,6 +217,11 @@ def admin_menu():
         elif choice == 2:
             clear_console()
             User_service.approve_users()
+            input("\nPress Enter to continue...")
+            clear_console()
+        elif choice == 3:  
+            clear_console()
+            User_service.view_loans()
             input("\nPress Enter to continue...")
             clear_console()
         elif choice == 0:
@@ -240,4 +272,3 @@ def handle_user_option():
             print("Invalid option. Please select from the menu.")
 
         clear_console()
-
