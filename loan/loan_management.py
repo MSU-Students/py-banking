@@ -21,7 +21,7 @@ class LoanService:
     payments: List[LoanPayment] = []
 
     def __init__(self, account: BankAccount):
-        self._bank_account = account
+        self._bank_account = account 
 
     def loan_apply(self):
         amount = float(input("Enter loan amount: "))
