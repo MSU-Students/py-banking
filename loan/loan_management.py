@@ -47,6 +47,16 @@ class LoanService:
                 return
         print(f"Loan ID {loan_id} not found.")
 
+        print("TODO:loan application")
+
+        input("press any key")
+    
+    def collect_payment(self):
+        print("TODO: Collect Payment")
+    
+    def display_load_history(self):
+        print("TODO: Loan History")
+
     def loan_history(self):
         if not self.loans:
             print("No loans found.")
