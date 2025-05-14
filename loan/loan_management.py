@@ -56,6 +56,7 @@ class LoanService:
     
     def display_load_history(self):
         print("TODO: Loan History")
+        # Other methods here like (history, ....)
 
     def loan_history(self):
         if not self.loans:
