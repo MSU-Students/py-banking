@@ -124,7 +124,7 @@ def handle_services_option():
             print("Invalid input. Please enter a number.")
             continue
         if option == CREATE_ACCOUNT:
-            account_service.create_account(user_id, full_name)
+            account_service.create_account()
         elif option == LOAN:
             clear_console()
             handle_loan_option(account_service.current_account)
