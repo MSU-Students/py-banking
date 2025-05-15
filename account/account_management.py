@@ -2,7 +2,7 @@ from typing import List
 from .bank_account import BankAccount
 from loan import handle_loan_option
 from utils import clear_console
-from transaction import TransactionService
+from transaction import TransactionService, handle_generate_report
 from random import random
 class AccountService: #kurt
     current_account: BankAccount | None = None
@@ -48,7 +48,7 @@ def print_account_menu():
     #other options here
     print(f"\t{EXIT} : Exit")
 
-CREATE_ACCOUNT, LOAN, FUND_TRANSFER = (1, 2, 3)
+CREATE_ACCOUNT, LOAN, FUND_TRANSFER, GENERATE_REPORT = (1, 2, 3,4)
 '''
 Main Account Sub Menu: Services
 '''
@@ -57,6 +57,7 @@ def print_services_options():
     print(f"\t{CREATE_ACCOUNT} : CREATE NEW ACCOUNT")
     print(f"\t{LOAN} : LOAN SERVICES")
     print(f"\t{FUND_TRANSFER} : FUND TRANSFER")
+    print(f"\t{GENERATE_REPORT} : GENERATE REPORT")
     #other options here
     print(f"\t{EXIT} : Exit")
 
@@ -74,6 +75,9 @@ def handle_services_option():
         elif option == FUND_TRANSFER:
             clear_console()
             process_fund_transfer()
+        elif option == GENERATE_REPORT:
+            clear_console()
+            handle_generate_report(account_service.current_account)
         # handle other options here
         clear_console()
 def process_fund_transfer(): 
