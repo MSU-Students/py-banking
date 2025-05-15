@@ -152,7 +152,7 @@ LOGIN, CREATE = (1, 2)
 def login_account_menu():
     #Allow the user to log in or create a new account
     print("Choose an option")
-    print(f"\t{LOGIN} : LOGIN ACCOUNT")
+    print(f"\t{LOGIN} : SELECT ACCOUNT")
     print(f"\t{CREATE} : CREATE ACCOUNT")
     print(f"\t{EXIT} : EXIT")
     choice = int(input("CHOICE: "))
