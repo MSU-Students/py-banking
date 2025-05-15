@@ -26,20 +26,37 @@ class AccountService:
         with open(self.accounts_file, "w") as f:
             json.dump([acc.to_dict() for acc in self.accounts], f, indent=4)
 
-    def create_account(self): 
+    def create_account(self):
+        account : str
         from users.user_management import User_service
         try:
             balance = float(input("Enter initial deposit amount: "))
         except ValueError: 
             print("Invalid input for balance.")
             return
+        
+        SAVINGS, JOINT, STUDENT, BUSINESS, PERSONAL = (1, 2, 3, 4, 5)
+        print("choose the type of your account:")
+        print(f"\t{SAVINGS} : SAVINGS ACCOUNT")
+        print(f"\t{JOINT} : JOINT ACCOUNT")
+        print(f"\t{STUDENT} : STUDENT ACCOUNT")
+        print(f"\t{BUSINESS} : BUSINESS ACCOUNT")
+        print(f"\t{PERSONAL} : PERSONAL ACCOUNT")
+        option = int(input("Choice:\t"))
 
-        new_account = BankAccount(User_service.login_user.User_Id,User_service.login_user.name, balance)
+        if option == SAVINGS: account = "Savings Account"
+        elif option == JOINT: account = "Joint Account"
+        elif option == STUDENT: account = "Student Account"
+        elif option == BUSINESS: account = "Business Account"
+        elif option == PERSONAL: account = "Personal Account"
+        else: return
+
+        new_account = BankAccount(User_service.login_user.User_Id, account, balance)
         self.accounts.append(new_account)
         self.current_account = new_account
         self.save_accounts()
 
-        print(f"\nAccount created successfully for {new_account.full_name}!")
+        print(f"\nAccount created successfully for {new_account.account_type}!")
         print(f"Account ID: {new_account.account_id}")
         print(f"Balance: ₱{new_account.balance:.2f}\n")
 
@@ -55,7 +72,7 @@ class AccountService:
 
         print("\nYour Accounts:")
         for i, acc in enumerate(user_accounts, start=1):
-            print(f"{i}. {acc.full_name} - Account ID: {acc.account_id} - Balance: ₱{acc.balance:.2f}")
+            print(f"{i}. {acc.account_type} - Account ID: {acc.account_id} - Balance: ₱{acc.balance:.2f}")
         return user_accounts
 
 
@@ -68,9 +85,11 @@ class AccountService:
             choice = int(input("\nEnter the number of the account to select: "))
             if 1 <= choice <= len(user_accounts):
                 self.current_account = user_accounts[choice - 1]
-                print(f"\nSelected account: {self.current_account.full_name} - Balance: ₱{self.current_account.balance:.2f}\n")
+                print(f"\nSelected account: {self.current_account.account_type} - Balance: ₱{self.current_account.balance:.2f}\n")
             else:
                 print("Invalid choice.")
+                input("Press enter to continue...")
+                return
         except ValueError:
             print("Please enter a valid number.")
 
@@ -81,7 +100,6 @@ class AccountService:
             if acc.account_id == id:
                 return acc
         return None
-
 
 
 account_service = AccountService()
