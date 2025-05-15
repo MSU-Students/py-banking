@@ -132,38 +132,15 @@ class TransactionService:
             self._save_transactions()
             input("Press enter to continue")
 
-    def generate_report(self, save_to_file=False, file_name="transaction_report.txt"):
+    def generate_report(self):
         try:
-            total_deposit = sum(t.amount for t in self.transactions if t.type == "deposit")
-            total_withdrawal = sum(t.amount for t in self.transactions if t.type == "withdrawal")
-            current_balance = self._account.balance
-
-            report_lines = [
-                f"===== Transaction Report for {self._account.account_holder_name} ({self._account.account_number}) =====",
-                f"Total Deposits: {total_deposit:.2f}",
-                f"Total Withdrawn: {total_withdrawal:.2f}",
-                f"Current Balance: {current_balance:.2f}",
-                f"Number of Transactions: {len(self.transactions)}",
-                "\nDetailed Transactions:"
-            ]
-            for transaction in self.transactions:
-                report_lines.append(f"{transaction.date} - {transaction.type.capitalize()} - {transaction.amount:.2f}")
-
-            report_content = "\n".join(report_lines)
-            if save_to_file:
-                with open(file_name, "w") as file:
-                    file.write(report_content)
-                print(f"Report successfully saved to {file_name}")
-            else:
-                print(report_content)
-        except AttributeError as e:
-            print(f"Account details are missing or invalid: {e}")
+            report = {
+                "account_number": self._account.account_number,
+                "balance": self._account.balance,
+                "transactions": [tx.to_dict() for tx in self.transactions]
+            }
+            with open("report.json", "w") as file:
+                json.dump(report, file, indent=4)
+            print("Report generated successfully.")
         except Exception as e:
             print(f"An error occurred while generating the report: {e}")
-
-def handle_generate_report(account, save_to_file=False, file_name="transaction_report.txt"):
-    try:
-        transaction_service = TransactionService(account)
-        transaction_service.generate_report(save_to_file=save_to_file, file_name=file_name)
-    except Exception as e:
-        print(f"An error occurred while handling the report generation: {e}")

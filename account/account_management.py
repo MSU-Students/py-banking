@@ -2,7 +2,7 @@ from typing import List
 from .bank_account import BankAccount
 from loan import handle_loan_option
 from utils import clear_console
-from transaction import TransactionService, handle_generate_report
+from transaction import TransactionService
 from random import random
 class AccountService: #kurt
     current_account: BankAccount | None = None
@@ -107,3 +107,8 @@ def handle_account_option(user): #group 1
             transaction_service.withdrawal()
         # handle other options here
         clear_console()
+
+def handle_generate_report(account: BankAccount):
+    transaction_service = TransactionService(account)
+    transaction_service.generate_report()
+    input("Press enter to continue")

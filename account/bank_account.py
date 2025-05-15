@@ -10,5 +10,5 @@ class BankAccount:
         self.type = account_type
         self.balance = initial_balance
         self.account_number = account_num
-
+        self.transactions = []
    
