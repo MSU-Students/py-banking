@@ -192,18 +192,21 @@ class TransactionService:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
     
-    def balance_inquiry(self, user_id:str,account_number:str):
-        try:
-             with open("data/accounts.json", 'r') as file:
-                accounts = json.load(file)
-                for i, account in enumerate(accounts):
-                    if account["account_number: "] == account_number:
-                        print(f"User Id: {user_id}")
-                        print(f"Account_type:  {account["account_type: "]}")
-                        print(f"Account Number: {account_number}")
-                        print(f"Current balance: Php {account["account_balance: "]}")
-                        return        
-        except Exception as e:
-            print(f"An error occurred while checking balance: {e}")
-        except FileNotFoundError as e:
-            print("The account.json file does not exist. Please ensure the file as available.")
+     def balance_inquiry(self, user_id: str, account_number: str):
+    try:
+        with open("accounts.json", 'r') as file:
+            accounts = json.load(file)
+            for account in accounts:
+                if account.get("account_number") == account_number and account.get("user_id") == user_id:
+                    print(f"User ID: {user_id}")
+                    print(f"Account Type: {account.get('account_type')}")
+                    print(f"Account Number: {account_number}")
+                    print(f"Current Balance: ₱{account.get('account_balance'):,.2f}")
+                    return
+            print("Account not found.")
+    except FileNotFoundError:
+        print("Accounts file not found.")
+    except json.JSONDecodeError:
+        print("Error decoding the accounts file.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
