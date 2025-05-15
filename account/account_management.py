@@ -135,6 +135,13 @@ def handle_services_option():
             clear_console()
             User_service.change_pass()
         clear_console()
+def process_fund_transfer(): 
+    account_num = input("Enter target account number:")
+    amount = float(input("Enter amount to transfer:"))
+    transaction_service = TransactionService(account_service.current_account)
+    target_account = account_service.find_account_by_number(account_num)
+    if target_account != None:
+        transaction_service.transfer_fund(target_account, amount)
 
 LOGIN, CREATE = (1, 2)
 

@@ -2,7 +2,7 @@ import json
 from typing import List, Optional
 from datetime import datetime
 # Removed unused imports Loan and LoanPayment
-# from account import BankAccount
+from account import BankAccount
 import random
 import os
 # from utils import clear_console 
@@ -205,5 +205,49 @@ class TransactionService:
                         return        
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
-        except FileNotFoundError as e:
-            print("The account.json file does not exist. Please ensure the file as available.")
+
+    def transfer_fund(self, target_account: BankAccount, amount: float):
+            if amount <= 0:
+                print("Transfer amount must be greater than zero.")
+                return
+
+            if self._account.balance < amount:
+                print("Insufficient funds for transfer.")
+                return
+
+            self._account.balance -= amount
+            print(f"Transferred {amount} from {self._account.account_number}.")
+            transaction = Transaction(type="credit", date="", amount=amount, account_num=self._account.account_number)
+            self.transactions.append(transaction)
+            self._save_transactions()
+
+
+            target_account.balance += amount
+            print(f"Received {amount} in {target_account.account_number}.")
+            transaction = Transaction(type="debit", date="", amount=amount, account_num=target_account.account_number)
+            self.transactions.append(transaction)
+            self._save_transactions()
+            input("Press enter to continue")
+
+    def generate_report(self):
+        try:
+            report = {
+                "Account Report": {
+                    "User ID": self._account.user_id,
+                    "Account Name": self._account.account_name,
+                    "Account Number": self._account.account_number,
+                    "Current Balance": self._account.balance,
+                },
+                "Transaction Summary": {
+                    "Total Deposits": sum(tx.amount for tx in self.transactions if tx.type == "deposit"),
+                    "Total Withdrawals": sum(tx.amount for tx in self.transactions if tx.type == "withdrawal"),
+                    "Total Transactions": len(self.transactions),
+                },
+                "Transactions": [tx.to_dict() for tx in self.transactions],
+                "Report Generated On": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+            with open("Generate_Report.json", "w") as file:
+                json.dump(report, file, indent=4)
+            print("Report generated successfully.")
+        except Exception as e:
+            print(f"An error occurred while generating the report: {e}")
