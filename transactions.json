@@ -58,4 +58,13 @@
     "original_balance: ": 600.0,
     "amount: ": 10000.0
 }
-]
+]{
+    "account_number: ": "94797",
+    "user_id: ": "1234",
+    "account_type: ": "savings",
+    "transaction_type: ": "withdrawal",
+    "date: ": "2025-05-14 17:00:28",
+    "transaction_number: ": "4795017",
+    "original_balance: ": 1000.0,
+    "amount: ": 100.0
+}
