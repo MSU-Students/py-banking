@@ -148,7 +148,7 @@ class TransactionService:
                     if account["account_number: "] == account_number:
                         print(f"User Id: {user_id}\nAccount_type: {account["account_type: "]},\nAccount Number: {account_number}\nCurrent balance: Php{account["account_balance: "]}")
                         print(f"christian ni gana ang pull?")
-                        
+                        print("ali nakita mo????")
                         break
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
