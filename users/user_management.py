@@ -160,6 +160,18 @@ class UserService:
                 print(f"  Approved  : {user.get('approved', False)}")
                 
     def change_pass(self):
+        #Captcha
+        code = str(random.randint(100000, 999999))
+        clear_console()
+        print(f"\nCaptcha: Type the numbers shown below:\n[ {code} ]")
+        entered_code = input("Enter the code: ")
+
+        if entered_code != code:
+            print("Incorrect code.")
+            return
+
+        clear_console()
+        
         print("\tCHANGE PIN")
         self.old_pin = input("Enter your previous pin:\t\t")
         if self.old_pin != User_service.login_user.pin:
