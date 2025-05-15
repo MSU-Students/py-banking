@@ -82,15 +82,15 @@ class TransactionService:
         print(f"Deposited: {amount}. New balance: {account_balance}")
 
         #im not sure if gagana na hindi ma overwrite and accounts.json para lang ma update yung account_balance ng isang account sa accounts.json
-        with open("accounts.json", 'r') as file:
+        with open("data/accounts.json", 'r') as file:
             accounts = json.load(file)
             for i, account in enumerate(accounts):
                 if account["account_number: "] == account_number:
                     accounts[i]["account_balance: "] = account_balance
-                    with open("accounts.json", 'w') as file:  
+                    with open("data/accounts.json", 'w') as file:  
                        pass
                     break
-        with open("accounts.json", 'a') as file:  
+        with open("data/accounts.json", 'a') as file:  
             json.dump(accounts, file, indent=4)
 
         print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}')
@@ -150,15 +150,15 @@ class TransactionService:
                 print(f"Deposited: {amount}. New balance: {account_balance}")
                 
             #update the account balance of the selected user's account in accounts.json
-                with open("accounts.json", 'r') as file:
+                with open("data/accounts.json", 'r') as file:
                     accounts = json.load(file)
                     for i, account in enumerate(accounts):
                         if account["account_number: "] == account_number:
                             accounts[i]["account_balance: "] = account_balance
-                            with open("accounts.json", 'w') as file:  
+                            with open("data/accounts.json", 'w') as file:  
                                 pass
                             break
-                with open("accounts.json", 'a') as file:  
+                with open("data/accounts.json", 'a') as file:  
                     json.dump(accounts, file, indent=4)
 
                 print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}')
@@ -177,7 +177,7 @@ class TransactionService:
         print(f"\n\t\tList of Transactions\n")   
 
         try:
-            with open("transactions.json", 'r') as file:
+            with open("data/transactions.json", 'r') as file:
                 transactions = json.load(file)
                 i = 0
                 for transaction in transactions:
@@ -194,7 +194,7 @@ class TransactionService:
     
     def balance_inquiry(self, user_id:str,account_number:str):
         try:
-             with open("accounts.json", 'r') as file:
+             with open("data/accounts.json", 'r') as file:
                 accounts = json.load(file)
                 for i, account in enumerate(accounts):
                     if account["account_number: "] == account_number:
@@ -246,7 +246,7 @@ class TransactionService:
                 "Transactions": [tx.to_dict() for tx in self.transactions],
                 "Report Generated On": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
-            with open("Generate_Report.json", "w") as file:
+            with open("data/Generate_Report.json", "w") as file:
                 json.dump(report, file, indent=4)
             print("Report generated successfully.")
         except Exception as e:

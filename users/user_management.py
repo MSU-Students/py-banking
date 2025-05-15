@@ -21,7 +21,7 @@ class User:
 class UserService:
     registered_user = User()
     login_user = User()
-    users_file = "users.json"
+    users_file = "data/users.json"
     
     def __init__(self):
         if os.path.exists(self.users_file):
