@@ -10,5 +10,17 @@
         "pin: ": "1234",
         "approval: ": 1,
         "authentication: ": "71725"
+    },
+    {
+        "full_name: ": "Renalyn Joyce D. Bascones",
+        "mobile_num: ": "098765421",
+        "address: ": "Hell Uni",
+        "bday: ": "ILY Since 1892",
+        "email: ": "secret daw",
+        "nationality: ": "Filipino",
+        "user_id: ": "1111",
+        "pin: ": "1111",
+        "approval: ": 1,
+        "authentication: ": "10694"
     }
 ]

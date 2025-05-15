@@ -101,12 +101,15 @@ class TransactionService:
         while True:
             if amount <= 0:
                 print("Withdraw amount must be greater than zero.")
+                return
 
             if amount > account_balance:
                 print("Insufficient funds for withdrawal.")
+                return
 
             if account_balance - amount < 500:
                 print("Wirhdrawal amount must not exceed the amount balance minus the maintaining balance of Php 500.")
+                return
                 
             if account_balance - amount >= 500:       
     
@@ -159,9 +162,12 @@ class TransactionService:
                     json.dump(accounts, file, indent=4)
 
                 print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}')
-                break
+                return
+            else:
+                print("Invalid Input. Please try again.")
+                return
             
-            return
+            
     # group 2 -christian (handling insuffiecient errors ) - ikaw na bahala mag gawa ng while loop dito
     # IKAW na bahala sano history transaction kapag ang account number walang laman na transaction history, gawan mo ng exception handling, and yung mga error messages
     def display_transactions(self, user_id:str, account_type:str, account_number:str):
