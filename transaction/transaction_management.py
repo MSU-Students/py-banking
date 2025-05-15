@@ -7,7 +7,6 @@ import random
 import os
 # from utils import clear_console 
 
-
 class Transaction:
     def __init__(self, user_id: str, account_type: str,account_number: str, type: str, date: str, amount: float, transaction_number: str, original_balance:float):      
         self.user_id = user_id
@@ -18,34 +17,28 @@ class Transaction:
         self.amount = amount
         self.transaction_number = transaction_number
         self.original_balance = original_balance
-        transaction_file = "transactions.json"
-        try:
-            if os.path.exists(transaction_file):
-                with open(transaction_file, 'r') as file:
-                    self.transactions_data = json.load(file)
-        #if walang laman talaga and transactions.json, as in walang brackets, mag lalagay siya ng empty bracket doon 
-        except(FileNotFoundError, json.JSONDecodeError):
-            self.transactions_data = []
 
 
 
 class TransactionService:
-    transaction_file = "transactions.json"
-    transactions_data = list()
     accounts_file = "accounts.json"
-    account:Transaction
-    def __init__(self, account):
-        self.account = account
+    transactions_data = list()
+    transaction_file = "transactions.json"
+    
+
+    def __init__(self, account: Transaction):
         try:
             if os.path.exists(self.transaction_file):
                 with open(self.transaction_file, 'r') as file:
-                    self.transactions_dataa = json.load(file)
-                print(f'__'*20)
-                print("\n\tTRANSACTION SERVICE")
-                print(f'__'*20)
+                    self.transactions_data = json.load(file)
+        #if walang laman talaga and transactions.json, as in walang brackets, mag lalagay siya ng empty bracket doon 
         except(FileNotFoundError, json.JSONDecodeError):
             self.transactions_data = []
- 
+        self.account = account
+        print(f'__'*20)
+        print("\n\tTRANSACTION SERVICE")
+        print(f'__'*20)
+
 #NORHAILAH - DEPOSIT
     def deposit(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
         if amount <= 0.0:
@@ -58,8 +51,10 @@ class TransactionService:
         self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="deposit", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
         #para to sa original balance bago pa nag deposit si user
         self.account.original_balance -= amount
-        self.transactions_data.append(self.account)
-        transaction_data = {
+        
+                    
+        #turn it into a dictionary
+        datas = {
             "account_number: ": self.account.account_number,
             "user_id: ": self.account.user_id,
             "account_type: ": self.account.account_type,
@@ -68,13 +63,24 @@ class TransactionService:
             "transaction_number: ": self.account.transaction_number,
             "original_balance: ": self.account.original_balance,
             "amount: ": self.account.amount
-        }
-        # append ur transaction into transactions.json
-        #w+ or a?
-        with open("transactions.json", 'a') as file:
-            file.write(json.dumps(transaction_data, indent=4) + "\n")
-        print(f"Deposited: {amount}. New balance: {account_balance}")
+        }  
+        #if meron siyang brackets, i load niya      
+        try:
+            if os.path.exists(self.transaction_file):
+                with open(self.transaction_file, 'r') as file:
+                    self.transactions_data = json.load(file)
+        #if walang laman talaga and transactions.json, as in walang brackets, mag lalagay siya ng empty bracket doon 
+        except(FileNotFoundError, json.JSONDecodeError):
+                self.transactions_data = []
+        self.transactions_data.append(datas)
         
+        #i store niya na append sa self.transactions_Data doon sa path na self.transactions.file
+        with open(self.transaction_file, 'w+') as transaction_file:
+            json.dump(self.transactions_data, transaction_file, indent=4)
+
+            
+        print(f"Deposited: {amount}. New balance: {account_balance}")
+
         #im not sure if gagana na hindi ma overwrite and accounts.json para lang ma update yung account_balance ng isang account sa accounts.json
         with open("accounts.json", 'r') as file:
             accounts = json.load(file)
@@ -87,7 +93,7 @@ class TransactionService:
         with open("accounts.json", 'a') as file:  
             json.dump(accounts, file, indent=4)
 
-        print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}')
+        print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}')
 
     #ALI - WITHDRAWAL
     # CHRISTIAN - INSUFFIECIENT CHUCHU, iKAW BAHALA GUMAWA NG WHILE LOOPS AND EXCEPTION HANDLING
@@ -101,8 +107,8 @@ class TransactionService:
             self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="withdrawal", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
             #para to sa original balance bago pa nag withdraw si user
             self.account.original_balance += amount
-            self.transactions_data.append(self.account)
-            transaction_data = {
+            
+            datas = {
                 "account_number: ": self.account.account_number,
                 "user_id: ": self.account.user_id,
                 "account_type: ": self.account.account_type,
@@ -112,9 +118,22 @@ class TransactionService:
                 "original_balance: ": self.account.original_balance,
                 "amount: ": self.account.amount
             }
-            # append ur transaction into transactions.json
-            with open("transactions.json", 'a') as file:
-                file.write(json.dumps(transaction_data, indent=4) + "\n")
+            
+            #if meron siyang brackets, i load niya      
+            try:
+                if os.path.exists(self.transaction_file):
+                    with open(self.transaction_file, 'r') as file:
+                        self.transactions_data = json.load(file)
+            #if walang laman talaga and transactions.json, as in walang brackets, mag lalagay siya ng empty bracket doon 
+            except(FileNotFoundError, json.JSONDecodeError):
+                    self.transactions_data = []
+            self.transactions_data.append(datas)
+            
+            #i store niya na append sa self.transactions_Data doon sa path na self.transactions.file
+            with open(self.transaction_file, 'w+') as transaction_file:
+                json.dump(self.transactions_data, transaction_file, indent=4)
+        
+        
             print(f"Deposited: {amount}. New balance: {account_balance}")
             
            #update the account balance of the selected user's account in accounts.json
@@ -129,7 +148,7 @@ class TransactionService:
             with open("accounts.json", 'a') as file:  
                 json.dump(accounts, file, indent=4)
 
-            print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}')
+            print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}')
 
         else:
             print("Withdrawal amount must be greater than PhP 500 Maintaining Balance and must not be less than 0.")
@@ -146,7 +165,7 @@ class TransactionService:
             for transaction in transactions: 
             
                 if transaction["user_id: "] == user_id and transaction["account_number: "] == account_number:
-                    print(f"{i+1.}\n*** Date and Time: {transaction["date: "]} \n*** Transaction Type: {transaction["transaction_type: "]} \n*** Amount: {transaction["amount: "]}\n")
+                    print(f"{i+1.}\n* Date and Time: {transaction["date: "]} \n* Transaction Type: {transaction["transaction_type: "]} \n* Amount: {transaction["amount: "]}\n* Transaction Number: {transaction["transaction_number: "]}")
                     i+=1
             return
     

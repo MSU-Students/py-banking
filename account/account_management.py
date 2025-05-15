@@ -175,7 +175,7 @@ EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1,
 Main Account Menu
 '''
 def print_account_menu():
-    clear_console()
+    
     print("Bank Account Options:\n")
     print(f"\t{WITHDRAW} : Withdraw")
     print(f"\t{DEPOSIT} : Deposit")
