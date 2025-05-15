@@ -210,36 +210,20 @@ class UserService:
         print("Profile information updated successfully!")
         input("Press any key to continue")
 
-    def change_pass(self):
-        print("\tCHANGE PIN")
-        self.old_pin = input("Enter your previous pin:\t\t")
-        if self.old_pin != User_service.login_user.pin:
-            print("incorrect pin")
-            return
+    def profile(self):
+
+        from account import account_service
+        print("          ~ PROFILE INFO ~\n")
+        print(f"User ID:\t\t{self.login_user.User_Id}")
+        print(f"Full Name:\t\t{self.login_user.name}")
+        print(f"Balance:\t\t{account_service.current_account.balance}")
+        print(f"Mobile Number:\t\t{self.login_user.mobile_number}")
+        print(f"Address:\t\t{self.login_user.address}")
+        print(f"Birthdate:\t\t{self.login_user.bday}")
+        print(f"Email Address:\t\t{self.login_user.email}")
+        print(f"Nationality:\t\t{self.login_user.nationality}")
+        input("Press enter to exit")
         
-        print("you can now change your pin")
-        self.new_pin = input("Enter your new pin(4 digits only):\t\t")
-        if not self.new_pin.isdigit() or len(self.new_pin) != 4:
-            print("please try again")
-            input("press enter to continue...")
-            return
-        self.confirm_pin = input("Re-enter your new pin:\t\t")
-        if self.new_pin != self.confirm_pin:
-            print("confirmation is incorrect...")
-            return
-        
-        self.login_user.pin = self.new_pin
-        for user_data in self.users_data:
-            if user_data["user_id"] == self.login_user.User_Id:
-                user_data["pin"] = self.login_user.pin
-                break
-
-        with open(self.users_file, 'w') as account:
-            json.dump(self.users_data, account, indent=4)
-        print("Profile information updated successfully!")
-        input("Press any key to continue")
-
-
     def view_loans(self):
         
         if self.login_user.is_admin:
