@@ -149,7 +149,6 @@ def process_fund_transfer():
         transaction_service.transfer_fund(target_account, amount)
 
 LOGIN, CREATE = (1, 2)
-
 def login_account_menu():
     #Allow the user to log in or create a new account
     print("Choose an option")
