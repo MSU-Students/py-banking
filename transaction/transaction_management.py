@@ -150,6 +150,7 @@ class TransactionService:
                         print(f"christian ni gana ang pull?")
                         print("ali nakita mo????")
                         print("nakita niyo na??? means na pull ninyo ni ahh")
+                        print("ali nakita mo  keneme")
                         break
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
