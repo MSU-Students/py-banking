@@ -3,6 +3,7 @@ from account import handle_account_option
 from utils import clear_console
 import json
 import os
+from utils import clear_console
 
 class User:
     def __init__(self, User_Id='', pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
@@ -21,22 +22,13 @@ class UserService:
     registered_user = User()
     login_user = User()
     users_file = "users.json"
-    loans_file = "loan.json" 
-
+    
     def __init__(self):
-        
         if os.path.exists(self.users_file):
             with open(self.users_file, 'r') as file:
                 self.users_data = json.load(file)
         else:
             self.users_data = []
-
-       
-        if os.path.exists(self.loans_file):
-            with open(self.loans_file, 'r') as file:
-                self.loans_data = json.load(file)
-        else:
-            self.loans_data = []
 
     def login(self):
         self.user_id = input("User ID:\t\t")
@@ -92,12 +84,11 @@ class UserService:
         }
         self.users_data.append(user_data)
 
-        with open(self.users_file, 'w') as account:
+        with open(self.users_file, 'w+') as account:
             json.dump(self.users_data, account, indent=4)
 
         self.registered_user = User(self.user_id, self.pin, self.address, self.bday, self.full_name, self.mobile_num, self.authentication, self.email, self.nationality, self.approval)
         print('You have successfully registered an account!')
-
     def forgot_password(self):
         print("Enter the correct information for user authentication")
         self.proof_accnum = input('Enter User User ID:\t\t\t')
@@ -105,7 +96,7 @@ class UserService:
 
         user_found = False
         for user_data in self.users_data:
-            if user_data["user_id"] == self.proof_accnum and user_data["authentication"] == self.proof:
+            if user_data["user_id: "] == self.proof_accnum and user_data["authentication: "] == self.proof:
                 user_found = True
                 self.user_data = user_data
                 break
@@ -120,7 +111,7 @@ class UserService:
             self.confirm_pin = input("Confirm Password:\t\t")
 
             if self.pin == self.confirm_pin:
-                self.user_data['pin'] = self.pin
+                self.user_data['pin: '] = self.pin
                 with open(self.users_file, 'w') as account:
                     json.dump(self.users_data, account, indent=4)
                 print("You have successfully changed your password!")
@@ -278,39 +269,6 @@ def print_main_menu():
     print(f"\t{REGISTER} : Register")
     print(f"\t{FORGOT_PASS} : Forgot Password")
     print(f"\t{EXIT} : Exit")
-
-def admin_menu():
-    while True:
-        print("\n--- Admin Panel ---")
-        print("1. View All Users")
-        print("2. Approve Registered Users")
-        print("3. View All Loans") 
-        print("0. Logout")
-        try:
-            choice = int(input("Enter your choice: "))
-        except ValueError:
-            print("Please enter a valid number.")
-            continue
-
-        if choice == 1:
-            clear_console()
-            User_service.view_all_users()
-            input("\nPress Enter to continue...")
-            clear_console()
-        elif choice == 2:
-            clear_console()
-            User_service.approve_users()
-            input("\nPress Enter to continue...")
-            clear_console()
-        elif choice == 3:  
-            clear_console()
-            User_service.view_loans()
-            input("\nPress Enter to continue...")
-            clear_console()
-        elif choice == 0:
-            break
-        else:
-            print("Invalid choice. Try again.")
 
 def handle_user_option():
     key = False

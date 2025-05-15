@@ -8,3 +8,4 @@ def clear_console():
 # Any other general utility functions, like input validation or formatting
 def format_account_balance(balance):
     return f"${balance:,.2f}"
+

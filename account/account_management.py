@@ -85,6 +85,9 @@ class AccountService:
 
 
 account_service = AccountService()
+transaction_data = []
+
+EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5,6)
 
 EXIT, WITHDRAW, DEPOSIT, BALANCE, SELECT, SERVICES = (0, 1, 2, 3, 4, 5)
 
@@ -115,7 +118,11 @@ def handle_services_option():
     option = CREATE_ACCOUNT 
     while option != EXIT:
         print_services_options()
-        option = int(input("\n\tCommand: "))
+        try:
+            option = int(input("\n\tCommand: "))
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
         if option == CREATE_ACCOUNT:
             account_service.create_account()
         elif option == LOAN:
@@ -161,6 +168,7 @@ def handle_account_option():
             handle_services_option()
         elif option == SELECT:
             account_service.select_account()
+        #ALI -WITHDRAW    
         elif option == WITHDRAW:
             transaction_service.withdrawal()
         # handle other options here
