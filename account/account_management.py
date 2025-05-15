@@ -101,7 +101,7 @@ def print_account_menu():
     print(f"\t{SERVICES} : Access Services")
     print(f"\t{EXIT} : Exit")
 
-CREATE_ACCOUNT, LOAN, CHANGE_INFO, CHANGE_PASS = (1, 2, 3, 4)
+CREATE_ACCOUNT, LOAN, CHANGE_INFO, CHANGE_PASS, SEE_PROFILE = (1, 2, 3, 4, 5)
 
 def print_services_options():
     #Print options for services menu
@@ -109,7 +109,8 @@ def print_services_options():
     print(f"\t{CREATE_ACCOUNT} : CREATE NEW ACCOUNT")
     print(f"\t{LOAN} : LOAN SERVICES")
     print(f"\t{CHANGE_INFO} : CHANGE PROFILE INFORMATION")      
-    print(f"\t{CHANGE_PASS} : CHANGE PASSWORD")    
+    print(f"\t{CHANGE_PASS} : CHANGE PASSWORD")   
+    print(f"\t{SEE_PROFILE} : SEE PROFILE INFORMATION")
     print(f"\t{EXIT} : Exit")
 
 def handle_services_option():
@@ -134,7 +135,11 @@ def handle_services_option():
         elif option == CHANGE_PASS:
             clear_console()
             User_service.change_pass()
+        elif option == SEE_PROFILE:
+            clear_console()
+            User_service.profile()
         clear_console()
+        
 def process_fund_transfer(): 
     account_num = input("Enter target account number:")
     amount = float(input("Enter amount to transfer:"))
