@@ -14,7 +14,7 @@ class AccountService: #kurt
     account_type: str
     account_number: str
     account_balance: float
-    accounts_file="accounts.json"
+    accounts_file="data/accounts.json"
     current_account: List
     #delete if nag error ang create acc
     accounts_data = list()
