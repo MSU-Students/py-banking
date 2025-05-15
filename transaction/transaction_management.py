@@ -31,6 +31,9 @@ class TransactionService:
             if os.path.exists(self.transaction_file):
                 with open(self.transaction_file, 'r') as file:
                     self.transactions_data = json.load(file)
+            else:
+                with open(self.transaction_file, 'w') as file:
+                    file.write('[]')
         #if walang laman talaga and transactions.json, as in walang brackets, mag lalagay siya ng empty bracket doon 
         except(FileNotFoundError, json.JSONDecodeError):
             self.transactions_data = []

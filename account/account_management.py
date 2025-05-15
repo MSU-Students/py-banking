@@ -16,6 +16,8 @@ class AccountService:
 
     def load_accounts(self): 
         if not os.path.exists(self.accounts_file):
+            with open(self.accounts_file, 'w') as file:
+                file.write('[]')
             return []
         
         with open(self.accounts_file, "r") as f:

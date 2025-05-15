@@ -28,6 +28,8 @@ class UserService:
             with open(self.users_file, 'r') as file:
                 self.users_data = json.load(file)
         else:
+            with open(self.users_file, 'w') as file:
+                file.write('[]')
             self.users_data = []
 
     def login(self):
