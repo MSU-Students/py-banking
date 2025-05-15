@@ -149,7 +149,7 @@ class TransactionService:
                 "Transactions": [tx.to_dict() for tx in self.transactions],
                 "Report Generated On": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
-            with open("report.json", "w") as file:
+            with open("Generate_Report.json", "w") as file:
                 json.dump(report, file, indent=4)
             print("Report generated successfully.")
         except Exception as e:
