@@ -1,5 +1,15 @@
 {
-    "account_number": "312527",
-    "balance": 500,
-    "transactions": []
+    "Account Report": {
+        "User ID": "1234",
+        "Account Name": "Dummy",
+        "Account Number": "189216",
+        "Current Balance": 500
+    },
+    "Transaction Summary": {
+        "Total Deposits": 0,
+        "Total Withdrawals": 0,
+        "Total Transactions": 0
+    },
+    "Transactions": [],
+    "Report Generated On": "2025-05-14 21:12:51"
 }

@@ -135,9 +135,19 @@ class TransactionService:
     def generate_report(self):
         try:
             report = {
-                "account_number": self._account.account_number,
-                "balance": self._account.balance,
-                "transactions": [tx.to_dict() for tx in self.transactions]
+                "Account Report": {
+                    "User ID": self._account.user_id,
+                    "Account Name": self._account.account_name,
+                    "Account Number": self._account.account_number,
+                    "Current Balance": self._account.balance,
+                },
+                "Transaction Summary": {
+                    "Total Deposits": sum(tx.amount for tx in self.transactions if tx.type == "deposit"),
+                    "Total Withdrawals": sum(tx.amount for tx in self.transactions if tx.type == "withdrawal"),
+                    "Total Transactions": len(self.transactions),
+                },
+                "Transactions": [tx.to_dict() for tx in self.transactions],
+                "Report Generated On": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
             with open("report.json", "w") as file:
                 json.dump(report, file, indent=4)
