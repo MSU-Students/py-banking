@@ -3,12 +3,30 @@
         "user_id: ": "1234",
         "account_type: ": "savings",
         "account_number: ": "73889",
-        "account_balance: ": 1000.0
+        "account_balance: ": 689.0
     },
     {
         "user_id: ": "1234",
         "account_type: ": "checking",
         "account_number: ": "47711",
         "account_balance: ": 5000.0
+    },
+    {
+        "user_id: ": "1234",
+        "account_type: ": "savings",
+        "account_number: ": "43708",
+        "account_balance: ": 500.0
+    },
+    {
+        "user_id: ": "1234",
+        "account_type: ": "savings",
+        "account_number: ": "28151",
+        "account_balance: ": 600.0
+    },
+    {
+        "user_id: ": "1234",
+        "account_type: ": "savings",
+        "account_number: ": "16043",
+        "account_balance: ": 1000.0
     }
 ]

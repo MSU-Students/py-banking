@@ -9,5 +9,3 @@ def clear_console():
 def format_account_balance(balance):
     return f"${balance:,.2f}"
 
-def design_1():
-    print("___"*25)

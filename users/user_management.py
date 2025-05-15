@@ -3,7 +3,7 @@ from account import handle_account_option
 from utils import clear_console
 import json
 import os
-from utils import clear_console, design_1
+from utils import clear_console
 
 class User:
     def __init__(self, user_id=str, pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
@@ -17,6 +17,7 @@ class User:
         self.email = email
         self.nationality = nationality
         self.approval = approval
+
 
 class UserService:
     registered_user = User()
@@ -67,6 +68,7 @@ class UserService:
         self.pin = input("Password:\t\t")
         self.approval = 0
         self.authentication = str(random.randint(10000, 99999))
+        
 
         user_data = {
             "full_name: ": self.full_name,
@@ -154,7 +156,6 @@ def handle_user_option():
                     input("Press enter to continue")
                 else:
                     clear_console()
-                    design_1()
                     
                     print(f"\nWelcome {User_service.login_user.name}")
                     handle_account_option(User_service.login_user.user_id, User_service.login_user.name)

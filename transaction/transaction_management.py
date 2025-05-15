@@ -18,7 +18,14 @@ class Transaction:
         self.amount = amount
         self.transaction_number = transaction_number
         self.original_balance = original_balance
-
+        transaction_file = "transactions.json"
+        try:
+            if os.path.exists(transaction_file):
+                with open(transaction_file, 'r') as file:
+                    self.transactions_data = json.load(file)
+        #if walang laman talaga and transactions.json, as in walang brackets, mag lalagay siya ng empty bracket doon 
+        except(FileNotFoundError, json.JSONDecodeError):
+            self.transactions_data = []
 
 
 
@@ -29,13 +36,16 @@ class TransactionService:
     account:Transaction
     def __init__(self, account):
         self.account = account
-        if os.path.exists(self.transaction_file):
-            
-            print(f'__'*20)
-            print("\n\tTRANSACTION SERVICE")
-            print(f'__'*20)
-        else:
+        try:
+            if os.path.exists(self.transaction_file):
+                with open(self.transaction_file, 'r') as file:
+                    self.transactions_dataa = json.load(file)
+                print(f'__'*20)
+                print("\n\tTRANSACTION SERVICE")
+                print(f'__'*20)
+        except(FileNotFoundError, json.JSONDecodeError):
             self.transactions_data = []
+ 
 #NORHAILAH - DEPOSIT
     def deposit(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
         if amount <= 0.0:
@@ -83,7 +93,6 @@ class TransactionService:
     # CHRISTIAN - INSUFFIECIENT CHUCHU, iKAW BAHALA GUMAWA NG WHILE LOOPS AND EXCEPTION HANDLING
     def withdrawal(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
         if account_balance - amount >= 500:
-            111
     
             date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
             
@@ -148,14 +157,6 @@ class TransactionService:
                 for i, account in enumerate(accounts):
                     if account["account_number: "] == account_number:
                         print(f"User Id: {user_id}\nAccount_type: {account["account_type: "]},\nAccount Number: {account_number}\nCurrent balance: Php{account["account_balance: "]}")
-                        print(f"christian ni gana ang pull?")
-                        print("ali nakita mo????")
-                        print("nakita niyo na??? means na pull ninyo ni ahh")
-                        print("ali nakita mo  keneme")
-                        print("ali nakita mo  keneme")
-                        print("ali nakita mo  keneme")
-                        print("ali nakita mo  keneme")
-                        
                         break
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")

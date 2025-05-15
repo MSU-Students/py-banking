@@ -1,7 +1,7 @@
 from typing import List
 from .bank_account import BankAccount
 from loan import handle_loan_option
-from utils import clear_console, design_1
+from utils import clear_console
 from transaction import TransactionService
 import random
 import json
@@ -64,17 +64,15 @@ class AccountService: #kurt
         account_number = str(random.randint(10000, 99999))
         
         clear_console()
-        design_1()
-        print(f"\nCreating a {account_type} account...")
+        print(f"\nCreating a {account_type} account for {full_name}\n")
         #3 trials only 
         attempts = 0
         while attempts < 3:
             try:
-                initial_balance = float(input("\nEnter initial deposit amount: "))
+                initial_balance = float(input("Enter initial deposit amount: "))
             except ValueError:
                 print("\n\t** Invalid amount. Please enter a number **")
                 print(f"\nPlease try again.")
-                design_1()
                 os.system("pause")
                 clear_console()
                 attempts += 1
@@ -95,21 +93,21 @@ class AccountService: #kurt
                 with open(self.accounts_file, 'w+') as account_file:
                     json.dump(self.accounts_data, account_file, indent=4)
                 
-                design_1()
-                print(f"\nSuccessfully created an {account_type} ACCOUNT for {full_name}! Below are your account details:\n")
-                print(f'\nInformation:\n\nUser_id: {self.current_account.user_id}')
+                print("**" * 20)
+                clear_console()
+                print(f"\nSuccessfully created a {account_type} account for {full_name}! Below are your account details:\n")
+                print(f'Information:\n\nUser_id: {self.current_account.user_id}')
                 print(f'Account Type: {self.current_account.account_type}')
                 print(f'Account Number: {self.current_account.account_number}')
                 print(f'Account Balance: {self.current_account.account_balance}\n')
-                design_1()
                 os.system("pause")
                 break
+            
             else:
                 print("\n\t** Error: Minimum deposit is Php 500.0 **")
                 attempts += 1
                 if attempts < 3:
                     print(f"\nPlease try again.")
-                    design_1()
                     os.system("pause")
                     clear_console()
                 else:
@@ -136,20 +134,24 @@ class AccountService: #kurt
             
                         # user_accounts = [] - a python list 
                         self.user_accounts.append(account)
-                    
+
                 if not self.user_accounts:
                     print('You do not have any existing account!')
                     return False
                 
             # LIST UR ACCOUNTS
-                print("List of Account You Have:")
+
+                print("\n\tList of Accounts You Have")
+                print(f'__'*20)
+                
                 index = 0
                 for account in self.user_accounts:
                     print(f"{index+1}.\tAccount Type: {account.account_type}\n\tAccount Number: {account.account_number}\n\tAccount Balance: {account.account_balance}")
                     index +=1
                     
             #  CHECK IF THE NUMBER U SELECTED IS EQUAL SA INDEX NG USER_ACCOUNTS  
-                selected_index = int(input("Select account: "))
+                selected_index = int(input("\nSelect account: "))
+                clear_console()
                 for account_details in self.user_accounts:
                     if 1 <= selected_index <=(len(self.user_accounts)+1):
                         selected_account = self.user_accounts[selected_index-1]
@@ -173,7 +175,8 @@ EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1,
 Main Account Menu
 '''
 def print_account_menu():
-    print("Bank Account Options:")
+    clear_console()
+    print("Bank Account Options:\n")
     print(f"\t{WITHDRAW} : Withdraw")
     print(f"\t{DEPOSIT} : Deposit")
     print(f"\t{BALANCE} : Balance")
@@ -189,13 +192,14 @@ CREATE_ACCOUNT, LOAN = (1, 2)
 Main Account Sub Menu: Services
 '''
 def print_services_options():
+    clear_console()
     print('Services Options:')
     print(f"\t{CREATE_ACCOUNT} : CREATE NEW ACCOUNT")
     print(f"\t{LOAN} : LOAN SERVICES")
     # other options here
     print(f"\t{EXIT} : Exit")
 
-def handle_services_option(user_id: str):
+def handle_services_option(user_id: str, full_name:str):
     option = CREATE_ACCOUNT
     while option != EXIT:
         print_services_options()
@@ -205,7 +209,7 @@ def handle_services_option(user_id: str):
             print("Invalid input. Please enter a number.")
             continue
         if option == CREATE_ACCOUNT:
-            account_service.create_account(user_id)
+            account_service.create_account(user_id, full_name)
         elif option == LOAN:
             clear_console()
             handle_loan_option(account_service.current_account)
@@ -216,7 +220,6 @@ def handle_account_option(user_id: str, full_name:str):
     option = SERVICES
     if not account_service.user_has_account(user_id):
         print("Please create an account.\n")
-        design_1()
         os.system("pause")
         clear_console()
         account_service.create_account(user_id, full_name)
@@ -225,13 +228,14 @@ def handle_account_option(user_id: str, full_name:str):
         print_account_menu()
         try:
             option = int(input("\n\tCommand: "))
+            clear_console()
         except ValueError:
             print("Invalid input. Please enter a number.")
             continue
 
         if option == SERVICES:
             clear_console()
-            handle_services_option(user_id)
+            handle_services_option(user_id, full_name)
         elif option == SELECT:
             account_service.select_account(user_id)
         #ALI -WITHDRAW    
