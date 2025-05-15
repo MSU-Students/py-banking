@@ -1,4 +1,5 @@
 import random
+from collections import UserDict
 
 class BankAccount:
     def __init__(self, user_id, full_name, balance):
@@ -19,11 +20,11 @@ class BankAccount:
         }
 
     @classmethod
-    def from_dict(cls, data):
+    def from_dict(cls, data:UserDict):
         account = cls(
             user_id=data["user_id"],
-            full_name=data["full_name"],
-            balance=data["balance"]
+            full_name=data.get("full_name", ""),
+            balance=data.get("balance", 0)
         )
         account.account_id = data.get("account_id", account.generate_account_id())
         return account
