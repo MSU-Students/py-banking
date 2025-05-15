@@ -1,7 +1,7 @@
 from typing import List
 from .bank_account import BankAccount
 from loan import handle_loan_option
-from utils import clear_console
+from utils import clear_console, design_1
 from transaction import TransactionService
 import random
 import json
@@ -22,12 +22,12 @@ class AccountService: #kurt
    
     
     def __init__(self, user_id: str = "", account_type: str = "", account_number: str = "", account_balance: float = 0.0):
-        
-        if os.path.exists(self.accounts_file):
-            with open(self.accounts_file, 'r') as file:
-                self.accounts_data = json.load(file)
-               
-        else:
+        try:
+            if os.path.exists(self.accounts_file):
+                with open(self.accounts_file, 'r') as file:
+                    self.accounts_data = json.load(file)
+        #if walang laman talaga and accounts.json, as in walang brackets, mag lalagay siya ng empty bracket doon sa accounts.json
+        except(FileNotFoundError, json.JSONDecodeError):
             self.accounts_data = []
             
         self.user_id = user_id
@@ -40,18 +40,19 @@ class AccountService: #kurt
             if account["user_id: "]== user_id:
                 return True
         else:
-            print("You don't have any existing account yet")
+            print("\nYou don't have any existing account yet")
         
 
-    def create_account(self, user_id: str = None):
-        print("Create an Account: ")
+    def create_account(self, user_id, full_name):
+        print("Create an Account: \n")
         print("What type of account will you open? Choose Below")
         print("1. Savings\n2. Checking")
-        option = input("Decision: ")
+        option = input("\nDecision: ")
 
         if user_id is None:
             user_id = input("Enter your User ID: ")
 
+        #account type
         if option == str(SAVINGS):
             account_type = "savings"
         elif option == str(CHECKING):
@@ -59,16 +60,26 @@ class AccountService: #kurt
         else:
             print("Invalid option. Please select 1 for Savings or 2 for Checking.")
             return
-
+        #account number
         account_number = str(random.randint(10000, 99999))
+        
+        clear_console()
+        design_1()
+        print(f"\nCreating a {account_type} account...")
+        #3 trials only 
         attempts = 0
         while attempts < 3:
             try:
-                initial_balance = float(input("Enter initial deposit amount: "))
+                initial_balance = float(input("\nEnter initial deposit amount: "))
             except ValueError:
-                print("Invalid amount. Please enter a number.")
+                print("\n\t** Invalid amount. Please enter a number **")
+                print(f"\nPlease try again.")
+                design_1()
+                os.system("pause")
+                clear_console()
                 attempts += 1
                 continue
+              
 
             if initial_balance >= 500:
                 self.current_account = BankAccount(user_id=user_id, account_number=account_number, account_type=account_type, account_balance=initial_balance)
@@ -80,24 +91,27 @@ class AccountService: #kurt
                     "account_balance: ": self.current_account.account_balance,
                 }
                 self.accounts_data.append(account_data)
-
+            #save newly created account in accounts.json
                 with open(self.accounts_file, 'w+') as account_file:
                     json.dump(self.accounts_data, account_file, indent=4)
-                    
-                os.system("pause")
-                clear_console()
-                print("SUCCESFULLY CREATED AN ACCOUNT! BELOW ARE YOUR ACCOUNT DETAILS:\n")
-                print(f'\nInformation:\nUser_id: {self.current_account.user_id}')
-                print(f'\nAccount Type: {self.current_account.account_type}')
+                
+                design_1()
+                print(f"\nSuccessfully created an {account_type} ACCOUNT for {full_name}! Below are your account details:\n")
+                print(f'\nInformation:\n\nUser_id: {self.current_account.user_id}')
+                print(f'Account Type: {self.current_account.account_type}')
                 print(f'Account Number: {self.current_account.account_number}')
                 print(f'Account Balance: {self.current_account.account_balance}\n')
+                design_1()
                 os.system("pause")
                 break
             else:
-                print("Error: Minimum deposit is Php 500.")
+                print("\n\t** Error: Minimum deposit is Php 500.0 **")
                 attempts += 1
                 if attempts < 3:
-                    print("Please try again.")
+                    print(f"\nPlease try again.")
+                    design_1()
+                    os.system("pause")
+                    clear_console()
                 else:
                     print("Maximum attempts reached. Exiting.")
                     clear_console()
@@ -144,42 +158,7 @@ class AccountService: #kurt
                     print('mali nalyn, wala nakita ang account, mali guro ka sa index')
                 os.system("pause")
                 clear_console()
-        # accounts_data : a variable that has all the  important details of the user's accounts
-    #     for user in self.accounts_data: 
-    #         # if ang user_id na ininput ng user galing sa log_in mah equal sa accounts.json na user_id, i-initialize and store niya yung mga variables na dictionary dito sa bank account class
-    #         if user["user_id: "] == user_id:
-    #             account = BankAccount(
-    #                 user_id=user["user_id: "],
-    #                 account_type=user["account_type: "],
-    #                 account_number=user["account_number: "],
-    #                 account_balance=user["account_balance: "]
-    #             )
-      
-    #             # user_accounts = [] - a python list 
-    #             self.user_accounts.append(account)
-            
-    #     if not self.user_accounts:
-    #         print('You do not have any existing account!')
-    #         return False
-        
-    # # LIST UR ACCOUNTS
-    #     print("List of Account You Have:")
-    #     index = 0
-    #     for account in self.user_accounts:
-    #         print(f"{index+1}.\tAccount Type: {account.account_type}\n\tAccount Number: {account.account_number}\n\tAccount Balance: {account.account_balance}")
-    #         index +=1
-    # #  CHECK IF THE NUMBER U SELECTED IS EQUAL SA INDEX NG USER_ACCOUNTS  
-    #     selected_index = int(input("Select account: "))
-    #     for account_details in self.user_accounts:
-    #         if 1 <= selected_index <=(len(self.user_accounts)+1):
-    #             selected_account = self.user_accounts[selected_index-1]
-    #         return selected_account  
-    #     else:
-    #         print('mali nalyn, wala nakita ang account, mali guro ka sa index')
-    #     os.system("pause")
-    #     clear_console()
-        
-
+   
     def find_account(self, id: int) -> BankAccount | None:
         print("TODO:find account:", id)
         return None
@@ -216,7 +195,7 @@ def print_services_options():
     # other options here
     print(f"\t{EXIT} : Exit")
 
-def handle_services_option():
+def handle_services_option(user_id: str):
     option = CREATE_ACCOUNT
     while option != EXIT:
         print_services_options()
@@ -226,20 +205,21 @@ def handle_services_option():
             print("Invalid input. Please enter a number.")
             continue
         if option == CREATE_ACCOUNT:
-            account_service.create_account()
+            account_service.create_account(user_id)
         elif option == LOAN:
             clear_console()
             handle_loan_option(account_service.current_account)
         # handle other options here
         clear_console()
 
-def handle_account_option(user_id: str):
+def handle_account_option(user_id: str, full_name:str):
     option = SERVICES
     if not account_service.user_has_account(user_id):
-        print("Please create an account.")
+        print("Please create an account.\n")
+        design_1()
         os.system("pause")
         clear_console()
-        account_service.create_account(user_id)
+        account_service.create_account(user_id, full_name)
 
     while option != EXIT:
         print_account_menu()
@@ -251,7 +231,7 @@ def handle_account_option(user_id: str):
 
         if option == SERVICES:
             clear_console()
-            handle_services_option()
+            handle_services_option(user_id)
         elif option == SELECT:
             account_service.select_account(user_id)
         #ALI -WITHDRAW    

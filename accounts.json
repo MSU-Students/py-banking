@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "user_id: ": "1234",
+        "account_type: ": "savings",
+        "account_number: ": "73889",
+        "account_balance: ": 1000.0
+    },
+    {
+        "user_id: ": "1234",
+        "account_type: ": "checking",
+        "account_number: ": "47711",
+        "account_balance: ": 5000.0
+    }
+]

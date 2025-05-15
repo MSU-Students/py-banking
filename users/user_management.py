@@ -3,6 +3,7 @@ from account import handle_account_option
 from utils import clear_console
 import json
 import os
+from utils import clear_console, design_1
 
 class User:
     def __init__(self, user_id=str, pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
@@ -153,9 +154,10 @@ def handle_user_option():
                     input("Press enter to continue")
                 else:
                     clear_console()
-                    print(f"Welcome {User_service.login_user.name}")
+                    design_1()
                     
-                    handle_account_option(User_service.login_user.user_id)
+                    print(f"\nWelcome {User_service.login_user.name}")
+                    handle_account_option(User_service.login_user.user_id, User_service.login_user.name)
 
         elif option == FORGOT_PASS:
             clear_console()
