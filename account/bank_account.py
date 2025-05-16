@@ -28,8 +28,7 @@ class BankAccount:
             full_name=data.get("full_name", ""),
             balance=data.get("balance", 0),
             account_number=data.get("account_number"," "),
-            account_type=data.get("account_type", ""),
-            balance=data["balance"]
+            account_type=data.get("account_type", "")
         )
         account.account_number = data.get("account_number", account.account_number)
         account.account_id = data.get("account_id", account.generate_account_id())
