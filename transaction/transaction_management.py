@@ -194,8 +194,8 @@ class TransactionService:
                 for transaction in transactions:
 
                     if transaction["user_id: "] == user_id and transaction["account_number: "] == account_number:
-                        print(f"{i+1.}\n* Date and Time: {transaction["date: "]} \n* Transaction Type: {transaction["transaction_type: "]} \n* Amount: {transaction["amount: "]}\n* Transaction Number: {transaction["transaction_number: "]}")
-                        i+=1
+                     print(f"{i+1}.\n* Date and Time: {transaction['date: ']} \n* Transaction Type: {transaction['transaction_type: ']} \n* Amount: {transaction['amount: ']} \n* Transaction Number: {transaction['transaction_number: ']}")
+                    i+=1
                 if i == 0:
                     raise ValueError("No transactions found for this account.")
         except FileNotFoundError as e:
@@ -211,9 +211,9 @@ class TransactionService:
                     if account["account_number"] == account_number:
                         print("\tBALANCE INQUIRY\n")
                         print(f"User Id: {user_id}")
-                        print(f"Account_type:  {account["account_type"]}")
+                        print(f"Account_type:  {account['account_type']}")
                         print(f"Account Number: {account_number}")
-                        print(f"Current balance: Php {account["balance"]}\n")
+                        print(f"Current balance: Php {account['balance']}\n")
                         print("__"*20)
                         input("Press any key to go back to menu")
                         return        
