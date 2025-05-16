@@ -5,5 +5,19 @@
         "balance": 98000.0,
         "account_number": "92407",
         "account_type": "SAVINGS"
+    },
+    {
+        "user_id": "3333",
+        "full_name": "rana",
+        "balance": 1000.0,
+        "account_number": "59117",
+        "account_type": "SAVINGS"
+    },
+    {
+        "user_id": "3333",
+        "full_name": "rana",
+        "balance": 500.0,
+        "account_number": "11114",
+        "account_type": "SAVINGS"
     }
 ]

@@ -361,9 +361,6 @@ def handle_account_option(full_name, user_id):
 
             clear_console()
             
-        elif option == EXIT:
-            clear_console()
-            return
 
         elif option == TRANSFER_FUND:
             
@@ -415,6 +412,22 @@ def handle_account_option(full_name, user_id):
             date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             transaction_number = str(random.randint(1000000, 9999999))
 
+
+                
+            for acc in account_service.accounts:
+                    if acc.account_number == account_service.current_account.account_number:
+                        acc.balance = account_service.current_account.balance
+                        break
+
+            
+            target_account.balance += amount
+
+    
+            for acc in account_service.accounts:
+                    if acc.account_number == target_account.account_number:
+                        acc.balance = target_account.balance
+                        break
+
             debit_transaction = {
                 "account_number": account_service.current_account.account_number,
                 "user_id": account_service.current_account.user_id,
@@ -456,3 +469,7 @@ def handle_account_option(full_name, user_id):
 
             print(f"Transferred ₱{amount:.2f} from {account_service.current_account.account_number} to {target_account.account_number}.")
             input("Press enter to continue")
+
+        elif option == EXIT:
+            clear_console()
+            return

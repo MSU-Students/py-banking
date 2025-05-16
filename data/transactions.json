@@ -48,5 +48,25 @@
         "transaction_number: ": "9455058",
         "original_balance: ": 102000.0,
         "amount: ": 2000.0
+    },
+    {
+        "account_number": "59117",
+        "user_id": "3333",
+        "account_type": "SAVINGS",
+        "transaction_type": "debit",
+        "date": "2025-05-16 22:38:29",
+        "transaction_number": "8953670",
+        "original_balance": 1000.0,
+        "amount": -100.0
+    },
+    {
+        "account_number": "11114",
+        "user_id": "3333",
+        "account_type": "SAVINGS",
+        "transaction_type": "credit",
+        "date": "2025-05-16 22:38:29",
+        "transaction_number": "8953670",
+        "original_balance": 500.0,
+        "amount": 100.0
     }
 ]
