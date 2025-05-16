@@ -125,41 +125,48 @@ class UserService:
             input("Press any key to continue")
 
     def change_info(self):
-        print("Change Information")
-        print("1. Change Address")
-        print("2. Change Mobile Number")
-        print("3. Change Email Address")
-        print("4. Change Nationality")
-        print("5. Change Birthdate")
+            print("Change Information")
+            print("1. Change Address")
+            print("2. Change Mobile Number")
+            print("3. Change Email Address")
+            print("4. Change Nationality")
+            print("5. Change Birthdate")
 
-        option = int(input("Select an option: "))
-        clear_console()
-        print("Change Information")
-        if option == 1:
-            new_address = input("Enter new address: ")
-            self.login_user.address = new_address
-        elif option == 2:
-            new_mobile_number = input("Enter new mobile number: ")
-            self.login_user.mobile_number = new_mobile_number
-        elif option == 3:
-            new_email = input("Enter new email address: ")
-            self.login_user.email = new_email
-        elif option == 4:
-            new_nationality = input("Enter new Nationality: ")
-            self.login_user.nationality = new_nationality
-        elif option == 5:
-            new_bday = input("Enter new Birthdate: ")
-            self.login_user.bday = new_bday
-        else:
-            for index, user in enumerate(self.users_data, 1):
-                print(f"\nUser {index}:")
-                print(f"  Full Name : {user['full_name']}")
-                print(f"  User ID   : {user['user_id']}")
-                print(f"  Email     : {user['email']}")
-                print(f"  Phone     : {user['mobile_num']}")
-                print(f"  Balance   : ₱{user.get('balance', 0.0):,.2f}")
-                print(f"  Admin     : {user.get('is_admin', False)}")
-                print(f"  Approved  : {user.get('approved', False)}")
+            option = int(input("Select an option: "))
+            clear_console()
+            print("Change Information")
+            if option == 1:
+                new_address = input("Enter new address: ")
+                self.login_user.address = new_address
+            elif option == 2:
+                new_mobile_number = input("Enter new mobile number: ")
+                self.login_user.mobile_number = new_mobile_number
+            elif option == 3:
+                new_email = input("Enter new email address: ")
+                self.login_user.email = new_email
+            elif option == 4:
+                new_nationality = input("Enter new Nationality: ")
+                self.login_user.nationality = new_nationality
+            elif option == 5:
+                new_bday = input("Enter new Birthdate: ")
+                self.login_user.bday = new_bday
+            else:
+                print("Invalid option selected.")
+                return
+
+            for user_data in self.users_data:
+                if user_data["user_id"] == self.login_user.User_Id:
+                    user_data["address"] = self.login_user.address
+                    user_data["mobile_num"] = self.login_user.mobile_number
+                    user_data["email"] = self.login_user.email
+                    user_data["nationality"] = self.login_user.nationality
+                    user_data["bday"] = self.login_user.bday
+                    break
+            
+            with open(self.users_file, 'w') as account:
+                json.dump(self.users_data, account, indent=4)
+            print("Profile information updated successfully!")
+            input("Press any key to continue")
                 
     def change_pass(self):
         #Captcha
