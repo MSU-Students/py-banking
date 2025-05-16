@@ -26,8 +26,8 @@ class LoanPayment:
         self.date = date
 
 class LoanService:
-    loan_file = "loan.json"
-    payment_file = "payments.json"
+    loan_file = "data/loan.json"
+    payment_file = "data/payments.json"
 
     def __init__(self, account: BankAccount):
         self._bank_account = account

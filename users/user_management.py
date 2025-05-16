@@ -263,7 +263,7 @@ class UserService:
                 print("Invalid choice. Try again.")
 
     def view_loan_records(self):
-        loan_file = "loan.json"
+        loan_file = "data/loan.json"
         if not os.path.exists(loan_file):
             print("No loan records found.")
             return
