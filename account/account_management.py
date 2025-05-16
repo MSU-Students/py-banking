@@ -6,6 +6,8 @@ from transaction import TransactionService
 import json
 import os
 import random
+from datetime import datetime
+
 SAVINGS, CHECKING =(1,2)
 class AccountService:
     current_account: BankAccount | None = None
@@ -155,7 +157,7 @@ transaction_data = []
 
 EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5,6)
 
-EXIT, WITHDRAW, DEPOSIT, BALANCE, VIEW_TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5, 6)
+EXIT, WITHDRAW, DEPOSIT, BALANCE, VIEW_TRANSACTION_HISTORY, SELECT, SERVICES, TRANSFER_FUND= (0, 1, 2, 3, 4, 5, 6, 7)
 
 def print_account_menu():
     #Print main account options
@@ -165,6 +167,7 @@ def print_account_menu():
     print(f"\t{BALANCE} : Balance Inquiry")
     print(f"\t{VIEW_TRANSACTION_HISTORY} : View Transaction History")
     print(f"\t{SELECT} : Select Another Account")
+    print(f"\t{TRANSFER_FUND} : Fund Transfer")
     print(f"\t{SERVICES} : Access Services")
     print(f"\t{EXIT} : Exit")
 
@@ -183,6 +186,7 @@ def print_services_options():
 def handle_services_option(full_name, user_id):
     #Handle user services options
     from users.user_management import User_service
+
     option = CREATE_ACCOUNT 
     while option != EXIT:
         print_services_options()
@@ -354,6 +358,9 @@ def handle_account_option(full_name, user_id):
             transaction_service.display_transactions(user_id,account_type, account_number)
             os.system("pause")
             clear_console()
+
+            clear_console()
+            
         elif option == EXIT:
             clear_console()
             return
