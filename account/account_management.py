@@ -28,73 +28,25 @@ class AccountService:
     def save_accounts(self): 
         with open(self.accounts_file, "w") as f:
             json.dump([acc.to_dict() for acc in self.accounts], f, indent=4)
-    
-    def create_account(self, full_name, user_id): 
-        clear_console()
-        print("Create an Account: \n")
-        print("What type of account will you open? Choose Below")
-        print("1. Savings\n2. Checking")
-        option = input("\nDecision: ")
 
-        if user_id is None:
-            user_id = input("Enter your User ID: ")
-
-        #account type
-        if option == str(SAVINGS):
-            account_type = "SAVINGS"
-        elif option == str(CHECKING):
-            account_type = "CHECKING"
-        else:
-            print("Invalid option. Please select 1 for Savings or 2 for Checking.")
+    def create_account(self):
+        account : str
+        from users.user_management import User_service
+        try:
+            balance = float(input("Enter initial deposit amount: "))
+        except ValueError: 
+            print("Invalid input for balance.")
             return
-        
-        #account number
-        account_number = str(random.randint(10000, 99999))
-        
-        clear_console()
-        print(f"\nCreating a {account_type} account for {full_name}\n")
-        #3 trials only 
-        attempts = 0
-        while attempts < 3:
-            try:
-                initial_balance = float(input("Enter initial deposit amount: "))
-            except ValueError:
-                print("\n\t** Invalid amount. Please enter a number **")
-                print(f"\nPlease try again.")
-                os.system("pause")
-                clear_console()
-                attempts += 1
-                continue
-              
 
-            if initial_balance >= 500:
-                account_data = BankAccount(user_id=user_id, full_name=full_name, balance=initial_balance, account_number=account_number, account_type=account_type)
-   
-                self.accounts.append(account_data)
-                self.current_account = account_data
-                self.save_accounts()
+        new_account = BankAccount(User_service.login_user.User_Id,User_service.login_user.name, balance)
+        self.accounts.append(new_account)
+        self.current_account = new_account
+        self.save_accounts()
 
-                print("**" * 20)
-                clear_console()
-                print(f"\nSuccessfully created a {account_type} account for {full_name}! Below are your account details:\n")
-                print(f'Information:\n\nUser_id: {self.current_account.user_id}')
-                print(f'Account Type: {self.current_account.account_type}')
-                print(f'Account Number: {self.current_account.account_number}')
-                print(f'Account Balance: {self.current_account.balance}\n')
-                os.system("pause")
-                break
-            
-            else:
-                print("\n\t** Error: Minimum deposit is Php 500.0 **")
-                attempts += 1
-                if attempts < 3:
-                    print(f"\nPlease try again.")
-                    os.system("pause")
-                    clear_console()
-                else:
-                    print("Maximum attempts reached. Exiting.")
-                    clear_console()
-                    return
+        print(f"\nAccount created successfully for {new_account.account_type}!")
+        print(f"Account ID: {new_account.account_id}")
+        print(f"Balance: ₱{new_account.balance:.2f}\n")
+
 
     def list_accounts(self):
         from users.user_management import User_service
@@ -108,7 +60,7 @@ class AccountService:
 
         print("\nYour Accounts:")
         for i, acc in enumerate(user_accounts, start=1):
-            print(f"{i}. {acc.full_name} - Account ID: {acc.account_number} - Balance: ₱{acc.balance:.2f}")
+            print(f"{i}. {acc.account_type} - Account ID: {acc.account_id} - Balance: ₱{acc.balance:.2f}")
         return user_accounts
                     
     def select_account(self):
@@ -121,13 +73,13 @@ class AccountService:
 
         try:
             choice = int(input("\nEnter the number of the account to select: "))
-            for account in user_accounts:
-                if 1 <= choice <= (len(user_accounts)):
-                    self.current_account = user_accounts[choice - 1]
-                    print(f"\nSelected account: {self.current_account.full_name} - Account Number: {self.current_account.account_number}\n{self.current_account.account_type} Account - Balance: ₱{self.current_account.balance:.2f}\n")
-                    return self.current_account
-                else:
-                    print("Invalid choice.")
+            if 1 <= choice <= len(user_accounts):
+                self.current_account = user_accounts[choice - 1]
+                print(f"\nSelected account: {self.current_account.account_type} - Balance: ₱{self.current_account.balance:.2f}\n")
+            else:
+                print("Invalid choice.")
+                input("Press enter to continue...")
+                return
         except ValueError:
             print("Please enter a valid number.")
             
@@ -147,7 +99,6 @@ class AccountService:
             if acc.account_id == account_num:
                 return acc
         return None
-
 
 
 account_service = AccountService()
@@ -216,12 +167,10 @@ def process_fund_transfer():
         transaction_service.transfer_fund(target_account, amount)
 
 LOGIN, CREATE = (1, 2)
-
-def login_account_menu(full_name, user_id):
-    clear_console()
+def login_account_menu():
     #Allow the user to log in or create a new account
     print("Choose an option")
-    print(f"\t{LOGIN} : LOGIN ACCOUNT")
+    print(f"\t{LOGIN} : SELECT ACCOUNT")
     print(f"\t{CREATE} : CREATE ACCOUNT")
     print(f"\t{EXIT} : EXIT")
     choice = int(input("CHOICE: "))
