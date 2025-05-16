@@ -5,17 +5,17 @@ class BankAccount:
         self.user_id = user_id
         self.account_type = account_type
         self.balance = balance
-        # prvious account_id
-        self.account_number = account_number
-        self.account_type = account_type
+        self.account_id = self.generate_account_id()
+
+    def generate_account_id(self):
+        return random.randint(100000, 999999)
 
     def to_dict(self):
         return {
             "user_id": self.user_id,
             "full_name": self.account_type,
             "balance": self.balance,
-            "account_number": self.account_number,
-            "account_type" : self.account_type
+            "account_id": self.account_id
         }
 
     @classmethod
