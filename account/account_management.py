@@ -16,6 +16,8 @@ class AccountService:
 
     def load_accounts(self): 
         if not os.path.exists(self.accounts_file):
+            with open(self.accounts_file, 'w') as file:
+                file.write('[]')
             return []
         
         with open(self.accounts_file, "r") as f:
@@ -26,20 +28,37 @@ class AccountService:
         with open(self.accounts_file, "w") as f:
             json.dump([acc.to_dict() for acc in self.accounts], f, indent=4)
 
-    def create_account(self): 
+    def create_account(self):
+        account : str
         from users.user_management import User_service
         try:
             balance = float(input("Enter initial deposit amount: "))
         except ValueError: 
             print("Invalid input for balance.")
             return
+        
+        SAVINGS, JOINT, STUDENT, BUSINESS, PERSONAL = (1, 2, 3, 4, 5)
+        print("choose the type of your account:")
+        print(f"\t{SAVINGS} : SAVINGS ACCOUNT")
+        print(f"\t{JOINT} : JOINT ACCOUNT")
+        print(f"\t{STUDENT} : STUDENT ACCOUNT")
+        print(f"\t{BUSINESS} : BUSINESS ACCOUNT")
+        print(f"\t{PERSONAL} : PERSONAL ACCOUNT")
+        option = int(input("Choice:\t"))
 
-        new_account = BankAccount(User_service.login_user.User_Id,User_service.login_user.name, balance)
+        if option == SAVINGS: account = "Savings Account"
+        elif option == JOINT: account = "Joint Account"
+        elif option == STUDENT: account = "Student Account"
+        elif option == BUSINESS: account = "Business Account"
+        elif option == PERSONAL: account = "Personal Account"
+        else: return
+
+        new_account = BankAccount(User_service.login_user.User_Id, account, balance, User_service.login_user.name)
         self.accounts.append(new_account)
         self.current_account = new_account
         self.save_accounts()
 
-        print(f"\nAccount created successfully for {new_account.full_name}!")
+        print(f"\nAccount created successfully for {new_account.account_type}!")
         print(f"Account ID: {new_account.account_id}")
         print(f"Balance: ₱{new_account.balance:.2f}\n")
 
@@ -55,7 +74,7 @@ class AccountService:
 
         print("\nYour Accounts:")
         for i, acc in enumerate(user_accounts, start=1):
-            print(f"{i}. {acc.full_name} - Account ID: {acc.account_id} - Balance: ₱{acc.balance:.2f}")
+            print(f"{i}. {acc.account_type} - Account ID: {acc.account_id} - Balance: ₱{acc.balance:.2f}")
         return user_accounts
 
 
@@ -68,9 +87,11 @@ class AccountService:
             choice = int(input("\nEnter the number of the account to select: "))
             if 1 <= choice <= len(user_accounts):
                 self.current_account = user_accounts[choice - 1]
-                print(f"\nSelected account: {self.current_account.full_name} - Balance: ₱{self.current_account.balance:.2f}\n")
+                print(f"\nSelected account: {self.current_account.account_type} - Balance: ₱{self.current_account.balance:.2f}\n")
             else:
                 print("Invalid choice.")
+                input("Press enter to continue...")
+                return
         except ValueError:
             print("Please enter a valid number.")
 
@@ -149,11 +170,10 @@ def process_fund_transfer():
         transaction_service.transfer_fund(target_account, amount)
 
 LOGIN, CREATE = (1, 2)
-
 def login_account_menu():
     #Allow the user to log in or create a new account
     print("Choose an option")
-    print(f"\t{LOGIN} : LOGIN ACCOUNT")
+    print(f"\t{LOGIN} : SELECT ACCOUNT")
     print(f"\t{CREATE} : CREATE ACCOUNT")
     print(f"\t{EXIT} : EXIT")
     choice = int(input("CHOICE: "))
@@ -182,6 +202,103 @@ def handle_account_option():
             account_service.select_account()
         #ALI -WITHDRAW    
         elif option == WITHDRAW:
-            transaction_service.withdrawal()
-        # handle other options here
-        clear_console()
+            # variables for arguments in withdrawal function
+            account_type = account_service.current_account.account_type
+            account_id = account_service.current_account.account_id
+            
+            with open("data/accounts.json", 'r') as file:
+                accounts_data = json.load(file)
+                for acc in accounts_data:
+                    if acc["account_id"] == account_service.current_account.account_id:
+                        balance = acc["balance"] # updated ang balance 
+                
+            if account_service.current_account is None:
+                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+            try:
+                amount = float(input("\nEnter amount to withdraw: "))
+            except ValueError:
+                print("Invalid amount. Please enter a number.")
+                continue
+            
+            print(f'__'*20)
+            print("\n\tSelected Account")
+            print(f"\nSelected account: {account_service.current_account} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f'__'*20)
+            transaction_service.withdrawal(amount, account_service.current_account.user_id,account_type, account_id, balance)
+            input("\nPress any keys to go back to menu")
+        #THAMEENAH -DEPOSIT
+        #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu
+        elif option == DEPOSIT:
+            # variables for arguments in deposit function
+            account_type = account_service.current_account.account_type
+            account_id = account_service.current_account.account_id
+            
+            with open("data/accounts.json", 'r') as file:
+                accounts_data = json.load(file)
+                for acc in accounts_data:
+                    if acc["account_id"] == account_service.current_account.account_id:
+                        balance = acc["balance"] # updated ang balance 
+                
+            if account_service.current_account is None:
+                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+            try:
+                amount = float(input("\nEnter amount to deposit: "))
+            except ValueError:
+                print("Invalid amount. Please enter a number.")
+                continue
+            
+            print(f'__'*20)
+            print("\n\tSelected Account")
+            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f'__'*20)
+            transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
+            input("\nPress any keys to go back to menu")
+            
+            
+            
+        #NORHAILAH   - balance inquiry
+        #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu 
+        elif option == BALANCE:
+            account_type = account_service.current_account.account_type
+            account_id = account_service.current_account.account_id
+            
+            with open("data/accounts.json", 'r') as file:
+                accounts_data = json.load(file)
+                for acc in accounts_data:
+                    if acc["account_id"] == account_service.current_account.account_id:
+                        balance = acc["balance"] # updated ang balance 
+           
+            if account_service.current_account is None:
+                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+            
+            print(f'__'*20)
+            print("\n\tSelected Account")
+            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f'__'*20)
+            
+            transaction_service.balance_inquiry(account_service.current_account.user_id,account_id)
+            
+        elif option == TRANSACTION_HISTORY:
+            account_type = account_service.current_account.account_type
+            account_id = account_service.current_account.account_id
+            
+            with open("data/accounts.json", 'r') as file:
+                accounts_data = json.load(file)
+                for acc in accounts_data:
+                    if acc["account_id"] == account_service.current_account.account_id:
+                        balance = acc["balance"] # updated ang balance 
+           
+            if account_service.current_account is None:
+                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+            
+            print(f'__'*20)
+            print("\n\tSelected Account")
+            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f'__'*20)
+
+            transaction_service.display_transactions(account_service.current_account.user_id,account_type, account_id)
+            os.system("pause")
+            clear_console()
+        elif option == EXIT:
+            clear_console()
+            return
