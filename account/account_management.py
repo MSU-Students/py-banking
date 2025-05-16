@@ -364,3 +364,95 @@ def handle_account_option(full_name, user_id):
         elif option == EXIT:
             clear_console()
             return
+
+        elif option == TRANSFER_FUND:
+            
+            target_account_number = input("Enter the target account number to transfer to: ")
+            if target_account_number == account_service.current_account.account_number:
+                print("You cannot transfer funds to your own account.")
+                input("Press enter to continue")
+                return
+
+            try:
+                amount = float(input("Enter the amount to transfer: "))
+            except ValueError:
+                print("Invalid amount entered.")
+                input("Press enter to continue")
+                return
+
+            if amount <= 0:
+                print("Transfer amount must be greater than zero.")
+                input("Press enter to continue")
+                return
+
+            target_account = None
+            for acc in account_service.accounts:
+                if acc.account_number == target_account_number:
+                    target_account = acc
+                    break
+
+            if not target_account:
+                print("Target account not found.")
+                input("Press enter to continue")
+                return
+
+            if account_service.current_account.balance < amount:
+                print("Insufficient funds for transfer.")
+                input("Press enter to continue")
+                return
+
+            
+            original_sender_balance = account_service.current_account.balance
+            account_service.current_account.balance -= amount
+            
+            original_receiver_balance = target_account.balance
+            target_account.balance += amount
+
+            
+            account_service.save_accounts()
+
+            
+            date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            transaction_number = str(random.randint(1000000, 9999999))
+
+            debit_transaction = {
+                "account_number": account_service.current_account.account_number,
+                "user_id": account_service.current_account.user_id,
+                "account_type": account_service.current_account.account_type,
+                "transaction_type": "debit",
+                "date": date,
+                "transaction_number": transaction_number,
+                "original_balance": original_sender_balance,
+                "amount": -amount
+            }
+
+            credit_transaction = {
+                "account_number": target_account.account_number,
+                "user_id": target_account.user_id,
+                "account_type": target_account.account_type,
+                "transaction_type": "credit",
+                "date": date,
+                "transaction_number": transaction_number,
+                "original_balance": original_receiver_balance,
+                "amount": amount
+            }
+
+            
+            transaction_file = "data/transactions.json"
+            try:
+                if os.path.exists(transaction_file):
+                    with open(transaction_file, 'r') as file:
+                        transactions_data = json.load(file)
+                else:
+                    transactions_data = []
+            except (FileNotFoundError, json.JSONDecodeError):
+                transactions_data = []
+
+            transactions_data.append(debit_transaction)
+            transactions_data.append(credit_transaction)
+
+            with open(transaction_file, 'w') as transaction_file_obj:
+                json.dump(transactions_data, transaction_file_obj, indent=4)
+
+            print(f"Transferred ₱{amount:.2f} from {account_service.current_account.account_number} to {target_account.account_number}.")
+            input("Press enter to continue")
