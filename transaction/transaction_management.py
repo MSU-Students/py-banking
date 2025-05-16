@@ -193,8 +193,8 @@ class TransactionService:
                 i = 0
                 for transaction in transactions:
 
-                    if transaction["user_id: "] == user_id and transaction["account_id: "] == account_id:
-                     print(f"{i+1}.\n* Date and Time: {transaction['date: ']} \n* Transaction Type: {transaction['transaction_type: ']} \n* Amount: {transaction['amount: ']} \n* Transaction Number: {transaction['transaction_number: ']}")
+                    if transaction["user_id"] == user_id and transaction["account_id"] == account_id:
+                     print(f"{i+1}.\n* Date and Time: {transaction['date']} \n* Transaction Type: {transaction['transaction_type']} \n* Amount: {transaction['amount']} \n* Transaction Number: {transaction['transaction_number']}")
                     i+=1
                 if i == 0:
                     raise ValueError("No transactions found for this account.")

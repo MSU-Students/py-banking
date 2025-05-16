@@ -312,7 +312,7 @@ def handle_account_option():
             return
         elif option == TRANSFER_FUND:
             
-            target_account_id = input("Enter the target account number to transfer to: ")
+            target_account_id = int(input("Enter the target account number to transfer to: "))
             if target_account_id == account_service.current_account.account_id:
                 print("You cannot transfer funds to your own account.")
                 input("Press enter to continue")
