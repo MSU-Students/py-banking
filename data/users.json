@@ -22,8 +22,7 @@
         "pin": "1111",
         "approval": 0,
         "authentication": "23476"
-<<<<<<< HEAD
-=======
+
     },
     {
         "full_name": "rana",
@@ -36,6 +35,5 @@
         "pin": "3333",
         "approval": 1,
         "authentication": "43198"
->>>>>>> 0ac94bba11788888baa8da2ac5385ae95fdb05c3
     }
 ]

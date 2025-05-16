@@ -48,8 +48,7 @@
         "transaction_number: ": "9455058",
         "original_balance: ": 102000.0,
         "amount: ": 2000.0
-<<<<<<< HEAD
-=======
+
     },
     {
         "account_number": "59117",
@@ -70,6 +69,6 @@
         "transaction_number": "8953670",
         "original_balance": 500.0,
         "amount": 100.0
->>>>>>> 0ac94bba11788888baa8da2ac5385ae95fdb05c3
+
     }
 ]
