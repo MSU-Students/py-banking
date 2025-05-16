@@ -132,3 +132,5 @@ def handle_loan_option(account: BankAccount):
 
         input("\nPress Enter to continue...")
         clear_console()
+
+print("nakita mo to andrew??")
