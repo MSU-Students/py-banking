@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "user_id": "1234",
+        "id": 1,
+        "status": "approved",
+        "balance": 1000.0
+    }
+]
