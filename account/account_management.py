@@ -312,8 +312,8 @@ def handle_account_option():
             return
         elif option == TRANSFER_FUND:
             
-            target_account_number = input("Enter the target account number to transfer to: ")
-            if target_account_number == account_service.current_account.account_number:
+            target_account_id = input("Enter the target account number to transfer to: ")
+            if target_account_id == account_service.current_account.account_id:
                 print("You cannot transfer funds to your own account.")
                 input("Press enter to continue")
                 return
@@ -332,7 +332,7 @@ def handle_account_option():
 
             target_account = None
             for acc in account_service.accounts:
-                if acc.account_number == target_account_number:
+                if acc.account_id == target_account_id:
                     target_account = acc
                     break
 
@@ -361,7 +361,7 @@ def handle_account_option():
             transaction_number = str(random.randint(1000000, 9999999))
 
             debit_transaction = {
-                "account_number": account_service.current_account.account_number,
+                "account_id": account_service.current_account.account_id,
                 "user_id": account_service.current_account.user_id,
                 "account_type": account_service.current_account.account_type,
                 "transaction_type": "debit",
@@ -372,7 +372,7 @@ def handle_account_option():
             }
 
             credit_transaction = {
-                "account_number": target_account.account_number,
+                "account_id": target_account.account_id,
                 "user_id": target_account.user_id,
                 "account_type": target_account.account_type,
                 "transaction_type": "credit",
@@ -399,7 +399,7 @@ def handle_account_option():
             with open(transaction_file, 'w') as transaction_file_obj:
                 json.dump(transactions_data, transaction_file_obj, indent=4)
 
-            print(f"Transferred ₱{amount:.2f} from {account_service.current_account.account_number} to {target_account.account_number}.")
+            print(f"Transferred ₱{amount:.2f} from {account_service.current_account.account_id} to {target_account.account_id}.")
             input("Press enter to continue")
             
         elif option == GENERATE_REPORT:
@@ -430,11 +430,11 @@ def filter_transaction_history():
     max_amount = float(max_amount) if max_amount else None
 
     user_id = account_service.current_account.user_id
-    account_number = account_service.current_account.account_number
+    account_id = account_service.current_account.account_id
 
     transaction_service.filter_transactions(
         user_id=user_id,
-        account_number=account_number,
+        account_id=account_id,
         transaction_type=transaction_type,
         start_date=start_date,
         end_date=end_date,

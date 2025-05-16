@@ -297,7 +297,7 @@ class UserService:
                 print("No account records found.")
             for index, acc in enumerate(accounts, 1):
                 print(f"\nAccount {index}:")
-                print(f"  Account Number  : {acc.get('account_number')}")
+                print(f"  Account Number  : {acc.get('account_id')}")
                 print(f"  User ID         : {acc.get('user_id')}")
                 print(f"  Balance         : ₱{acc.get('balance', 0.0):,.2f}")
                 print(f"  Type            : {acc.get('account_type', 'N/A')}")
