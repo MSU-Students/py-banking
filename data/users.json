@@ -22,5 +22,17 @@
         "pin": "1111",
         "approval": 0,
         "authentication": "23476"
+    },
+    {
+        "full_name": "0",
+        "mobile_num": "0",
+        "address": "0",
+        "bday": "0",
+        "email": "0",
+        "nationality": "0",
+        "user_id": "0",
+        "pin": "0000",
+        "approval": 1,
+        "authentication": "46446"
     }
 ]

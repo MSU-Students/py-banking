@@ -1,5 +1,6 @@
 import json
-from typing import List, Optional
+from typing import List
+from datetime import datetime
 from utils import clear_console
 from account import BankAccount
 
@@ -7,7 +8,7 @@ class Loan:
     def __init__(self, user_id: int, loan_id: int, amount: float):
         self.user_id = user_id
         self.id = loan_id
-        self.status = 'approved' 
+        self.status = 'approved'
         self.balance = amount
 
     def to_dict(self):
@@ -25,13 +26,15 @@ class LoanPayment:
         self.date = date
 
 class LoanService:
-    loans: List[Loan] = []
-    payments: List[LoanPayment] = []
     loan_file = "loan.json"
+    payment_file = "payments.json"
 
     def __init__(self, account: BankAccount):
         self._bank_account = account
+        self.loans: List[Loan] = []
+        self.payments: List[LoanPayment] = []
         self.load_loans()
+        self.load_payments()
 
     def load_loans(self):
         try:
@@ -50,6 +53,23 @@ class LoanService:
         with open(self.loan_file, 'w') as file:
             json.dump([loan.to_dict() for loan in self.loans], file, indent=4)
 
+    def load_payments(self):
+        try:
+            with open(self.payment_file, 'r') as file:
+                payment_data = json.load(file)
+                for data in payment_data:
+                    self.payments.append(LoanPayment(
+                        loan_id=data['loan_id'],
+                        amount=data['amount'],
+                        date=data['date']
+                    ))
+        except (FileNotFoundError, json.JSONDecodeError):
+            self.payments = []
+
+    def save_payments(self):
+        with open(self.payment_file, 'w') as file:
+            json.dump([vars(p) for p in self.payments], file, indent=4)
+
     def loan_apply(self):
         try:
             amount = float(input("Enter loan amount: "))
@@ -66,7 +86,6 @@ class LoanService:
         try:
             loan_id = int(input("Enter loan ID to make a payment: "))
             amount = float(input("Enter payment amount: "))
-            date = input("Enter payment date (YYYY-MM-DD): ")
         except ValueError:
             print("Invalid input. Please enter numbers for ID and amount.")
             return
@@ -75,28 +94,31 @@ class LoanService:
             if loan.id == loan_id:
                 if loan.status == 'approved' and loan.balance > 0:
                     loan.balance -= amount
-                    self.payments.append(LoanPayment(loan_id, amount, date))
+                    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    payment = LoanPayment(loan_id, amount, current_date)
+                    self.payments.append(payment)
                     print(f"Payment of {amount} made for Loan ID {loan_id}. Remaining balance: {loan.balance}")
                     if loan.balance <= 0:
                         loan.status = 'paid'
                         print(f"Loan ID {loan_id} is now fully paid.")
                     self.save_loans()
+                    self.save_payments()
                 else:
                     print(f"Loan ID {loan_id} is not approved or already paid.")
                 return
         print(f"Loan ID {loan_id} not found.")
 
     def loan_history(self):
-        if not self.loans:
-            print("No loans found.")
-            return
-
+        found = False
         for loan in self.loans:
             if loan.user_id == self._bank_account.user_id:
-                print(f"Loan ID: {loan.id}, Status: {loan.status}, Balance: {loan.balance}")
-                loan_payments = [payment for payment in self.payments if payment.loan_id == loan.id]
+                found = True
+                print(f"\nLoan ID: {loan.id}, Status: {loan.status}, Balance: {loan.balance}")
+                loan_payments = [p for p in self.payments if p.loan_id == loan.id]
                 for payment in loan_payments:
                     print(f"  Payment: {payment.amount} on {payment.date}")
+        if not found:
+            print("No loans found for this user.")
 
 
 EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3
@@ -132,5 +154,3 @@ def handle_loan_option(account: BankAccount):
 
         input("\nPress Enter to continue...")
         clear_console()
-
-print("nakita mo to andrew??" "ano meron?")

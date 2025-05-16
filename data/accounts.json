@@ -5,5 +5,12 @@
         "balance": 98000.0,
         "account_number": "92407",
         "account_type": "SAVINGS"
+    },
+    {
+        "user_id": "0",
+        "full_name": "Renalyn Joyce D. Bascones",
+        "balance": 98000.0,
+        "account_number": "92407",
+        "account_type": "SAVINGS"
     }
 ]
