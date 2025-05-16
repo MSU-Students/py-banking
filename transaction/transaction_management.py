@@ -193,8 +193,8 @@ class TransactionService:
                 i = 0
                 for transaction in transactions:
 
-                    if transaction["user_id: "] == user_id and transaction["account_id: "] == account_id:
-                     print(f"{i+1}.\n* Date and Time: {transaction['date: ']} \n* Transaction Type: {transaction['transaction_type: ']} \n* Amount: {transaction['amount: ']} \n* Transaction Number: {transaction['transaction_number: ']}")
+                    if transaction["user_id"] == user_id and transaction["account_id"] == account_id:
+                     print(f"{i+1}.\n* Date and Time: {transaction['date']} \n* Transaction Type: {transaction['transaction_type']} \n* Amount: {transaction['amount']} \n* Transaction Number: {transaction['transaction_number']}")
                     i+=1
                 if i == 0:
                     raise ValueError("No transactions found for this account.")
@@ -223,45 +223,59 @@ class TransactionService:
             print("The account.json file does not exist. Please ensure the file as available.")
 
             
-
     def transfer_fund(self, target_account: BankAccount, amount: float):
-            if amount <= 0:
-                print("Transfer amount must be greater than zero.")
-                return
+                if amount <= 0:
+                    print("Transfer amount must be greater than zero.")
+                    return
 
-            if self._account.balance < amount:
-                print("Insufficient funds for transfer.")
-                return
+                if self._account.balance < amount:
+                    print("Insufficient funds for transfer.")
+                    return
 
-            self._account.balance -= amount
-            print(f"Transferred {amount} from {self._account.account_id}.")
-            transaction = Transaction(type="credit", date="", amount=amount, account_num=self._account.account_id)
-            self.transactions.append(transaction)
-            self._save_transactions()
+                self._account.balance -= amount
+                print(f"Transferred {amount} from {self._account.account_id}.")
+                transaction = Transaction(type="credit", date="", amount=amount, account_num=self._account.account_id)
+                self.transactions.append(transaction)
+                self._save_transactions()
+                input("Press enter to continue") 
 
 
-            target_account.balance += amount
-            print(f"Received {amount} in {target_account.account_id}.")
-            transaction = Transaction(type="debit", date="", amount=amount, account_num=target_account.account_id)
-            self.transactions.append(transaction)
-            self._save_transactions()
-            input("Press enter to continue")
-
+                target_account.balance += amount
+                print(f"Received {amount} in {target_account.account_id}.")
+                transaction = Transaction(type="debit", date="", amount=amount, account_num=target_account.account_id)
+                self.transactions.append(transaction)
+                self._save_transactions()
+                input("Press enter to continue") 
+    
+            
+         
     def generate_report(self):
         try:
+            # Use self.account and self.transactions_data
+            total_deposits = 0.0
+            total_withdrawals = 0.0
+            total_transactions = 0
+
+            for tx in self.transactions_data:
+                if tx.get("transaction_type: ") == "deposit":
+                    total_deposits += tx.get("amount: ", 0)
+                elif tx.get("transaction_type: ") == "withdrawal":
+                    total_withdrawals += tx.get("amount: ", 0)
+                total_transactions += 1
+
             report = {
                 "Account Report": {
-                    "User ID": self._account.user_id,
-                    "Account Name": self._account.account_name,
-                    "Account Number": self._account.account_id,
-                    "Current Balance": self._account.balance,
+                    "User ID": getattr(self.account, "user_id", "N/A"),
+                    "Account Type": getattr(self.account, "account_type", "N/A"),
+                    "Account Number": getattr(self.account, "account_id", "N/A"),
+                    "Current Balance": getattr(self.account, "original_balance", "N/A"),
                 },
                 "Transaction Summary": {
-                    "Total Deposits": sum(tx.amount for tx in self.transactions if tx.type == "deposit"),
-                    "Total Withdrawals": sum(tx.amount for tx in self.transactions if tx.type == "withdrawal"),
-                    "Total Transactions": len(self.transactions),
+                    "Total Deposits": total_deposits,
+                    "Total Withdrawals": total_withdrawals,
+                    "Total Transactions": total_transactions,
                 },
-                "Transactions": [tx.to_dict() for tx in self.transactions],
+                "Transactions": self.transactions_data,
                 "Report Generated On": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
             with open("data/Generate_Report.json", "w") as file:
