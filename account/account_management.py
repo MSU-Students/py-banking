@@ -204,12 +204,12 @@ def handle_account_option():
         elif option == WITHDRAW:
             # variables for arguments in withdrawal function
             account_type = account_service.current_account.account_type
-            account_number = account_service.current_account.account_number
+            account_id = account_service.current_account.account_id
             
             with open("data/accounts.json", 'r') as file:
                 accounts_data = json.load(file)
                 for acc in accounts_data:
-                    if acc["account_number"] == account_service.current_account.account_number:
+                    if acc["account_id"] == account_service.current_account.account_id:
                         balance = acc["balance"] # updated ang balance 
                 
             if account_service.current_account is None:
@@ -222,21 +222,21 @@ def handle_account_option():
             
             print(f'__'*20)
             print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account} - Account Number: {account_service.current_account.account_number}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f"\nSelected account: {account_service.current_account} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
             print(f'__'*20)
-            transaction_service.withdrawal(amount, user_id,account_type, account_number, balance)
+            transaction_service.withdrawal(amount, account_service.current_account.user_id,account_type, account_id, balance)
             input("\nPress any keys to go back to menu")
         #THAMEENAH -DEPOSIT
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu
         elif option == DEPOSIT:
             # variables for arguments in deposit function
             account_type = account_service.current_account.account_type
-            account_number = account_service.current_account.account_number
+            account_id = account_service.current_account.account_id
             
             with open("data/accounts.json", 'r') as file:
                 accounts_data = json.load(file)
                 for acc in accounts_data:
-                    if acc["account_number"] == account_service.current_account.account_number:
+                    if acc["account_id"] == account_service.current_account.account_id:
                         balance = acc["balance"] # updated ang balance 
                 
             if account_service.current_account is None:
@@ -249,9 +249,9 @@ def handle_account_option():
             
             print(f'__'*20)
             print("\n\tSelected Account")
-            print(f"\nSelected account: {full_name} - Account Number: {account_service.current_account.account_number}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
             print(f'__'*20)
-            transaction_service.deposit(amount, user_id,account_type, account_number, balance)
+            transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
             input("\nPress any keys to go back to menu")
             
             
@@ -260,12 +260,12 @@ def handle_account_option():
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu 
         elif option == BALANCE:
             account_type = account_service.current_account.account_type
-            account_number = account_service.current_account.account_number
+            account_id = account_service.current_account.account_id
             
             with open("data/accounts.json", 'r') as file:
                 accounts_data = json.load(file)
                 for acc in accounts_data:
-                    if acc["account_number"] == account_service.current_account.account_number:
+                    if acc["account_id"] == account_service.current_account.account_id:
                         balance = acc["balance"] # updated ang balance 
            
             if account_service.current_account is None:
@@ -273,19 +273,19 @@ def handle_account_option():
             
             print(f'__'*20)
             print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_number}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
             print(f'__'*20)
             
-            transaction_service.balance_inquiry(account_service.current_account.user_id,account_number)
+            transaction_service.balance_inquiry(account_service.current_account.user_id,account_id)
             
         elif option == TRANSACTION_HISTORY:
             account_type = account_service.current_account.account_type
-            account_number = account_service.current_account.account_number
+            account_id = account_service.current_account.account_id
             
             with open("data/accounts.json", 'r') as file:
                 accounts_data = json.load(file)
                 for acc in accounts_data:
-                    if acc["account_number"] == account_service.current_account.account_number:
+                    if acc["account_id"] == account_service.current_account.account_id:
                         balance = acc["balance"] # updated ang balance 
            
             if account_service.current_account is None:
@@ -293,10 +293,10 @@ def handle_account_option():
             
             print(f'__'*20)
             print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_number}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
             print(f'__'*20)
 
-            transaction_service.display_transactions(account_service.current_account.user_id,account_type, account_number)
+            transaction_service.display_transactions(account_service.current_account.user_id,account_type, account_id)
             os.system("pause")
             clear_console()
         elif option == EXIT:
