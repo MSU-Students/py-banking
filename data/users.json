@@ -24,14 +24,15 @@
         "authentication": "23476"
     },
     {
-        "full_name": "0",
+        "full_name": "admin",
         "mobile_num": "0",
         "address": "0",
         "bday": "0",
         "email": "0",
         "nationality": "0",
-        "user_id": "0",
-        "pin": "0000",
+        "user_id": "admin",
+        "pin": "andrewcute",
+        "is_admin": true,
         "approval": 1,
         "authentication": "46446"
     }
