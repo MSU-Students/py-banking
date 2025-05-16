@@ -121,7 +121,7 @@ class LoanService:
             print("No loans found for this user.")
 
 
-EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3
+EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3 
 
 def print_loan_option():
     print("Loan Options:")
