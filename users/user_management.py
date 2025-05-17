@@ -235,7 +235,12 @@ class UserService:
         print("          ~ PROFILE INFO ~\n")
         print(f"User ID:\t\t{self.login_user.User_Id}")
         print(f"Full Name:\t\t{self.login_user.name}")
-        print(f"Balance:\t\t{account_service.current_account.balance}")
+        with open("data/accounts.json", 'r') as file:
+            accounts_data = json.load(file)
+            for acc in accounts_data:
+                if acc["account_id"] == account_service.current_account.account_id:
+                    balance = acc["balance"]
+        print(f"Balance:\t\t{balance}")
         print(f"Mobile Number:\t\t{self.login_user.mobile_number}")
         print(f"Address:\t\t{self.login_user.address}")
         print(f"Birthdate:\t\t{self.login_user.bday}")
