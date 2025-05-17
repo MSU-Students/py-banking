@@ -157,7 +157,7 @@ transaction_data = []
 
 EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5,6)
 
-EXIT, WITHDRAW, DEPOSIT, BALANCE, VIEW_TRANSACTION_HISTORY, SELECT, SERVICES, TRANSFER_FUND= (0, 1, 2, 3, 4, 5, 6, 7)
+EXIT, WITHDRAW, DEPOSIT, BALANCE, VIEW_TRANSACTION_HISTORY, SELECT, SERVICES, TRANSFER_FUND, GENERATE_REPORT= (0, 1, 2, 3, 4, 5, 6, 7, 8)
 
 def print_account_menu():
     #Print main account options
@@ -168,6 +168,7 @@ def print_account_menu():
     print(f"\t{VIEW_TRANSACTION_HISTORY} : View Transaction History")
     print(f"\t{SELECT} : Select Another Account")
     print(f"\t{TRANSFER_FUND} : Fund Transfer")
+    print(f"\t{GENERATE_REPORT} : Generate Report")
     print(f"\t{SERVICES} : Access Services")
     print(f"\t{EXIT} : Exit")
 
@@ -455,4 +456,10 @@ def handle_account_option(full_name, user_id):
                 json.dump(transactions_data, transaction_file_obj, indent=4)
 
             print(f"Transferred ₱{amount:.2f} from {account_service.current_account.account_number} to {target_account.account_number}.")
+            input("Press enter to continue")
+            
+        elif option == GENERATE_REPORT:
+            # Generate a report of the account
+            print("Generating report...")
+            transaction_service.generate_report()
             input("Press enter to continue")

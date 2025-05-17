@@ -251,19 +251,31 @@ class TransactionService:
          
     def generate_report(self):
         try:
+            # Use self.account and self.transactions_data
+            total_deposits = 0.0
+            total_withdrawals = 0.0
+            total_transactions = 0
+
+            for tx in self.transactions_data:
+                if tx.get("transaction_type: ") == "deposit":
+                    total_deposits += tx.get("amount: ", 0)
+                elif tx.get("transaction_type: ") == "withdrawal":
+                    total_withdrawals += tx.get("amount: ", 0)
+                total_transactions += 1
+
             report = {
                 "Account Report": {
-                    "User ID": self._account.user_id,
-                    "Account Name": self._account.account_name,
-                    "Account Number": self._account.account_number,
-                    "Current Balance": self._account.balance,
+                    "User ID": getattr(self.account, "user_id", "N/A"),
+                    "Account Type": getattr(self.account, "account_type", "N/A"),
+                    "Account Number": getattr(self.account, "account_number", "N/A"),
+                    "Current Balance": getattr(self.account, "original_balance", "N/A"),
                 },
                 "Transaction Summary": {
-                    "Total Deposits": sum(tx.amount for tx in self.transactions if tx.type == "deposit"),
-                    "Total Withdrawals": sum(tx.amount for tx in self.transactions if tx.type == "withdrawal"),
-                    "Total Transactions": len(self.transactions),
+                    "Total Deposits": total_deposits,
+                    "Total Withdrawals": total_withdrawals,
+                    "Total Transactions": total_transactions,
                 },
-                "Transactions": [tx.to_dict() for tx in self.transactions],
+                "Transactions": self.transactions_data,
                 "Report Generated On": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
             with open("data/Generate_Report.json", "w") as file:
