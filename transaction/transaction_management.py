@@ -21,9 +21,9 @@ class Transaction:
 
 
 class TransactionService:
-    accounts_file = "accounts.json"
+    accounts_file = "data/accounts.json"
     transactions_data = list()
-    transaction_file = "transactions.json"
+    transaction_file = "data/transactions.json"
     
 
     def __init__(self, account: Transaction):
@@ -40,20 +40,19 @@ class TransactionService:
         self.account = account
         print(f'__'*20)
         print("\n\tTRANSACTION SERVICE")
-        print(f'__'*20)
 
 #NORHAILAH - DEPOSIT
-    def deposit(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
+    def deposit(self, amount: float, user_id:str, account_type:str, account_number:str, original_balance:float):
         if amount <= 0.0:
             raise ValueError("Deposit amount must be greater than zero.")
 
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
         
-        account_balance += amount  # Update the account's balance
+        updated_balance = original_balance
+        updated_balance += amount  # Update the account's balance
+        
         transaction_number = str(random.randint(1000000, 9999999))
-        self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="deposit", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
-        #para to sa original balance bago pa nag deposit si user
-        self.account.original_balance -= amount
+        self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="withdrawal", date=date, amount=amount, transaction_number=transaction_number,original_balance=original_balance)
         
                     
         #turn it into a dictionary
@@ -64,7 +63,7 @@ class TransactionService:
             "transaction_type: ": self.account.transaction_type,
             "date: ": self.account.date,
             "transaction_number: ": self.account.transaction_number,
-            "original_balance: ": self.account.original_balance,
+            "original_balance: ": original_balance,
             "amount: ": self.account.amount
         }  
         #if meron siyang brackets, i load niya      
@@ -82,47 +81,53 @@ class TransactionService:
             json.dump(self.transactions_data, transaction_file, indent=4)
 
             
-        print(f"Deposited: {amount}. New balance: {account_balance}")
+        print(f"Deposited: {amount}. New balance: {updated_balance}")
 
-        #im not sure if gagana na hindi ma overwrite and accounts.json para lang ma update yung account_balance ng isang account sa accounts.json
+         #update the account balance of the selected user's account in accounts.json
         with open("data/accounts.json", 'r') as file:
             accounts = json.load(file)
             for i, account in enumerate(accounts):
-                if account["account_number: "] == account_number:
-                    accounts[i]["account_balance: "] = account_balance
+                if account["account_number"] == account_number:
+                    accounts[i]["balance"] = updated_balance
                     with open("data/accounts.json", 'w') as file:  
                        pass
                     break
         with open("data/accounts.json", 'a') as file:  
             json.dump(accounts, file, indent=4)
 
-        print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}')
+        print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}\n')
+        print("__"*20)
 
     #ALI - WITHDRAWAL
     # CHRISTIAN - INSUFFIECIENT CHUCHU, iKAW BAHALA GUMAWA NG WHILE LOOPS AND EXCEPTION HANDLING
-    def withdrawal(self, amount: float, user_id:str, account_type:str, account_number:str, account_balance:float):
+    def withdrawal(self, amount: float, user_id:str, account_type:str, account_number:str, original_balance:float):
         while True:
             if amount <= 0:
                 print("Withdraw amount must be greater than zero.")
                 return
 
-            if amount > account_balance:
+            if amount > original_balance:
                 print("Insufficient funds for withdrawal.")
                 return
 
-            if account_balance - amount < 500:
+            if original_balance - amount < 500:
                 print("Wirhdrawal amount must not exceed the amount balance minus the maintaining balance of Php 500.")
                 return
                 
-            if account_balance - amount >= 500:       
+            if original_balance - amount >= 500:       
     
                 date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
                 
-                account_balance -= amount  # Update the account's balance
+                updated_balance = original_balance
+                updated_balance -= amount  # Update the account's balance
+                
+                #transaction number
                 transaction_number = str(random.randint(1000000, 9999999))
-                self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="withdrawal", date=date, amount=amount, transaction_number=transaction_number,original_balance=account_balance)
+                self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="withdrawal", date=date, amount=amount, transaction_number=transaction_number,original_balance=original_balance)
+                
                 #para to sa original balance bago pa nag withdraw si user
-                self.account.original_balance += amount
+
+                
                 
                 datas = {
                     "account_number: ": self.account.account_number,
@@ -131,7 +136,7 @@ class TransactionService:
                     "transaction_type: ": self.account.transaction_type,
                     "date: ": self.account.date,
                     "transaction_number: ": self.account.transaction_number,
-                    "original_balance: ": self.account.original_balance,
+                    "original_balance: ": original_balance,
                     "amount: ": self.account.amount
                 }
                 
@@ -150,21 +155,22 @@ class TransactionService:
                     json.dump(self.transactions_data, transaction_file, indent=4)
             
             
-                print(f"Deposited: {amount}. New balance: {account_balance}")
+                print(f"Deposited: {amount}. New balance: {updated_balance}")
                 
             #update the account balance of the selected user's account in accounts.json
                 with open("data/accounts.json", 'r') as file:
                     accounts = json.load(file)
                     for i, account in enumerate(accounts):
-                        if account["account_number: "] == account_number:
-                            accounts[i]["account_balance: "] = account_balance
+                        if account["account_number"] == account_number:
+                            accounts[i]["balance"] = updated_balance
                             with open("data/accounts.json", 'w') as file:  
                                 pass
                             break
                 with open("data/accounts.json", 'a') as file:  
                     json.dump(accounts, file, indent=4)
 
-                print(f'\n\tSucessful Transaction!\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}')
+                print(f'\n\tSucessful Transaction!\n\nAccount Type: {self.account.account_type}\t Account Number: {self.account.account_number}\t Transaction Number: {self.account.transaction_number}\n')
+                print("__"*20)
                 return
             else:
                 print("Invalid Input. Please try again.")
@@ -200,14 +206,21 @@ class TransactionService:
              with open("data/accounts.json", 'r') as file:
                 accounts = json.load(file)
                 for i, account in enumerate(accounts):
-                    if account["account_number: "] == account_number:
+                    if account["account_number"] == account_number:
+                        print("\tBALANCE INQUIRY\n")
                         print(f"User Id: {user_id}")
-                        print(f"Account_type:  {account["account_type: "]}")
+                        print(f"Account_type:  {account["account_type"]}")
                         print(f"Account Number: {account_number}")
-                        print(f"Current balance: Php {account["account_balance: "]}")
+                        print(f"Current balance: Php {account["balance"]}\n")
+                        print("__"*20)
+                        input("Press any key to go back to menu")
                         return        
         except Exception as e:
             print(f"An error occurred while checking balance: {e}")
+        except FileNotFoundError as e:
+            print("The account.json file does not exist. Please ensure the file as available.")
+
+            
 
     def transfer_fund(self, target_account: BankAccount, amount: float):
             if amount <= 0:

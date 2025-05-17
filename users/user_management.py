@@ -6,8 +6,8 @@ import os
 from utils import clear_console
 
 class User:
-    def __init__(self, User_Id='', pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
-        self.User_Id = User_Id
+    def __init__(self, user_id=str, pin='', address='', bday='', fullname='', mob_num='', authentication=0, email='', nationality='', approval=0):
+        self.user_id = user_id
         self.pin = pin
         self.name = fullname
         self.mobile_number = mob_num
@@ -21,7 +21,7 @@ class User:
 class UserService:
     registered_user = User()
     login_user = User()
-    users_file = "users.json"
+    users_file = "data/users.json"
     
     def __init__(self):
         if os.path.exists(self.users_file):
@@ -39,7 +39,7 @@ class UserService:
         for user_data in self.users_data:
             if user_data['user_id'] == self.user_id and user_data['pin'] == self.pin:
                 self.login_user = User(
-                    User_Id=user_data["user_id"],
+                    user_id=user_data["user_id"],
                     pin=user_data["pin"],
                     address=user_data["address"],
                     bday=user_data["bday"],
@@ -52,8 +52,6 @@ class UserService:
                 )
                 return  # Exit after setting up login_user
 
-        print("Invalid username or pin")
-        input("Wrong credentials. Press any key to continue")
         clear_console()
 
     
@@ -162,18 +160,6 @@ class UserService:
                 print(f"  Approved  : {user.get('approved', False)}")
                 
     def change_pass(self):
-        #Captcha
-        code = str(random.randint(100000, 999999))
-        clear_console()
-        print(f"\nCaptcha: Type the numbers shown below:\n[ {code} ]")
-        entered_code = input("Enter the code: ")
-
-        if entered_code != code:
-            print("Incorrect code.")
-            return
-
-        clear_console()
-        
         print("\tCHANGE PIN")
         self.old_pin = input("Enter your previous pin:\t\t")
         if self.old_pin != User_service.login_user.pin:
@@ -193,7 +179,7 @@ class UserService:
         
         self.login_user.pin = self.new_pin
         for user_data in self.users_data:
-            if user_data["user_id"] == self.login_user.User_Id:
+            if user_data["user_id"] == self.login_user.user_id:
                 user_data["pin"] = self.login_user.pin
                 break
 
@@ -211,7 +197,7 @@ class UserService:
             return
 
         for user_data in self.users_data:
-            if user_data["user_id"] == self.login_user.User_Id:
+            if user_data["user_id"] == self.login_user.user_id:
                 user_data["address"] = self.login_user.address
                 user_data["mobile_num"] = self.login_user.mobile_number
                 user_data["email"] = self.login_user.email
@@ -228,7 +214,7 @@ class UserService:
 
         from account import account_service
         print("          ~ PROFILE INFO ~\n")
-        print(f"User ID:\t\t{self.login_user.User_Id}")
+        print(f"User ID:\t\t{self.login_user.user_id}")
         print(f"Full Name:\t\t{self.login_user.name}")
         print(f"Balance:\t\t{account_service.current_account.balance}")
         print(f"Mobile Number:\t\t{self.login_user.mobile_number}")
@@ -262,6 +248,7 @@ User_service = UserService()
 EXIT, LOGIN, REGISTER, FORGOT_PASS = (0, 1, 2, 3)
 
 def print_main_menu():
+    print("Welcome to PY Banking")
     print("Options:")
     print(f"\t{LOGIN} : Login")
     print(f"\t{REGISTER} : Register")
@@ -273,20 +260,28 @@ def handle_user_option():
     global enter
     option = LOGIN
     while option != EXIT:
+        clear_console()
         print_main_menu()
-        option = int(input("\n\tCommand: "))
+        try:
+            option = int(input("\n\tCommand: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
 
         if option == REGISTER:
             print("Registration")
             User_service.register()
+            input("Press enter to continue")
+            
 
         elif option == LOGIN:
+            clear_console()
             print("Login")
             User_service.login()
 
             user_found = False
             for user_data in User_service.users_data:
-                if user_data['user_id'] == User_service.login_user.User_Id and user_data['pin'] == User_service.login_user.pin:
+                if user_data['user_id'] == User_service.login_user.user_id and user_data['pin'] == User_service.login_user.pin:
                     user_found = True
                     approval_status = user_data['approval']
                     break
@@ -295,7 +290,8 @@ def handle_user_option():
                 print("Invalid username or pin")
                 input("Wrong credentials. Press any key to continue")
                 clear_console()
-                return
+                continue
+                
 
             if approval_status == 0:
                 print("Account hasn't been confirmed by the Admin")
@@ -313,7 +309,7 @@ def handle_user_option():
 
         if key:
             clear_console()
-            print(f"Welcome {User_service.registered_user.name}")
+            print(f"Welcome {User_service.login_user.name}")
             handle_account_option()
         
         clear_console()
