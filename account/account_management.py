@@ -153,17 +153,17 @@ class AccountService:
 account_service = AccountService()
 transaction_data = []
 
-EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5,6)
+EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES, FILTER_TRANSACTION_HISTORY = (0, 1, 2, 3, 4, 5, 6, 7)
 
-EXIT, WITHDRAW, DEPOSIT, BALANCE, VIEW_TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5, 6)
+EXIT, WITHDRAW, DEPOSIT, BALANCE, VIEW_TRANSACTION_HISTORY, SELECT, SERVICES, FILTER_TRANSACTION_HISTORY = (0, 1, 2, 3, 4, 5, 6, 7)
 
 def print_account_menu():
-    #Print main account options
     print("Bank Account Options:")
     print(f"\t{WITHDRAW} : Withdraw")
     print(f"\t{DEPOSIT} : Deposit")
     print(f"\t{BALANCE} : Balance Inquiry")
     print(f"\t{VIEW_TRANSACTION_HISTORY} : View Transaction History")
+    print(f"\t{FILTER_TRANSACTION_HISTORY} : Filter Transaction History")  # <-- Add this line
     print(f"\t{SELECT} : Select Another Account")
     print(f"\t{SERVICES} : Access Services")
     print(f"\t{EXIT} : Exit")
@@ -357,3 +357,39 @@ def handle_account_option(full_name, user_id):
         elif option == EXIT:
             clear_console()
             return
+        
+        elif option == FILTER_TRANSACTION_HISTORY:
+            filter_transaction_history()
+
+def filter_transaction_history():
+    """
+    Prompts the user for filter options and displays filtered transaction history.
+    """
+    transaction_service = TransactionService(account_service.current_account)
+    print("\n=== Filter Transaction History ===")
+    print("Leave blank if you don't want to filter by that field.")
+
+    transaction_type = input("Transaction Type (deposit/withdrawal/credit/debit): ").strip() or None
+    start_date = input("Start Date (YYYY-MM-DD): ").strip() or None
+    end_date = input("End Date (YYYY-MM-DD): ").strip() or None
+    min_amount = input("Minimum Amount: ").strip()
+    max_amount = input("Maximum Amount: ").strip()
+
+    # Convert amount inputs to float if provided
+    min_amount = float(min_amount) if min_amount else None
+    max_amount = float(max_amount) if max_amount else None
+
+    user_id = account_service.current_account.user_id
+    account_number = account_service.current_account.account_number
+
+    transaction_service.filter_transactions(
+        user_id=user_id,
+        account_number=account_number,
+        transaction_type=transaction_type,
+        start_date=start_date,
+        end_date=end_date,
+        min_amount=min_amount,
+        max_amount=max_amount
+    )
+    os.system("pause")
+    clear_console()        
