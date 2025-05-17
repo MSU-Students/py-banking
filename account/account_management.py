@@ -11,7 +11,7 @@ class AccountService:
     accounts: List[BankAccount] = list()
 
     def __init__(self):
-        self.accounts_file = "data/accounts.json"  
+        self.accounts_file = "accounts.json"  
         self.accounts = self.load_accounts()  
 
     def load_accounts(self): 

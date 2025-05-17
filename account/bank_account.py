@@ -22,7 +22,7 @@ class BankAccount:
     def from_dict(cls, data):
         account = cls(
             user_id=data["user_id"],
-            account_type=data["full_name"],
+            account_type=data["account_type"],
             balance=data["balance"]
         )     
         account.account_id = data.get("account_id", account.generate_account_id())
