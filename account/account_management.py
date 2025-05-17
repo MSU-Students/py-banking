@@ -202,32 +202,58 @@ def handle_account_option():
             account_service.select_account()
         #ALI -WITHDRAW    
         elif option == WITHDRAW:
-            # variables for arguments in withdrawal function
-            account_type = account_service.current_account.account_type
-            account_id = account_service.current_account.account_id
             
-            with open("data/accounts.json", 'r') as file:
-                accounts_data = json.load(file)
-                for acc in accounts_data:
-                    if acc["account_id"] == account_service.current_account.account_id:
-                        balance = acc["balance"] # updated ang balance 
-                
-            if account_service.current_account is None:
-                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
-            try:
-                amount = float(input("\nEnter amount to withdraw: "))
-            except ValueError:
-                print("Invalid amount. Please enter a number.")
-                continue
-            
-            print(f'__'*20)
-            print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
-            print(f'__'*20)
-            transaction_service.withdrawal(amount, account_service.current_account.user_id,account_type, account_id, balance)
-            input("\nPress any keys to go back to menu")
-        #THAMEENAH -DEPOSIT
-        #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu
+            def withdrawal(self, amount: float, user_id: str, account_type: str, account_number: str, original_balance: float):
+                try:
+                    if amount <= 0 or amount > original_balance or original_balance - amount < 500:
+                        print("Invalid withdrawal amount or insufficient funds.")
+                        return
+
+                    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    transaction_number = str(random.randint(1000000, 9999999))
+                    updated_balance = original_balance - amount
+
+                    transaction_data = {
+                        "account_number": account_number,
+                        "user_id": user_id,
+                        "account_type": account_type,
+                        "transaction_type": "withdrawal",
+                        "date": date,
+                        "transaction_number": transaction_number,
+                        "original_balance": original_balance,
+                        "amount": amount
+                    }
+
+                    # Update transactions
+                    try:
+                        with open(self.transaction_file, 'r') as file:
+                            self.transactions_data = json.load(file)
+                    except (FileNotFoundError, json.JSONDecodeError):
+                        self.transactions_data = []
+
+                    self.transactions_data.append(transaction_data)
+                    with open(self.transaction_file, 'w') as file:
+                        json.dump(self.transactions_data, file, indent=4)
+
+                    # Update account balance
+                    with open("data/accounts.json", 'r') as file:
+                        accounts = json.load(file)
+                        for account in accounts:
+                            if account["account_number"] == account_number:
+                                account["balance"] = updated_balance
+                                break
+
+                    with open("data/accounts.json", 'w') as file:
+                        json.dump(accounts, file, indent=4)
+
+                    print(f"Withdrawn: {amount}. New balance: {updated_balance}")
+                    print(f"Transaction Number: {transaction_number}")
+                    print("__" * 20)
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+
+                #THAMEENAH -DEPOSIT
+                #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu
         elif option == DEPOSIT:
             # variables for arguments in deposit function
             account_type = account_service.current_account.account_type
