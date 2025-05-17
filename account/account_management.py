@@ -257,30 +257,73 @@ def handle_account_option(full_name, user_id):
             account_service.select_account()
         #ALI -WITHDRAW    
         elif option == WITHDRAW:
-            # variables for arguments in withdrawal function
+            
             account_type = account_service.current_account.account_type
             account_number = account_service.current_account.account_number
-            
+
             with open("data/accounts.json", 'r') as file:
                 accounts_data = json.load(file)
                 for acc in accounts_data:
                     if acc["account_number"] == account_service.current_account.account_number:
-                        balance = acc["balance"] # updated ang balance 
-                
+                        balance = acc["balance"]
+
             if account_service.current_account is None:
-                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
-            try:
-                amount = float(input("\nEnter amount to withdraw: "))
-            except ValueError:
-                print("Invalid amount. Please enter a number.")
                 continue
-            
+
+            attempts = 0
+            while attempts < 3:
+                try:
+                    amount = float(input("\nEnter amount to withdraw: "))
+                    if amount <= 0:
+                        print("Amount must be greater than zero.")
+                        attempts += 1
+                        continue
+                    if amount > balance:
+                        print("Insufficient funds.")
+                        attempts += 1
+                        continue
+                    break
+                except ValueError:
+                    print("Invalid amount. Please enter a number.")
+                    attempts += 1
+
+            if attempts == 3:
+                print("Maximum attempts reached. Returning to menu.")
+                input("\nPress any key to continue...")
+                continue
+
             print(f'__'*20)
             print("\n\tSelected Account")
             print(f"\nSelected account: {full_name} - Account Number: {account_service.current_account.account_number}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
             print(f'__'*20)
-            transaction_service.withdrawal(amount, user_id,account_type, account_number, balance)
-            input("\nPress any keys to go back to menu")
+            transaction_service.withdrawal(amount, user_id, account_type, account_number, balance)
+            input("\nPress any key to go back to menu")
+            
+
+            # # variables for arguments in withdrawal function
+            # account_type = account_service.current_account.account_type
+            # account_number = account_service.current_account.account_number
+            
+            # with open("data/accounts.json", 'r') as file:
+            #     accounts_data = json.load(file)
+            #     for acc in accounts_data:
+            #         if acc["account_number"] == account_service.current_account.account_number:
+            #             balance = acc["balance"] # updated ang balance 
+                
+            # if account_service.current_account is None:
+            #     continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+            # try:
+            #     amount = float(input("\nEnter amount to withdraw: "))
+            # except ValueError:
+            #     print("Invalid amount. Please enter a number.")
+            #     continue
+            
+            # print(f'__'*20)
+            # print("\n\tSelected Account")
+            # print(f"\nSelected account: {full_name} - Account Number: {account_service.current_account.account_number}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            # print(f'__'*20)
+            # transaction_service.withdrawal(amount, user_id,account_type, account_number, balance)
+            # input("\nPress any keys to go back to menu")
         #THAMEENAH -DEPOSIT
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu
         elif option == DEPOSIT:
