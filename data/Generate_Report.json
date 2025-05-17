@@ -1,0 +1,56 @@
+{
+    "Account Report": {
+        "User ID": "202433660",
+        "Account Type": "Business Account",
+        "Account Number": 489317,
+        "Current Balance": "N/A"
+    },
+    "Transaction Summary": {
+        "Total Deposits": 0.0,
+        "Total Withdrawals": 13000.0,
+        "Total Transactions": 4
+    },
+    "Transactions": [
+        {
+            "account_id: ": 848800,
+            "user_id: ": "202433660",
+            "account_type: ": "Savings Account",
+            "transaction_type: ": "withdrawal",
+            "date: ": "2025-05-17 14:52:52",
+            "transaction_number: ": "6062597",
+            "original_balance: ": 11000.0,
+            "amount: ": 1000.0
+        },
+        {
+            "account_id: ": 848800,
+            "user_id: ": "202433660",
+            "account_type: ": "Savings Account",
+            "transaction_type: ": "withdrawal",
+            "date: ": "2025-05-17 17:44:45",
+            "transaction_number: ": "3679130",
+            "original_balance: ": 10000.0,
+            "amount: ": 1000.0
+        },
+        {
+            "account_id: ": 848800,
+            "user_id: ": "202433660",
+            "account_type: ": "Savings Account",
+            "transaction_type: ": "withdrawal",
+            "date: ": "2025-05-17 17:55:26",
+            "transaction_number: ": "5686854",
+            "original_balance: ": 9000.0,
+            "amount: ": 1000.0
+        },
+        {
+            "account_id: ": 489317,
+            "user_id: ": "202433660",
+            "account_type: ": "Business Account",
+            "transaction_type: ": "withdrawal",
+            "date: ": "2025-05-17 18:56:16",
+            "transaction_number: ": "3423451",
+            "original_balance: ": 1010000.0,
+            "amount: ": 10000.0
+        }
+    ],
+    "Report Generated On": "2025-05-17 18:57:14"
+}

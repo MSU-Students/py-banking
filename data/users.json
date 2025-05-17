@@ -1,0 +1,28 @@
+[
+    {
+        "full_name": "Abdullah Abuat Lacsaman",
+        "mobile_num": "09092907819",
+        "address": "Dilausan, Balindong, Lanao del Sur",
+        "bday": "june 16",
+        "email": "lacsaman",
+        "nationality": "filipino",
+        "user_id": "202433660",
+        "pin": "1234",
+        "is_admin": false,
+        "approval": 1,
+        "authentication": "72310"
+    },
+    {
+        "full_name": "admin",
+        "mobile_num": "0",
+        "address": "0",
+        "bday": "0",
+        "email": "0",
+        "nationality": "0",
+        "user_id": "admin",
+        "pin": "andrewcute",
+        "is_admin": true,
+        "approval": 1,
+        "authentication": "46446"
+    }
+]
