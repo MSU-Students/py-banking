@@ -203,6 +203,7 @@ def handle_account_option():
         #ALI -WITHDRAW    
         
         elif option == WITHDRAW:
+            print('hello world')
 
             # variables for arguments in withdrawal function
             account_type = account_service.current_account.account_type
