@@ -204,8 +204,33 @@ def handle_account_option():
             account_service.select_account()
         #ALI -WITHDRAW    
         elif option == WITHDRAW:
-            
-            
+
+            try:
+                amount = float(input("Enter amount to withdraw: "))
+                if amount <= 0:
+                    print("Amount must be greater than zero.")
+                    return
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+                return
+
+            if account_service.current_account.balance < amount:
+                print("Insufficient funds.")
+                return
+
+            account_service.current_account.balance -= amount
+
+            for acc in account_service.accounts:
+                if acc.account_id == account_service.current_account.account_id:
+                    acc.balance = account_service.current_account.balance
+                    break
+
+            account_service.save_accounts()
+
+            transaction_service.withdraw(amount)
+
+            print(f"Withdrawal successful. New balance: ₱{account_service.current_account.balance:.2f}")
+
             
             
         #NORHAILAH   - balance inquiry
