@@ -259,46 +259,67 @@ def handle_account_option():
         #NORHAILAH   - balance inquiry
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu 
         elif option == BALANCE:
-            account_type = account_service.current_account.account_type
-            account_id = account_service.current_account.account_id
-            
-            with open("data/accounts.json", 'r') as file:
-                accounts_data = json.load(file)
-                for acc in accounts_data:
-                    if acc["account_id"] == account_service.current_account.account_id:
-                        balance = acc["balance"] # updated ang balance 
-           
-            if account_service.current_account is None:
-                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
-            
-            print(f'__'*20)
-            print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
-            print(f'__'*20)
-            
-            transaction_service.balance_inquiry(account_service.current_account.user_id,account_id)
-            
-        elif option == TRANSACTION_HISTORY:
-            account_type = account_service.current_account.account_type
-            account_id = account_service.current_account.account_id
-            
-            with open("data/accounts.json", 'r') as file:
-                accounts_data = json.load(file)
-                for acc in accounts_data:
-                    if acc["account_id"] == account_service.current_account.account_id:
-                        balance = acc["balance"] # updated ang balance 
-           
-            if account_service.current_account is None:
-                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
-            
-            print(f'__'*20)
-            print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
-            print(f'__'*20)
+             def balance_inquiry(self, user_id: str, account_number: str):
+                try:
+                    with open("accounts.json", 'r') as file:
+                        accounts = json.load(file)
+                        for account in accounts:
+                            if account.get("account_number") == account_number and account.get("user_id") == user_id:
+                                print(f"User ID: {user_id}")
+                                print(f"Account Type: {account.get('account_type')}")
+                                print(f"Account Number: {account_number}")
+                                print(f"Current Balance: ₱{account.get('account_balance'):,.2f}")
+                                return
+                        print("Account not found.")
+                except FileNotFoundError:
+                    print("Accounts file not found.")
+                except json.JSONDecodeError:
+                    print("Error decoding the accounts file.")
+                except Exception as e:
+                    print(f"An unexpected error occurred: {e}")
+                    
+                    clear_console()
 
-            transaction_service.display_transactions(account_service.current_account.user_id,account_type, account_id)
-            os.system("pause")
-            clear_console()
-        elif option == EXIT:
-            clear_console()
-            return
+        #     account_type = account_service.current_account.account_type
+        #     account_id = account_service.current_account.account_id
+            
+        #     with open("data/accounts.json", 'r') as file:
+        #         accounts_data = json.load(file)
+        #         for acc in accounts_data:
+        #             if acc["account_id"] == account_service.current_account.account_id:
+        #                 balance = acc["balance"] # updated ang balance 
+           
+        #     if account_service.current_account is None:
+        #         continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+            
+        #     print(f'__'*20)
+        #     print("\n\tSelected Account")
+        #     print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+        #     print(f'__'*20)
+            
+        #     transaction_service.balance_inquiry(account_service.current_account.user_id,account_id)
+            
+        # elif option == TRANSACTION_HISTORY:
+        #     account_type = account_service.current_account.account_type
+        #     account_id = account_service.current_account.account_id
+            
+        #     with open("data/accounts.json", 'r') as file:
+        #         accounts_data = json.load(file)
+        #         for acc in accounts_data:
+        #             if acc["account_id"] == account_service.current_account.account_id:
+        #                 balance = acc["balance"] # updated ang balance 
+           
+        #     if account_service.current_account is None:
+        #         continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+            
+        #     print(f'__'*20)
+        #     print("\n\tSelected Account")
+        #     print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+        #     print(f'__'*20)
+
+        #     transaction_service.display_transactions(account_service.current_account.user_id,account_type, account_id)
+        #     os.system("pause")
+        #     clear_console()
+        # elif option == EXIT:
+            # clear_console()
+            # return
