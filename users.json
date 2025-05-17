@@ -44,7 +44,19 @@
         "nationality": "pilipinas",
         "user_id": "2344",
         "pin": "1234",
-        "approval": 1,
+        "approval": 0,
         "authentication": "59170"
+    },
+    {
+        "full_name": "Jorhan",
+        "mobile_num": "039",
+        "address": "Baca",
+        "bday": "nov 12",
+        "email": "jordy",
+        "nationality": "pilipi",
+        "user_id": "2004",
+        "pin": "4411",
+        "approval": 0,
+        "authentication": "75237"
     }
 ]

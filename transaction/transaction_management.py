@@ -223,131 +223,59 @@ class TransactionService:
             print("The account.json file does not exist. Please ensure the file as available.")
 
             
-
     def transfer_fund(self, target_account: BankAccount, amount: float):
-            target_account_number = input("Enter the target account number to transfer to: ")
-            try:
-                amount = float(input("Enter the amount to transfer: "))
-            except ValueError:
-                print("Invalid amount entered.")
-                return
+                if amount <= 0:
+                    print("Transfer amount must be greater than zero.")
+                    return
 
+                if self._account.balance < amount:
+                    print("Insufficient funds for transfer.")
+                    return
+
+                self._account.balance -= amount
+                print(f"Transferred {amount} from {self._account.account_number}.")
+                transaction = Transaction(type="credit", date="", amount=amount, account_num=self._account.account_number)
+                self.transactions.append(transaction)
+                self._save_transactions()
+                input("Press enter to continue") 
+
+
+                target_account.balance += amount
+                print(f"Received {amount} in {target_account.account_number}.")
+                transaction = Transaction(type="debit", date="", amount=amount, account_num=target_account.account_number)
+                self.transactions.append(transaction)
+                self._save_transactions()
+                input("Press enter to continue") 
+    
             
-            with open("data/accounts.json", "r") as file:
-                accounts = json.load(file)
-
-            source_account = None
-            destination_account = None
-
-            for acc in accounts:
-                if acc["account_number"] == self.account.account_number:
-                    source_account = acc
-                if acc["account_number"] == target_account_number:
-                    destination_account = acc
-
-            if not destination_account:
-                print("Target account not found.")
-                return
-
-            if amount <= 0:
-                print("Transfer amount must be greater than zero.")
-                return
-
-            if source_account["balance"] < amount:
-                print("Insufficient funds for transfer.")
-                return
-
-            
-            source_original_balance = source_account["balance"]
-            destination_original_balance = destination_account["balance"]
-
-            source_account["balance"] -= amount
-            destination_account["balance"] += amount
-
-            
-            with open("data/accounts.json", "w") as file:
-                json.dump(accounts, file, indent=4)
-
-            
-            date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            transaction_number = str(random.randint(1000000, 9999999))
-
-          
-            debit_transaction = {
-                "account_number: ": source_account["account_number"],
-                "user_id: ": source_account["user_id"],
-                "account_type: ": source_account["account_type"],
-                "transaction_type: ": "debit",
-                "date: ": date,
-                "transaction_number: ": transaction_number,
-                "original_balance: ": source_original_balance,
-                "amount: ": -amount
-            }
-
-            
-            credit_transaction = {
-                "account_number: ": destination_account["account_number"],
-                "user_id: ": destination_account["user_id"],
-                "account_type: ": destination_account["account_type"],
-                "transaction_type: ": "credit",
-                "date: ": date,
-                "transaction_number: ": transaction_number,
-                "original_balance: ": destination_original_balance,
-                "amount: ": amount
-            }
-
-            try:
-                if os.path.exists(self.transaction_file):
-                    with open(self.transaction_file, 'r') as file:
-                        self.transactions_data = json.load(file)
-            except (FileNotFoundError, json.JSONDecodeError):
-                self.transactions_data = []
-
-            self.transactions_data.append(debit_transaction)
-            self.transactions_data.append(credit_transaction)
-
-            with open(self.transaction_file, 'w') as transaction_file:
-                json.dump(self.transactions_data, transaction_file, indent=4)
-
-            print(f"Transferred {amount} from {source_account['account_number']} to {destination_account['account_number']}.")
-            input("Press enter to continue")
-            if amount <= 0:
-                print("Transfer amount must be greater than zero.")
-                return
-
-            # if self._account.balance < amount:
-            #     print("Insufficient funds for transfer.")
-            #     return
-
-            # self._account.balance -= amount
-            # print(f"Transferred {amount} from {self._account.account_number}.")
-            # transaction = Transaction(type="credit", date="", amount=amount, account_num=self._account.account_number)
-            # self.transactions.append(transaction)
-            # self._save_transactions()
-
-
-            # target_account.balance += amount
-            # print(f"Received {amount} in {target_account.account_number}.")
-            # transaction = Transaction(type="debit", date="", amount=amount, account_num=target_account.account_number)
-            # self.transactions.append(transaction)
-            # self._save_transactions()
-            # input("Press enter to continue")
-
+         
     def generate_report(self):
         try:
+            # Use self.account and self.transactions_data
+            total_deposits = 0.0
+            total_withdrawals = 0.0
+            total_transactions = 0
+
+            for tx in self.transactions_data:
+                if tx.get("transaction_type: ") == "deposit":
+                    total_deposits += tx.get("amount: ", 0)
+                elif tx.get("transaction_type: ") == "withdrawal":
+                    total_withdrawals += tx.get("amount: ", 0)
+                total_transactions += 1
+
             report = {
                 "Account Report": {
-                    "User ID": self._account.user_id,
-                    "Account Name": self._account.account_name,
-                    "Account Number": self._account.account_number,
-                    "Current Balance": self._account.balance,
+                    "User ID": getattr(self.account, "user_id", "N/A"),
+                    "Account Type": getattr(self.account, "account_type", "N/A"),
+                    "Account Number": getattr(self.account, "account_number", "N/A"),
+                    "Current Balance": getattr(self.account, "original_balance", "N/A"),
                 },
                 "Transaction Summary": {
-                    "Total Deposits": sum(tx.amount for tx in self.transactions if tx.type == "deposit"),
-                    "Total Withdrawals": sum(tx.amount for tx in self.transactions if tx.type == "withdrawal"),
-                    "Total Transactions": len(self.transactions),
+                    "Total Deposits": total_deposits,
+                    "Total Withdrawals": total_withdrawals,
+                    "Total Transactions": total_transactions,
                 },
-                "Transactions": [tx.to_dict() for tx in self.transactions],
+                "Transactions": self.transactions_data,
                 "Report Generated On": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
             with open("data/Generate_Report.json", "w") as file:

@@ -1,0 +1,26 @@
+[
+    {
+        "full_name": "Renalyn Joyce D. Bascones",
+        "mobile_num": "09876542",
+        "address": "secret",
+        "bday": "March 7 1892",
+        "email": "basconesjoyce92@gmail.com",
+        "nationality": "Filipino",
+        "user_id": "1234",
+        "pin": "1233",
+        "approval": 1,
+        "authentication": "88835"
+    },
+    {
+        "full_name": "Carmela",
+        "mobile_num": "09876543",
+        "address": "secret",
+        "bday": "July 10, 2003",
+        "email": "secret",
+        "nationality": "Filipino",
+        "user_id": "1111",
+        "pin": "1111",
+        "approval": 0,
+        "authentication": "23476"
+    }
+]
