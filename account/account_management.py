@@ -165,11 +165,11 @@ def print_account_menu():
     print(f"\t{DEPOSIT} : Deposit")
     print(f"\t{BALANCE} : Balance Inquiry")
     print(f"\t{VIEW_TRANSACTION_HISTORY} : View Transaction History")
-    print(f"\t{FILTER_TRANSACTION_HISTORY} : Filter Transaction History")  # <-- Add this line
     print(f"\t{SELECT} : Select Another Account")
+    print(f"\t{SERVICES} : Access Services")
     print(f"\t{TRANSFER_FUND} : Fund Transfer")
     print(f"\t{GENERATE_REPORT} : Generate Report")
-    print(f"\t{SERVICES} : Access Services")
+    print(f"\t{FILTER_TRANSACTION_HISTORY} : Filter Transaction History")
     print(f"\t{EXIT} : Exit")
 
 CREATE_ACCOUNT, LOAN, CHANGE_INFO, CHANGE_PASS, SEE_PROFILE = (1, 2, 3, 4, 5)
