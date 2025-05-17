@@ -39,7 +39,11 @@ class AccountService:
         except ValueError: 
             print("Invalid input for balance.")
             return
-        
+            
+        if balance < 500:
+            print("Insufficient balance, please deposit at least 500 php.")
+            return
+            
         SAVINGS, JOINT, STUDENT, BUSINESS, PERSONAL = (1, 2, 3, 4, 5)
         print("choose the type of your account:")
         print(f"\t{SAVINGS} : SAVINGS ACCOUNT")
