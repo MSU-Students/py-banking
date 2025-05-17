@@ -28,5 +28,65 @@
         "transaction_number: ": "7978220",
         "original_balance: ": 990.0,
         "amount: ": 20.0
+    },
+    {
+        "account_number: ": 768489,
+        "user_id: ": "1234",
+        "account_type: ": "Joint Account",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-17 05:15:38",
+        "transaction_number: ": "6639280",
+        "original_balance: ": 1010.0,
+        "amount: ": 100.0
+    },
+    {
+        "account_number: ": 768489,
+        "user_id: ": "1234",
+        "account_type: ": "Joint Account",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-17 05:15:42",
+        "transaction_number: ": "6258596",
+        "original_balance: ": 910.0,
+        "amount: ": 10.0
+    },
+    {
+        "account_number: ": 768489,
+        "user_id: ": "1234",
+        "account_type: ": "Joint Account",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-17 05:16:08",
+        "transaction_number: ": "3512659",
+        "original_balance: ": 920.0,
+        "amount: ": 100.0
+    },
+    {
+        "account_number: ": 768489,
+        "user_id: ": "1234",
+        "account_type: ": "Joint Account",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-17 05:16:15",
+        "transaction_number: ": "6569341",
+        "original_balance: ": 1020.0,
+        "amount: ": 100.0
+    },
+    {
+        "account_number: ": 768489,
+        "user_id: ": "1234",
+        "account_type: ": "Joint Account",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-17 05:16:25",
+        "transaction_number: ": "6554515",
+        "original_balance: ": 920.0,
+        "amount: ": 10.0
+    },
+    {
+        "account_number: ": 768489,
+        "user_id: ": "1234",
+        "account_type: ": "Joint Account",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-17 05:16:30",
+        "transaction_number: ": "6647743",
+        "original_balance: ": 910.0,
+        "amount: ": 10.0
     }
 ]
