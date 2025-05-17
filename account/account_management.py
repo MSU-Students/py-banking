@@ -3,6 +3,8 @@ from .bank_account import BankAccount
 from loan import handle_loan_option
 from utils import clear_console
 from transaction import TransactionService
+import datetime
+from random import Random
 import json
 import os
 import random
@@ -207,58 +209,33 @@ def handle_account_option():
             account_service.select_account()
         #ALI -WITHDRAW    
         elif option == WITHDRAW:
-            # variables for arguments in withdrawal function
-            account_type = account_service.current_account.account_type
-            account_id = account_service.current_account.account_id
-            
-            with open("data/accounts.json", 'r') as file:
-                accounts_data = json.load(file)
-                for acc in accounts_data:
-                    if acc["account_id"] == account_service.current_account.account_id:
-                        balance = acc["balance"] # updated ang balance 
-                
-            if account_service.current_account is None:
-                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+
             try:
-                amount = float(input("\nEnter amount to withdraw: "))
+                amount = float(input("Enter amount to withdraw: "))
+                if amount <= 0:
+                    print("Amount must be greater than zero.")
+                    return
             except ValueError:
-                print("Invalid amount. Please enter a number.")
-                continue
-            
-            print(f'__'*20)
-            print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
-            print(f'__'*20)
-            transaction_service.withdrawal(amount, account_service.current_account.user_id,account_type, account_id, balance)
-            input("\nPress any keys to go back to menu")
-        #THAMEENAH -DEPOSIT
-        #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu
-        elif option == DEPOSIT:
-            # variables for arguments in deposit function
-            account_type = account_service.current_account.account_type
-            account_id = account_service.current_account.account_id
-            
-            with open("data/accounts.json", 'r') as file:
-                accounts_data = json.load(file)
-                for acc in accounts_data:
-                    if acc["account_id"] == account_service.current_account.account_id:
-                        balance = acc["balance"] # updated ang balance 
-                
-            if account_service.current_account is None:
-                continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
-            try:
-                amount = float(input("\nEnter amount to deposit: "))
-            except ValueError:
-                print("Invalid amount. Please enter a number.")
-                continue
-            
-            print(f'__'*20)
-            print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
-            print(f'__'*20)
-            transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
-            input("\nPress any keys to go back to menu")
-            
+                print("Invalid input. Please enter a valid number.")
+                return
+
+            if account_service.current_account.balance < amount:
+                print("Insufficient funds.")
+                return
+
+            account_service.current_account.balance -= amount
+
+            for acc in account_service.accounts:
+                if acc.account_id == account_service.current_account.account_id:
+                    acc.balance = account_service.current_account.balance
+                    break
+
+            account_service.save_accounts()
+
+            transaction_service.withdraw(amount)
+
+            print(f"Withdrawal successful. New balance: ₱{account_service.current_account.balance:.2f}")
+
             
             
         #NORHAILAH   - balance inquiry
