@@ -48,5 +48,25 @@
         "transaction_number: ": "9455058",
         "original_balance: ": 102000.0,
         "amount: ": 2000.0
+    },
+    {
+        "account_number: ": "92407",
+        "user_id: ": "1234",
+        "account_type: ": "SAVINGS",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-16 17:04:13",
+        "transaction_number: ": "5075080",
+        "original_balance: ": 108000.0,
+        "amount: ": 10000.0
+    },
+    {
+        "account_number: ": "92407",
+        "user_id: ": "1234",
+        "account_type: ": "SAVINGS",
+        "transaction_type: ": "deposit",
+        "date: ": "2025-05-16 17:04:16",
+        "transaction_number: ": "1070328",
+        "original_balance: ": 87990.0,
+        "amount: ": 10.0
     }
 ]
