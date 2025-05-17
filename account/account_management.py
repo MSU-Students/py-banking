@@ -42,6 +42,7 @@ class AccountService:
             
         if balance < 500:
             print("Insufficient balance, please deposit at least 500 php.")
+            input("press enter to continue...")
             return
             
         SAVINGS, JOINT, STUDENT, BUSINESS, PERSONAL = (1, 2, 3, 4, 5)
