@@ -273,6 +273,7 @@ def handle_account_option():
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu
         elif option == DEPOSIT:
             # variables for arguments in deposit function
+            user_id = account_service.current_account.user_id
             full_name = account_service.current_account.full_name
             account_type = account_service.current_account.account_type
             account_number = account_service.current_account.account_number
@@ -286,7 +287,7 @@ def handle_account_option():
             if account_service.current_account is None:
                 continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
             try:
-                amount = float(input("\nEnter amount to deposit: "))
+                amount = float(input("Enter amount to deposit: ₱"))
             except ValueError:
                 print("Invalid amount. Please enter a number.")
                 continue

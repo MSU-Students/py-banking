@@ -41,20 +41,21 @@ class TransactionService:
         print(f'__'*20)
         print("\n\tTRANSACTION SERVICE")
 
-#NORHAILAH - DEPOSIT
+#ALONTO - DEPOSIT
     def deposit(self, amount: float, user_id:str, account_type:str, account_number:str, original_balance:float):
-        if amount <= 0.0:
-            raise ValueError("Deposit amount must be greater than zero.")
+       
+        if amount <= 0:
+            print("Deposit amount must be greater than zero.")
+        else:
+            updated_balance = original_balance
+            updated_balance += amount
 
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Include time
-        
-        updated_balance = original_balance
-        updated_balance += amount  # Update the account's balance
         
         transaction_number = str(random.randint(1000000, 9999999))
         self.account = Transaction(user_id=user_id,account_type=account_type,account_number=account_number,type="withdrawal", date=date, amount=amount, transaction_number=transaction_number,original_balance=original_balance)
         
-                    
+                  
         #turn it into a dictionary
         datas = {
             "account_number: ": self.account.account_number,
@@ -80,8 +81,8 @@ class TransactionService:
         with open(self.transaction_file, 'w+') as transaction_file:
             json.dump(self.transactions_data, transaction_file, indent=4)
 
-            
-        print(f"Deposited: {amount}. New balance: {updated_balance}")
+        print(f"Successfully deposited ₱{amount:.2f}")
+        print(f"New balance: ₱{updated_balance:.2f}")   
 
          #update the account balance of the selected user's account in accounts.json
         with open("data/accounts.json", 'r') as file:

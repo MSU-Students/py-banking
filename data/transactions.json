@@ -88,5 +88,15 @@
         "transaction_number: ": "6647743",
         "original_balance: ": 910.0,
         "amount: ": 10.0
+    },
+    {
+        "account_number: ": "92407",
+        "user_id: ": "1234",
+        "account_type: ": "SAVINGS",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-17 22:22:26",
+        "transaction_number: ": "4619116",
+        "original_balance: ": 550.0,
+        "amount: ": 10.0
     }
 ]
