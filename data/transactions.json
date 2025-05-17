@@ -68,5 +68,45 @@
         "transaction_number: ": "1070328",
         "original_balance: ": 87990.0,
         "amount: ": 10.0
+    },
+    {
+        "account_number: ": "92407",
+        "user_id: ": "1234",
+        "account_type: ": "SAVINGS",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-16 17:52:09",
+        "transaction_number: ": "9902826",
+        "original_balance: ": 88121.0,
+        "amount: ": 111.0
+    },
+    {
+        "account_number: ": "92407",
+        "user_id: ": "1234",
+        "account_type: ": "SAVINGS",
+        "transaction_type: ": "deposit",
+        "date: ": "2025-05-16 17:52:14",
+        "transaction_number: ": "7881422",
+        "original_balance: ": 87799.0,
+        "amount: ": 100.0
+    },
+    {
+        "account_number: ": "92407",
+        "user_id: ": "1234",
+        "account_type: ": "SAVINGS",
+        "transaction_type: ": "withdrawal",
+        "date: ": "2025-05-16 17:53:33",
+        "transaction_number: ": "4471326",
+        "original_balance: ": 88099.0,
+        "amount: ": 100.0
+    },
+    {
+        "account_number: ": "92407",
+        "user_id: ": "1234",
+        "account_type: ": "SAVINGS",
+        "transaction_type: ": "deposit",
+        "date: ": "2025-05-16 17:53:37",
+        "transaction_number: ": "9558688",
+        "original_balance: ": 87799.0,
+        "amount: ": 100.0
     }
 ]

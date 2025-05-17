@@ -153,8 +153,6 @@ class AccountService:
 account_service = AccountService()
 transaction_data = []
 
-EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5,6)
-
 EXIT, WITHDRAW, DEPOSIT, BALANCE, VIEW_TRANSACTION_HISTORY, SELECT, SERVICES = (0, 1, 2, 3, 4, 5, 6)
 
 def print_account_menu():
@@ -333,7 +331,7 @@ def handle_account_option(full_name, user_id):
             
             transaction_service.balance_inquiry(user_id,account_number)
             
-        elif option == TRANSACTION_HISTORY:
+        elif option == VIEW_TRANSACTION_HISTORY:
             account_type = account_service.current_account.account_type
             account_number = account_service.current_account.account_number
             
