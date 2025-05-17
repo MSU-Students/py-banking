@@ -228,15 +228,15 @@ class TransactionService:
                     print("Transfer amount must be greater than zero.")
                     return
 
-                if self._account.balance < amount:
+                if self.account.balance < amount:
                     print("Insufficient funds for transfer.")
                     return
 
-                self._account.balance -= amount
-                print(f"Transferred {amount} from {self._account.account_id}.")
-                transaction = Transaction(type="credit", date="", amount=amount, account_num=self._account.account_id)
+                self.account.balance -= amount
+                print(f"Transferred {amount} from {self.account.account_id}.")
+                transaction = Transaction(type="credit", date="", amount=amount, account_num=self.account.account_id)
                 self.transactions.append(transaction)
-                self._save_transactions()
+                self.save_transactions()
                 input("Press enter to continue") 
 
 
@@ -244,7 +244,7 @@ class TransactionService:
                 print(f"Received {amount} in {target_account.account_id}.")
                 transaction = Transaction(type="debit", date="", amount=amount, account_num=target_account.account_id)
                 self.transactions.append(transaction)
-                self._save_transactions()
+                self.save_transactions()
                 input("Press enter to continue") 
     
             
