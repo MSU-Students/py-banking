@@ -3,6 +3,8 @@ from .bank_account import BankAccount
 from loan import handle_loan_option
 from utils import clear_console
 from transaction import TransactionService
+import datetime
+from random import Random
 import json
 import os
 import random
@@ -257,8 +259,12 @@ def handle_account_option():
                 
             if account_service.current_account is None:
                 continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+
             try:
-                amount = float(input("\nEnter amount to deposit: "))
+                amount = float(input("Enter amount to withdraw: "))
+                if amount <= 0:
+                    print("Amount must be greater than zero.")
+                    return
             except ValueError:
                 print("Invalid amount. Please enter a number.")
                 continue
@@ -269,7 +275,7 @@ def handle_account_option():
             print(f'__'*20)
             transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
             input("\nPress any keys to go back to menu")
-            
+
             
             
         #NORHAILAH   - balance inquiry
