@@ -39,7 +39,12 @@ class AccountService:
         except ValueError: 
             print("Invalid input for balance.")
             return
-        
+            
+        if balance < 500:
+            print("Insufficient balance, please deposit at least 500 php.")
+            input("press enter to continue...")
+            return
+            
         SAVINGS, JOINT, STUDENT, BUSINESS, PERSONAL = (1, 2, 3, 4, 5)
         print("choose the type of your account:")
         print(f"\t{SAVINGS} : SAVINGS ACCOUNT")
@@ -230,7 +235,7 @@ def handle_account_option():
             
             print(f'__'*20)
             print("\n\tSelected Account")
-            print(f"\nSelected account: {full_name} - Account Number: {account_service.current_account.account_number}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f"\nSelected account:\t{account_service.current_account.full_name}\nAccount Number:\t\t{account_service.current_account.account_id}\nAccount Type:\t\t{account_service.current_account.account_type}\nAccount Balance:\t₱{balance:.2f}\n")
             print(f'__'*20)
             transaction_service.withdrawal(amount, user_id,account_type, account_number, balance)
             input("\nPress any keys to go back to menu")
@@ -260,7 +265,7 @@ def handle_account_option():
             
             print(f'__'*20)
             print("\n\tSelected Account")
-            print(f"\nSelected account: {account_service.current_account.full_name} - Account Number: {account_service.current_account.account_id}\n{account_service.current_account.account_type} Account - Balance: ₱{balance:.2f}\n")
+            print(f"\nSelected account:\t{account_service.current_account.full_name}\nAccount Number:\t\t{account_service.current_account.account_id}\nAccount Type:\t\t{account_service.current_account.account_type}\nAccount Balance:\t₱{balance:.2f}\n")
             print(f'__'*20)
             transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
             input("\nPress any keys to go back to menu")

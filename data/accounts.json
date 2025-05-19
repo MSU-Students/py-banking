@@ -1,0 +1,23 @@
+[
+    {
+        "user_id": "202433660",
+        "full_name": "Abdullah Abuat Lacsaman",
+        "account_type": "Savings Account",
+        "balance": 7000.0,
+        "account_id": 848800
+    },
+    {
+        "user_id": "202427287",
+        "full_name": "Alfred Jun Esoy pogi",
+        "account_type": "Savings Account",
+        "balance": 100000000.0,
+        "account_id": 123456
+    },
+    {
+        "user_id": "202433660",
+        "full_name": "Abdullah Abuat Lacsaman",
+        "account_type": "Business Account",
+        "balance": 990000.0,
+        "account_id": 489317
+    }
+]
