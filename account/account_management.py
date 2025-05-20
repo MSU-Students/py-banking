@@ -275,9 +275,8 @@ def handle_account_option():
             print(f'__'*20)
             transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
             input("\nPress any keys to go back to menu")
-
             
-            
+        
         #NORHAILAH   - balance inquiry
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu 
         elif option == BALANCE:
@@ -301,7 +300,16 @@ def handle_account_option():
                     print(f"An unexpected error occurred: {e}")
                     
                     clear_console()
+        elif option == GENERATE_REPORT:
+            # Generate a report of the account
+            print("Generating report...")
+            transaction_service.generate_report()
+            input("Press enter to continue")
 
+        elif option == FILTER_TRANSACTION_HISTORY:
+            filter_transaction_history()
+
+            # account_type = account_service.current_account.account_type
         #     account_type = account_service.current_account.account_type
         #     account_id = account_service.current_account.account_id
             
@@ -456,15 +464,6 @@ def handle_account_option():
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
                 input("Press enter to continue...")
-
-        elif option == GENERATE_REPORT:
-            # Generate a report of the account
-            print("Generating report...")
-            transaction_service.generate_report()
-            input("Press enter to continue")
-
-        elif option == FILTER_TRANSACTION_HISTORY:
-            filter_transaction_history()
 
 def filter_transaction_history():
     """
