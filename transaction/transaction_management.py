@@ -286,3 +286,60 @@ class TransactionService:
         except Exception as e:
             print(f"An error occurred while generating the report: {e}")
 
+    def display_transaction_history(self, account_id: str):
+        # Validate account number
+        try:
+            with open("data/accounts.json", "r") as acc_file:
+                accounts = json.load(acc_file)
+                account = next((a for a in accounts if a.get("account_id") == account_id), None)
+                if not account:
+                    print(f"Account number {account_id} not found.")
+                    return
+        except FileNotFoundError:
+            print("Accounts file not found.")
+            return
+        except json.JSONDecodeError:
+            print("Accounts file is corrupted.")
+            return
+
+        # Read transactions for this account
+        try:
+            with open("data/transactions.json", "r") as tx_file:
+                transactions = json.load(tx_file)
+        except FileNotFoundError:
+            print("Transactions file not found.")
+            return
+        except json.JSONDecodeError:
+            print("Transactions file is corrupted.")
+            return
+
+        # Filter transactions for this account
+        account_transactions = [
+            tx for tx in transactions if tx.get("account_id: ") == account_id
+        ]
+
+        print(f"\nTransaction History for Account Number: {account_id}")
+        print(f"Account Type: {account.get('account_type', 'N/A')}")
+        print(f"Current Balance: {account.get('balance', 'N/A')}")
+        print("-" * 40)
+
+        if not account_transactions:
+            print("No transactions found for this account.")
+            return
+
+        for i, tx in enumerate(account_transactions, 1):
+            # Parse date if possible
+            date_str = tx.get("date: ", "N/A")
+            try:
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+                formatted_date = date_obj.strftime("%b %d, %Y %I:%M %p")
+            except Exception:
+                formatted_date = date_str
+
+            print(f"{i}. Date: {formatted_date}")
+            print(f"   Type: {tx.get('transaction_type: ', 'N/A')}")
+            print(f"   Amount: {tx.get('amount: ', 'N/A')}")
+            print(f"   Transaction Number: {tx.get('transaction_number: ', 'N/A')}")
+            print(f"   Original Balance: {tx.get('original_balance: ', 'N/A')}")
+            print("-" * 40)
+
