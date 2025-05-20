@@ -184,7 +184,7 @@ class TransactionService:
     def display_transactions(self, user_id:str, account_type:str, account_id:str):
         print(f"User Id: {user_id}") 
         print(f"Account Type: {account_type}") 
-        print(f"Account Number:{account_id}")
+        print(f"Account Number: {account_id}")
         print(f"\n\t\tList of Transactions\n")   
 
         try:
@@ -192,14 +192,16 @@ class TransactionService:
                 transactions = json.load(file)
                 i = 0
                 for transaction in transactions:
-
-                    if transaction["user_id"] == user_id and transaction["account_id"] == account_id:
-                     print(f"{i+1}.\n* Date and Time: {transaction['date']} \n* Transaction Type: {transaction['transaction_type']} \n* Amount: {transaction['amount']} \n* Transaction Number: {transaction['transaction_number']}")
-                    i+=1
+                    # Fix keys to match stored JSON keys with trailing colon and space
+                    if transaction.get("user_id: ") == user_id and transaction.get("account_id: ") == account_id:
+                        print(f"{i+1}.\n* Date and Time: {transaction.get('date: ')} \n* Transaction Type: {transaction.get('transaction_type: ')} \n* Amount: {transaction.get('amount: ')} \n* Transaction Number: {transaction.get('transaction_number: ')}")
+                        i += 1
                 if i == 0:
                     raise ValueError("No transactions found for this account.")
-        except FileNotFoundError as e:
-            print(e)
+        except FileNotFoundError:
+            print("Transaction history file not found.")
+        except ValueError as ve:
+            print(ve)
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
     
@@ -283,3 +285,60 @@ class TransactionService:
             print("Report generated successfully.")
         except Exception as e:
             print(f"An error occurred while generating the report: {e}")
+
+    def display_transaction_history(self, account_id: str):
+        # Validate account number
+        try:
+            with open("data/accounts.json", "r") as acc_file:
+                accounts = json.load(acc_file)
+                account = next((a for a in accounts if a.get("account_id") == account_id), None)
+                if not account:
+                    print(f"Account number {account_id} not found.")
+                    return
+        except FileNotFoundError:
+            print("Accounts file not found.")
+            return
+        except json.JSONDecodeError:
+            print("Accounts file is corrupted.")
+            return
+
+        # Read transactions for this account
+        try:
+            with open("data/transactions.json", "r") as tx_file:
+                transactions = json.load(tx_file)
+        except FileNotFoundError:
+            print("Transactions file not found.")
+            return
+        except json.JSONDecodeError:
+            print("Transactions file is corrupted.")
+            return
+
+        # Filter transactions for this account
+        account_transactions = [
+            tx for tx in transactions if tx.get("account_id: ") == account_id
+        ]
+
+        print(f"\nTransaction History for Account Number: {account_id}")
+        print(f"Account Type: {account.get('account_type', 'N/A')}")
+        print(f"Current Balance: {account.get('balance', 'N/A')}")
+        print("-" * 40)
+
+        if not account_transactions:
+            print("No transactions found for this account.")
+            return
+
+        for i, tx in enumerate(account_transactions, 1):
+            # Parse date if possible
+            date_str = tx.get("date: ", "N/A")
+            try:
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+                formatted_date = date_obj.strftime("%b %d, %Y %I:%M %p")
+            except Exception:
+                formatted_date = date_str
+
+            print(f"{i}. Date: {formatted_date}")
+            print(f"   Type: {tx.get('transaction_type: ', 'N/A')}")
+            print(f"   Amount: {tx.get('amount: ', 'N/A')}")
+            print(f"   Transaction Number: {tx.get('transaction_number: ', 'N/A')}")
+            print(f"   Original Balance: {tx.get('original_balance: ', 'N/A')}")
+            print("-" * 40)
