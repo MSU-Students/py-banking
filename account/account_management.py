@@ -3,6 +3,8 @@ from .bank_account import BankAccount
 from loan import handle_loan_option
 from utils import clear_console
 from transaction import TransactionService
+import datetime
+from random import Random
 import json
 import os
 import random
@@ -257,8 +259,12 @@ def handle_account_option():
                 
             if account_service.current_account is None:
                 continue # skips the iteration , no account is selected(or the user did not choose a valid acc) kaya i ask niya uli ang user anong account i select
+
             try:
-                amount = float(input("\nEnter amount to deposit: "))
+                amount = float(input("Enter amount to withdraw: "))
+                if amount <= 0:
+                    print("Amount must be greater than zero.")
+                    return
             except ValueError:
                 print("Invalid amount. Please enter a number.")
                 continue
@@ -270,17 +276,7 @@ def handle_account_option():
             transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
             input("\nPress any keys to go back to menu")
             
-        elif option == GENERATE_REPORT:
-            # Generate a report of the account
-            print("Generating report...")
-            transaction_service.generate_report()
-            input("Press enter to continue")
-
-        elif option == FILTER_TRANSACTION_HISTORY:
-            filter_transaction_history()
-
-            # account_type = account_service.current_account.account_type
-            
+        
         #NORHAILAH   - balance inquiry
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu 
         elif option == BALANCE:
@@ -304,7 +300,16 @@ def handle_account_option():
                     print(f"An unexpected error occurred: {e}")
                     
                     clear_console()
+        elif option == GENERATE_REPORT:
+            # Generate a report of the account
+            print("Generating report...")
+            transaction_service.generate_report()
+            input("Press enter to continue")
 
+        elif option == FILTER_TRANSACTION_HISTORY:
+            filter_transaction_history()
+
+            # account_type = account_service.current_account.account_type
         #     account_type = account_service.current_account.account_type
         #     account_id = account_service.current_account.account_id
             
@@ -459,7 +464,6 @@ def handle_account_option():
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
                 input("Press enter to continue...")
-
 
 def filter_transaction_history():
     """
