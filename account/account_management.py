@@ -116,7 +116,7 @@ class AccountService:
 account_service = AccountService()
 transaction_data = []
 
-EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES, TRANSFER_FUND, GENERATE_REPORT, FILTER_TRANSACTION_HISTORY = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+EXIT, WITHDRAW, DEPOSIT, BALANCE, TRANSACTION_HISTORY, SELECT, SERVICES, TRANSFER_FUND, GENERATE_REPORT, FILTER_TRANSACTION_HISTORY, DISPLAY_TRANSACTION_HISTORY= (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
 def print_account_menu():
     print("Bank Account Options:")
@@ -129,6 +129,7 @@ def print_account_menu():
     print(f"\t{TRANSFER_FUND} : Fund Transfer")
     print(f"\t{GENERATE_REPORT} : Generate Report")
     print(f"\t{FILTER_TRANSACTION_HISTORY} : Filter Transaction History")
+    print(f"\t{DISPLAY_TRANSACTION_HISTORY} : Display Transaction History")
     print(f"\t{EXIT} : Exit")
 
 CREATE_ACCOUNT, LOAN, CHANGE_INFO, CHANGE_PASS, SEE_PROFILE = (1, 2, 3, 4, 5)
@@ -270,7 +271,21 @@ def handle_account_option():
             transaction_service.deposit(amount, account_service.current_account.user_id,account_type, account_id, balance)
             input("\nPress any keys to go back to menu")
             
-            
+        elif option == GENERATE_REPORT:
+            # Generate a report of the account
+            print("Generating report...")
+            transaction_service.generate_report()
+            input("Press enter to continue")
+
+        elif option == FILTER_TRANSACTION_HISTORY:
+            filter_transaction_history()
+
+        elif option == DISPLAY_TRANSACTION_HISTORY:
+            # Display transaction history
+            print("Displaying transaction history...")
+            transaction_service.display_transactions(account_service.current_account.user_id, account_service.current_account.account_type, account_service.current_account.account_id)
+            input("Press enter to continue")
+            # account_type = account_service.current_account.account_type
             
         #NORHAILAH   - balance inquiry
         #CHRISTIAN - EXCEPTION HANDLING - pagandahin mo yung mga ganern lods, may retries chuchu, while loops chuchu 
@@ -451,14 +466,6 @@ def handle_account_option():
                 print("Invalid input. Please enter a valid number.")
                 input("Press enter to continue...")
 
-        elif option == GENERATE_REPORT:
-            # Generate a report of the account
-            print("Generating report...")
-            transaction_service.generate_report()
-            input("Press enter to continue")
-
-        elif option == FILTER_TRANSACTION_HISTORY:
-            filter_transaction_history()
 
 def filter_transaction_history():
     """
