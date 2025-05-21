@@ -92,7 +92,16 @@ class LoanService:
 
         for loan in self.loans:
             if loan.id == loan_id:
+                if loan.user_id != self._bank_account.user_id:
+                    print("You are not authorized to make payments on this loan.")
+                    return
                 if loan.status == 'approved' and loan.balance > 0:
+                    if amount > loan.balance:
+                        print(f"Payment exceeds remaining balance of {loan.balance}")
+                        return
+                    if not self._bank_account.withdraw(amount):
+                        print("Insufficient funds in savings account.")
+                        return
                     loan.balance -= amount
                     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     payment = LoanPayment(loan_id, amount, current_date)
@@ -121,7 +130,7 @@ class LoanService:
             print("No loans found for this user.")
 
 
-EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3 
+EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3
 
 def print_loan_option():
     print("Loan Options:")
