@@ -354,12 +354,11 @@ def handle_account_option():
             # return
            
           
-          transaction_service.display_transactions(account_service.current_account.user_id,account_type, account_id)
+            transaction_service.display_transactions(account_service.current_account.user_id,account_type, account_id)
             os.system("pause")
             clear_console()
 
             clear_console()
-            
         elif option == EXIT:
             clear_console()
             return
