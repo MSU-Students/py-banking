@@ -3,7 +3,7 @@ from typing import List
 from datetime import datetime
 from utils import clear_console
 from account import BankAccount
-from transaction_service import TransactionService  # <- Added this import
+from transaction_service import TransactionService
 
 class Loan:
     def __init__(self, user_id: int, loan_id: int, amount: float):
