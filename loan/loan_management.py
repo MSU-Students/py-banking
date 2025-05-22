@@ -3,6 +3,7 @@ from typing import List
 from datetime import datetime
 from utils import clear_console
 from account import BankAccount
+from transaction_service import TransactionService
 
 class Loan:
     def __init__(self, user_id: int, loan_id: int, amount: float):
@@ -92,7 +93,25 @@ class LoanService:
 
         for loan in self.loans:
             if loan.id == loan_id:
+                if loan.user_id != self._bank_account.user_id:
+                    print("You are not authorized to make payments on this loan.")
+                    return
                 if loan.status == 'approved' and loan.balance > 0:
+                    if amount > loan.balance:
+                        print(f"Payment exceeds remaining balance of {loan.balance}")
+                        return
+
+                    transaction_service = TransactionService(self._bank_account)
+                    success = transaction_service.withdrawal(
+                        amount=amount,
+                        user_id=self._bank_account.user_id,
+                        account_type=self._bank_account.account_type,
+                        account_id=self._bank_account.account_id,
+                        original_balance=self._bank_account.balance
+                    )
+                    if success is None:
+                        return
+
                     loan.balance -= amount
                     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     payment = LoanPayment(loan_id, amount, current_date)
@@ -121,7 +140,7 @@ class LoanService:
             print("No loans found for this user.")
 
 
-EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3 
+EXIT, LOAN_APPLY, LOAN_PAYMENT, LOAN_HISTORY = 0, 1, 2, 3
 
 def print_loan_option():
     print("Loan Options:")
