@@ -3,6 +3,7 @@ from typing import List
 from datetime import datetime
 from utils import clear_console
 from account import BankAccount
+from transaction_service import TransactionService  # <- Added this import
 
 class Loan:
     def __init__(self, user_id: int, loan_id: int, amount: float):
@@ -99,9 +100,18 @@ class LoanService:
                     if amount > loan.balance:
                         print(f"Payment exceeds remaining balance of {loan.balance}")
                         return
-                    if not self._bank_account.withdraw(amount):
-                        print("Insufficient funds in savings account.")
+
+                    transaction_service = TransactionService(self._bank_account)
+                    success = transaction_service.withdrawal(
+                        amount=amount,
+                        user_id=self._bank_account.user_id,
+                        account_type=self._bank_account.account_type,
+                        account_id=self._bank_account.account_id,
+                        original_balance=self._bank_account.balance
+                    )
+                    if success is None:
                         return
+
                     loan.balance -= amount
                     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     payment = LoanPayment(loan_id, amount, current_date)
